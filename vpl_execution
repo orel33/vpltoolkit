@@ -10,16 +10,13 @@ source vplmodel/bootstrap.sh
 model_clone $REPOSITORY
 model_checkout $EXO
 
-# BASEDIR="$HOME/vplmoodle/$EXO"
+BASEDIR="$HOME/GIT/$EXO"
 # echo "BASEDIR=$BASEDIR"
 
 # ### run
-# [ ! -d "$BASEDIR" ] && echo "⚠ Directory \"$BASEDIR\" missing!" && exit 0
-# cd $BASEDIR
-# [ ! -f run.sh ] && echo "⚠ File \"run.sh\" missing!" && exit 0
-# ./run.sh
-
-bash
-
+[ ! -d "$BASEDIR" ] && echo "⚠ Directory \"$BASEDIR\" missing!" && exit 0
+cd $BASEDIR
+[ ! -f run.sh ] && echo "⚠ File \"run.sh\" missing!" && exit 0
+./run.sh
 
 # EOF
