@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function setenv()
+function model_setenv()
 {
     # basic environment
     VERSION="1.0"
@@ -13,7 +13,7 @@ function setenv()
     rm -f $HOME/env.sh
     echo "VERSION=$VERSION" >> $HOME/env.sh
     echo "MODE=$MODE" >> $HOME/env.sh
-    echo "EXO=$MODE" >> $HOME/env.sh
+    echo "EXO=$EXO" >> $HOME/env.sh
     echo "DEBUG=$DEBUG" >> $HOME/env.sh
     echo "VERBOSE=$VERBOSE" >> $HOME/env.sh
 
@@ -21,4 +21,17 @@ function setenv()
     if [ "$DEBUG" = "1" ] ; then
         cat $HOME/env.sh
     fi
+}
+
+function model_clone() {
+    REPOSITORY=$1
+    [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
+    git -c http.sslVerify=false clone -q -n $REPOSITORY --depth 1 GIT
+    [ ! $? -eq 0 ] && echo "⚠ GIT clone \"vplmoodle\" failure!" && exit 0
+}
+
+function model_checkout() {
+    CHECKOUT=$1
+    cd GIT && git -c http.sslVerify=false checkout HEAD -- $CHECKOUT && cd
+    [ ! $? -eq 0 ] && echo "⚠ GIT checkout \"$CHECKOUT\" failure!" && exit 0
 }
