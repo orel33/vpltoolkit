@@ -88,7 +88,7 @@ function vplmodel_clone() {
     local REPOSITORY=$1
     local BRANCH=$2
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
-    git -c http.sslVerify=false clone -q -n $REPOSITORY $BRANCH --depth 1 GIT
+    git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 GIT
     [ ! $? -eq 0 ] && echo "⚠ GIT clone \"vplmoodle\" failure!" && exit 0
 }
 
@@ -101,7 +101,7 @@ function vplmodel_checkout() {
 function vplmodel_download() {
     local DIR=$1
     START=$(date +%s.%N)
-    vplmodel_clone $REPOSITORY --branch $BRANCH
+    vplmodel_clone $REPOSITORY $BRANCH
     vplmodel_checkout $DIR
     END=$(date +%s.%N)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
