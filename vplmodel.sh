@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function model_setenv()
+function vplmodel_setenv()
 {
     # basic environment
     VERSION="1.0"
@@ -25,20 +25,20 @@ function model_setenv()
     fi
 }
 
-function model_getenv()
+function vplmodel_getenv()
 {
     [ ! -f $HOME/env.sh ] && echo "⚠ File \"env.sh\" missing!" && exit 0
     source $HOME/env.sh
 }
 
-function model_clone() {
+function vplmodel_clone() {
     local REPOSITORY=$1
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
     git -c http.sslVerify=false clone -q -n $REPOSITORY --depth 1 GIT
     [ ! $? -eq 0 ] && echo "⚠ GIT clone \"vplmoodle\" failure!" && exit 0
 }
 
-function model_checkout() {
+function vplmodel_checkout() {
     local CHECKOUT=$1
     cd GIT && git -c http.sslVerify=false checkout HEAD -- $CHECKOUT && cd
     [ ! $? -eq 0 ] && echo "⚠ GIT checkout \"$CHECKOUT\" failure!" && exit 0
