@@ -3,13 +3,13 @@
 rm -f $0 # for security issue
 
 ### load environment
-source $HOME/vplmodel/vplmodel.sh
+source $RUNDIR/vplmodel/vplmodel.sh
 vplmodel_loadenv
 vplmodel_checkenv
 vplmodel_exportenv
 
 ### run exo
-BASEDIR="$HOME/GIT/$EXO"
+BASEDIR="$RUNDIR/GIT/$EXO"
 # [ ! -d "$BASEDIR" ] && echo "⚠ Directory \"$BASEDIR\" missing!" && exit 0
 cd $BASEDIR
 [ ! -f run.sh ] && echo "⚠ File \"run.sh\" missing!" && exit 0
