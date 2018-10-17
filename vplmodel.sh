@@ -116,8 +116,8 @@ function vplmodel_start() {
     vplmodel_printenv
     vplmodel_download $EXO
     vplmodel_saveenv
-    cp vplmodel/vpl_execution .
-    chmod +x vpl_execution
+    cp $RUNDIR/vplmodel/vpl_execution $RUNDIR
+    chmod +x $RUNDIR/vpl_execution
     # => implicit execution of vpl_execution
 }
 
