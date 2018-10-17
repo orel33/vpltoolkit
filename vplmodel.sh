@@ -31,11 +31,8 @@ function vplmodel_checkenv()
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
     [ -z "$BRANCH" ] && BRANCH="master"
     [ -z "$EXO" ] && echo "⚠ EXO variable is not defined!" && exit 0
-    # [ -z "$DEBUG" ] && echo "⚠ DEBUG variable is not defined!" && exit 0
-    # [ -z "$VERBOSE" ] && echo "⚠ VERBOSE variable is not defined!" && exit 0
     [ -z "$DEBUG" ] && DEBUG=0
     [ -z "$VERBOSE" ] && VERBOSE=0
-    
 }
 
 function vplmodel_saveenv()
@@ -44,8 +41,8 @@ function vplmodel_saveenv()
     rm -f $HOME/env.sh
     echo "VERSION=$VERSION" >> $HOME/env.sh
     echo "MODE=$MODE" >> $HOME/env.sh
-    # echo "REPOSITORY=$REPOSITORY" >> $HOME/env.sh
-    # echo "BRANCH=$BRANCH" >> $HOME/env.sh
+    echo "REPOSITORY=$REPOSITORY" >> $HOME/env.sh
+    echo "BRANCH=$BRANCH" >> $HOME/env.sh
     echo "EXO=$EXO" >> $HOME/env.sh
     echo "DEBUG=$DEBUG" >> $HOME/env.sh
     echo "VERBOSE=$VERBOSE" >> $HOME/env.sh
