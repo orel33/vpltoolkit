@@ -9,7 +9,7 @@ function model_setenv()
     [ -z "$EXO" ] && echo "⚠ EXO variable is not defined!" && exit 0
     [ -z "$DEBUG" ] && DEBUG=0
     [ -z "$VERBOSE" ] && VERBOSE=0
-
+    
     # export environment
     rm -f $HOME/env.sh
     echo "VERSION=$VERSION" >> $HOME/env.sh
@@ -18,11 +18,17 @@ function model_setenv()
     echo "EXO=$EXO" >> $HOME/env.sh
     echo "DEBUG=$DEBUG" >> $HOME/env.sh
     echo "VERBOSE=$VERBOSE" >> $HOME/env.sh
-
+    
     # print environment
     if [ "$DEBUG" = "1" ] ; then
         cat $HOME/env.sh
     fi
+}
+
+function model_getenv()
+{
+    [ ! -f $HOME/env.sh ] && echo "⚠ File \"env.sh\" missing!" && exit 0
+    source $HOME/env.sh
 }
 
 function model_clone() {
