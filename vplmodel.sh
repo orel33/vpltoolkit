@@ -1,5 +1,13 @@
 #!/bin/bash
 
+### BASIC ROUTINES ###
+
+ECHO()
+{
+  local COMMENT=""
+  if [ "$MODE" = "EVALUATE" ] ; then COMMENT="Comment :=>>" ; fi
+  echo "${COMMENT}$@"
+}
 
 ### ENVIRONMENT ###
 
@@ -68,7 +76,7 @@ function vplmodel_download() {
     vplmodel_checkout $EXO
     END=$(date +%s.%N)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
-    echo "Download $EXO in $TIME ms"
+    ECHO "Download $EXO in $TIME ms"
 }
 
 ### EXECUTION ###
