@@ -1,15 +1,26 @@
 #!/bin/bash
 
-function vplmodel_setenv()
+function vplmodel_initenv()
+{
+    VERSION="1.0"
+    [ -z "$MODE" ] && MODE="RUN"
+    [ -z "$DEBUG" ] && DEBUG=0
+    [ -z "$VERBOSE" ] && VERBOSE=0
+}
+
+function vplmodel_checkenv()
 {
     # basic environment
-    VERSION="1.0"
+    [ -z "$VERSION" ] && echo "⚠ MODE variable is not defined!" && exit 0
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
     [ -z "$EXO" ] && echo "⚠ EXO variable is not defined!" && exit 0
-    [ -z "$DEBUG" ] && DEBUG=0
-    [ -z "$VERBOSE" ] && VERBOSE=0
-    
+    [ -z "$DEBUG" ] && echo "⚠ DEBUG variable is not defined!" && exit 0
+    [ -z "$VERBOSE" ] && echo "⚠ VERBOSE variable is not defined!" && exit 0
+}
+
+function vplmodel_saveenv()
+{
     # export environment
     rm -f $HOME/env.sh
     echo "VERSION=$VERSION" >> $HOME/env.sh
@@ -18,17 +29,19 @@ function vplmodel_setenv()
     echo "EXO=$EXO" >> $HOME/env.sh
     echo "DEBUG=$DEBUG" >> $HOME/env.sh
     echo "VERBOSE=$VERBOSE" >> $HOME/env.sh
-    
-    # print environment
-    if [ "$DEBUG" = "1" ] ; then
-        cat $HOME/env.sh
-    fi
 }
 
-function vplmodel_getenv()
+function vplmodel_loadenv()
 {
     [ ! -f $HOME/env.sh ] && echo "⚠ File \"env.sh\" missing!" && exit 0
     source $HOME/env.sh
+}
+
+function vplmodel_printenv()
+{
+    if [ "$DEBUG" = "1" ] ; then
+        cat $HOME/env.sh | grep -v "REPOSITORY"
+    fi
 }
 
 ### download ###
@@ -60,9 +73,10 @@ function vplmodel_download() {
 
 function vplmodel_start() {
     EXO=$1
-    # vplmodel_checkenv
-    vplmodel_setenv
+    vplmodel_checkenv
     vplmodel_download $EXO
+    vplmodel_saveenv
     cp vplmodel/vpl_execution .
     chmod +x vpl_execution
+    # => implicit execution of vpl_execution
 }

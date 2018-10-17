@@ -4,7 +4,8 @@ rm -f $0 # for security issue
 
 ### load environment
 source vplmodel/vplmodel.sh
-vplmodel_getenv
+vplmodel_loadenv
+vplmodel_checkenv
 
 ### download exo
 # vpl_download $EXO
