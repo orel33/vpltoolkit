@@ -1,12 +1,9 @@
 #!/bin/bash
 
-function vplmodel_initenv()
-{
-    VERSION="1.0"
-    [ -z "$MODE" ] && MODE="RUN"
-    [ -z "$DEBUG" ] && DEBUG=0
-    [ -z "$VERBOSE" ] && VERBOSE=0
-}
+
+### ENVIRONMENT ###
+
+VERSION="1.0"
 
 function vplmodel_checkenv()
 {
@@ -15,8 +12,11 @@ function vplmodel_checkenv()
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
     [ -z "$EXO" ] && echo "⚠ EXO variable is not defined!" && exit 0
-    [ -z "$DEBUG" ] && echo "⚠ DEBUG variable is not defined!" && exit 0
-    [ -z "$VERBOSE" ] && echo "⚠ VERBOSE variable is not defined!" && exit 0
+    # [ -z "$DEBUG" ] && echo "⚠ DEBUG variable is not defined!" && exit 0
+    # [ -z "$VERBOSE" ] && echo "⚠ VERBOSE variable is not defined!" && exit 0
+    [ -z "$DEBUG" ] && DEBUG=0
+    [ -z "$VERBOSE" ] && VERBOSE=0
+
 }
 
 function vplmodel_saveenv()
@@ -44,7 +44,9 @@ function vplmodel_printenv()
     fi
 }
 
-### download ###
+### DOWNLOAD ###
+
+# TODO: add wget method
 
 function vplmodel_clone() {
     local REPOSITORY=$1
@@ -69,7 +71,7 @@ function vplmodel_download() {
     echo "Download $EXO in $TIME ms"
 }
 
-### download ###
+### EXECUTION ###
 
 function vplmodel_start() {
     EXO=$1
