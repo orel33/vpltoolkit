@@ -31,6 +31,8 @@ function vplmodel_getenv()
     source $HOME/env.sh
 }
 
+### download ###
+
 function vplmodel_clone() {
     local REPOSITORY=$1
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
@@ -42,4 +44,25 @@ function vplmodel_checkout() {
     local CHECKOUT=$1
     cd GIT && git -c http.sslVerify=false checkout HEAD -- $CHECKOUT && cd
     [ ! $? -eq 0 ] && echo "⚠ GIT checkout \"$CHECKOUT\" failure!" && exit 0
+}
+
+function vplmodel_download() {
+    local EXO=$1
+    START=$(date +%s.%N)
+    vplmodel_clone $REPOSITORY
+    vplmodel_checkout $EXO
+    END=$(date +%s.%N)
+    TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
+    echo "Download $EXO in $TIME ms"
+}
+
+### download ###
+
+function vplmodel_start() {
+    EXO=$1
+    # vplmodel_checkenv
+    vplmodel_setenv
+    vplmodel_download $EXO
+    cp vplmodel/vpl_execution .
+    chmod +x vpl_execution
 }

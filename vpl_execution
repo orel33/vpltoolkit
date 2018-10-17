@@ -4,21 +4,13 @@ rm -f $0 # for security issue
 
 ### load environment
 source vplmodel/vplmodel.sh
-source vplmodel/toolkit.sh
 vplmodel_getenv
 
 ### download exo
-START=$(date +%s.%N)
-vplmodel_clone $REPOSITORY
-vplmodel_checkout $EXO
-END=$(date +%s.%N)
-TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
-ECHO "Download $EXO in $TIME ms"
+# vpl_download $EXO
 
+### run exo
 BASEDIR="$HOME/GIT/$EXO"
-# echo "BASEDIR=$BASEDIR"
-
-# ### run
 [ ! -d "$BASEDIR" ] && echo "⚠ Directory \"$BASEDIR\" missing!" && exit 0
 cd $BASEDIR
 [ ! -f run.sh ] && echo "⚠ File \"run.sh\" missing!" && exit 0
