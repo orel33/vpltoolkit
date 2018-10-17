@@ -6,14 +6,12 @@ rm -f $0 # for security issue
 source vplmodel/bootstrap.sh
 model_getenv
 
-START=$(date +%s.%N)
+START=$(date +%s.%N) # in nanoseconds
 model_clone $REPOSITORY
 model_checkout $EXO
-END=$(date +%s.%N)
-echo $START
-echo $END
-DIFF=$(echo "$END - $START" | bc)
-echo $DIFF
+END=$(date +%s.%N)   # in nanoseconds
+TIME=python -c "print(($END-$START)/1E6" # in ms
+echo "Checkout $EXO in $TIME ms"
 
 BASEDIR="$HOME/GIT/$EXO"
 # echo "BASEDIR=$BASEDIR"
