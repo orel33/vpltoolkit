@@ -10,7 +10,7 @@ vplmodel_exportenv
 
 ### run exo
 BASEDIR="$HOME/GIT/$EXO"
-[ ! -d "$BASEDIR" ] && echo "⚠ Directory \"$BASEDIR\" missing!" && exit 0
+# [ ! -d "$BASEDIR" ] && echo "⚠ Directory \"$BASEDIR\" missing!" && exit 0
 cd $BASEDIR
 [ ! -f run.sh ] && echo "⚠ File \"run.sh\" missing!" && exit 0
 ./run.sh
