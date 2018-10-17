@@ -31,6 +31,7 @@ function vplmodel_checkenv()
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
     [ -z "$BRANCH" ] && BRANCH="master"
     [ -z "$EXO" ] && echo "⚠ EXO variable is not defined!" && exit 0
+    [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ -z "$DEBUG" ] && DEBUG=0
     [ -z "$VERBOSE" ] && VERBOSE=0
 }
@@ -38,20 +39,21 @@ function vplmodel_checkenv()
 function vplmodel_saveenv()
 {
     # export environment
-    rm -f $HOME/env.sh
-    echo "VERSION=$VERSION" >> $HOME/env.sh
-    echo "MODE=$MODE" >> $HOME/env.sh
-    echo "REPOSITORY=$REPOSITORY" >> $HOME/env.sh
-    echo "BRANCH=$BRANCH" >> $HOME/env.sh
-    echo "EXO=$EXO" >> $HOME/env.sh
-    echo "DEBUG=$DEBUG" >> $HOME/env.sh
-    echo "VERBOSE=$VERBOSE" >> $HOME/env.sh
+    rm -f $RUNDIR/env.sh
+    echo "VERSION=$VERSION" >> $RUNDIR/env.sh
+    echo "MODE=$MODE" >> $RUNDIR/env.sh
+    echo "REPOSITORY=$REPOSITORY" >> $RUNDIR/env.sh
+    echo "BRANCH=$BRANCH" >> $RUNDIR/env.sh
+    echo "EXO=$EXO" >> $RUNDIR/env.sh
+    echo "RUNDIR=$RUNDIR" >> $RUNDIR/env.sh
+    echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
+    echo "VERBOSE=$VERBOSE" >> $RUNDIR/env.sh
 }
 
 function vplmodel_loadenv()
 {
-    [ ! -f $HOME/env.sh ] && echo "⚠ File \"env.sh\" missing!" && exit 0
-    source $HOME/env.sh
+    [ ! -f $RUNDIR/env.sh ] && echo "⚠ File \"env.sh\" missing!" && exit 0
+    source $RUNDIR/env.sh
 }
 
 function vplmodel_exportenv()
@@ -61,6 +63,7 @@ function vplmodel_exportenv()
     # export REPOSITORY
     # export BRANCH
     export EXO
+    export RUNDIR
     export DEBUG
     export VERBOSE
 }
@@ -73,6 +76,7 @@ function vplmodel_printenv()
     # ECHOV "REPOSITORY=$REPOSITORY" # Don't show it, because of possible login & password!!!
     # ECHOV "BRANCH=$BRANCH"
     ECHOV "EXO=$EXO"
+    ECHOV "RUNDIR=$RUNDIR"
     ECHOV "DEBUG=$DEBUG"
     ECHOV "VERBOSE=$VERBOSE"
 }
@@ -116,3 +120,5 @@ function vplmodel_start() {
     chmod +x vpl_execution
     # => implicit execution of vpl_execution
 }
+
+# EOF
