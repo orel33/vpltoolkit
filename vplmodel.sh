@@ -89,13 +89,14 @@ function vplmodel_clone() {
     local REPOSITORY=$1
     local BRANCH=$2
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
-    git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 GIT
+    # git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 GIT
+    git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/GIT
     [ ! $? -eq 0 ] && echo "⚠ GIT clone \"vplmoodle\" failure!" && exit 0
 }
 
 function vplmodel_checkout() {
     local DIR=$1
-    cd GIT && git -c http.sslVerify=false checkout HEAD -- $DIR && cd
+    cd $RUNDIR/GIT && git -c http.sslVerify=false checkout HEAD -- $DIR && cd
     [ ! $? -eq 0 ] && echo "⚠ GIT checkout \"$CHECKOUT\" failure!" && exit 0
 }
 
