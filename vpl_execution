@@ -11,7 +11,7 @@ START=$(date +%s.%N) # in nanoseconds
 model_clone $REPOSITORY
 model_checkout $EXO
 END=$(date +%s.%N)   # in nanoseconds
-TIME=$(python -c "print(($END-$START)/1E6")) # in ms
+TIME=$(python -c "print(($END-$START)/1E6)") # in ms
 echo "Download $EXO in $TIME ms"
 
 BASEDIR="$HOME/GIT/$EXO"
