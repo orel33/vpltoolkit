@@ -101,7 +101,7 @@ function vplmodel_checkout() {
 function vplmodel_download() {
     local DIR=$1
     START=$(date +%s.%N)
-    vplmodel_clone $REPOSITORY $BRANCH
+    vplmodel_clone $REPOSITORY --branch $BRANCH
     vplmodel_checkout $DIR
     END=$(date +%s.%N)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
