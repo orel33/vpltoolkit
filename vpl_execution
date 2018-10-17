@@ -3,7 +3,9 @@
 rm -f $0 # for security issue
 
 ### load environment
+[ -z "$RUNDIR" ] && RUNDIR=$HOME
 source $RUNDIR/vplmodel/vplmodel.sh
+
 vplmodel_loadenv
 vplmodel_checkenv
 vplmodel_exportenv
