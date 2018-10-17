@@ -6,12 +6,13 @@ rm -f $0 # for security issue
 source vplmodel/bootstrap.sh
 model_getenv
 
+### download exo
 START=$(date +%s.%N) # in nanoseconds
 model_clone $REPOSITORY
 model_checkout $EXO
 END=$(date +%s.%N)   # in nanoseconds
-TIME=python -c "print(($END-$START)/1E6" # in ms
-echo "Checkout $EXO in $TIME ms"
+TIME=$(python -c "print(($END-$START)/1E6") # in ms
+echo "Download $EXO in $TIME ms"
 
 BASEDIR="$HOME/GIT/$EXO"
 # echo "BASEDIR=$BASEDIR"
