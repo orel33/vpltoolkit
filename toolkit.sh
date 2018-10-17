@@ -21,7 +21,7 @@ TRACE()
 ECHO()
 {
   local COMMENT=""
-  if [ "$VPL" = "EVALUATE" ] ; then COMMENT="Comment :=>>" ; fi
+  if [ "$MODE" = "EVALUATE" ] ; then COMMENT="Comment :=>>" ; fi
   echo "${COMMENT}$@"
 }
 
@@ -41,8 +41,8 @@ EXIT()
     (( GRADE < 0 )) && GRADE=0
     (( GRADE > 100 )) && GRADE=100
     ECHO "-GRADE" && ECHO "$GRADE / 100"
-    if [ "$VPL" = "EVALUATE" ] ; then echo "Grade :=>> $GRADE" ; fi
-    if [ "$VPL" = "RUN" ] ; then echo "Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
+    if [ "$MODE" = "EVALUATE" ] ; then echo "Grade :=>> $GRADE" ; fi
+    if [ "$MODE" = "RUN" ] ; then echo "Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
     exit 0
 }
 

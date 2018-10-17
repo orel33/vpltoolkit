@@ -32,14 +32,14 @@ function model_getenv()
 }
 
 function model_clone() {
-    REPOSITORY=$1
+    local REPOSITORY=$1
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
     git -c http.sslVerify=false clone -q -n $REPOSITORY --depth 1 GIT
     [ ! $? -eq 0 ] && echo "⚠ GIT clone \"vplmoodle\" failure!" && exit 0
 }
 
 function model_checkout() {
-    CHECKOUT=$1
+    local CHECKOUT=$1
     cd GIT && git -c http.sslVerify=false checkout HEAD -- $CHECKOUT && cd
     [ ! $? -eq 0 ] && echo "⚠ GIT checkout \"$CHECKOUT\" failure!" && exit 0
 }
