@@ -3,12 +3,10 @@
 rm -f $0 # for security issue
 
 ### load environment
-source vplmodel/vplmodel.sh
+source $HOME/vplmodel/vplmodel.sh
 vplmodel_loadenv
 vplmodel_checkenv
-
-### download exo
-# vpl_download $EXO
+vplmodel_exportenv
 
 ### run exo
 BASEDIR="$HOME/GIT/$EXO"

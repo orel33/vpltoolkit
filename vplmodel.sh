@@ -23,8 +23,6 @@ ECHOD()
 
 ### ENVIRONMENT ###
 
-
-
 function vplmodel_checkenv()
 {
     # basic environment
@@ -56,6 +54,17 @@ function vplmodel_loadenv()
     [ ! -f $HOME/env.sh ] && echo "⚠ File \"env.sh\" missing!" && exit 0
     source $HOME/env.sh
 }
+
+function vplmodel_exportenv()
+{
+    export VERSION
+    export MODE
+    # export REPOSITORY
+    export EXO
+    export DEBUG
+    export VERBOSE
+}
+
 
 function vplmodel_printenv()
 {
