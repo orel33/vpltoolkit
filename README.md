@@ -7,9 +7,9 @@ Features:
 * offline testing using a local *run.sh* script
 * ...
 
-## A First Example
+## Hello World
 
-Let's consider a VPL activity named *demo*, that you want to develop. In oder to follow our exection model, the *demo* VPL activity must be based on a generic VPL activity (named *vplmodel*), provided here. In other words, the *demo* must inherit from *vplmodel*.
+Let's consider a VPL activity named *hello*, that you want to develop. In oder to follow our exection model, the *hello* VPL activity must be based on a generic VPL activity (named *vplmodel*), provided here. In other words, the *hello* must inherit from *vplmodel*.
 
 ### Parent Activity
 
@@ -40,7 +40,7 @@ Scripts *vpl_run.sh* and *vpl_evaluate.sh*:
 ```bash
 #!/bin/bash
 REPOSITORY="https://github.com/orel33/vplmodel.git"
-BRANCH="demo"
+BRANCH="hello"
 EXO="demo"
 DEBUG=1
 VERBOSE=1
