@@ -1,17 +1,29 @@
 #!/bin/bash
 
+VERSION="1.0"
+
 ### BASIC ROUTINES ###
 
 ECHO()
 {
-  local COMMENT=""
-  if [ "$MODE" = "EVALUATE" ] ; then COMMENT="Comment :=>>" ; fi
-  echo "${COMMENT}$@"
+    local COMMENT=""
+    if [ "$MODE" = "EVALUATE" ] ; then COMMENT="Comment :=>>" ; fi
+    echo "${COMMENT}$@"
+}
+
+ECHOV()
+{
+    if [ "$VERBOSE" = "1" ] ; then ECHO $@ ; fi
+}
+
+ECHOD()
+{
+    if [ "$DEBUG" = "1" ] ; then ECHO $@ ; fi
 }
 
 ### ENVIRONMENT ###
 
-VERSION="1.0"
+
 
 function vplmodel_checkenv()
 {
@@ -24,7 +36,7 @@ function vplmodel_checkenv()
     # [ -z "$VERBOSE" ] && echo "⚠ VERBOSE variable is not defined!" && exit 0
     [ -z "$DEBUG" ] && DEBUG=0
     [ -z "$VERBOSE" ] && VERBOSE=0
-
+    
 }
 
 function vplmodel_saveenv()
@@ -47,9 +59,12 @@ function vplmodel_loadenv()
 
 function vplmodel_printenv()
 {
-    if [ "$DEBUG" = "1" ] ; then
-        cat $HOME/env.sh | grep -v "REPOSITORY"
-    fi
+    ECHOV "VERSION=$VERSION"
+    ECHOV "MODE=$MODE"
+    # ECHOV "REPOSITORY=$REPOSITORY" # Don't show it, because of possible login & password!!!
+    ECHOV "EXO=$EXO"
+    ECHOV "DEBUG=$DEBUG"
+    ECHOV "VERBOSE=$VERBOSE"
 }
 
 ### DOWNLOAD ###
@@ -76,13 +91,14 @@ function vplmodel_download() {
     vplmodel_checkout $EXO
     END=$(date +%s.%N)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
-    ECHO "Download $EXO in $TIME ms"
+    ECHOV "Download $EXO in $TIME ms"
 }
 
 ### EXECUTION ###
 
 function vplmodel_start() {
     vplmodel_checkenv
+    vplmodel_printenv
     vplmodel_download $EXO
     vplmodel_saveenv
     cp vplmodel/vpl_execution .
