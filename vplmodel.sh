@@ -74,7 +74,6 @@ function vplmodel_download() {
 ### EXECUTION ###
 
 function vplmodel_start() {
-    EXO=$1
     vplmodel_checkenv
     vplmodel_download $EXO
     vplmodel_saveenv
