@@ -6,13 +6,11 @@ BRANCH="demo"
 EXO="hello"
 DEBUG=1
 VERBOSE=1
-# RUNDIR=$HOME
-# RUNDIR=$(dirname $(realpath $0))
 RUNDIR=$(mktemp -d)
 
 cd $RUNDIR && git clone $VPLMODEL &> /dev/null && cd -
-source $RUNDIR/vplmodel/vplmodel.sh
-vplmodel_start
+source $RUNDIR/vplmodel/toolkit.sh
+START
 
 # explicit run
 source $RUNDIR/vplmodel/vpl_execution
