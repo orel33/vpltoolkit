@@ -57,8 +57,8 @@ function CHECKENV()
     # basic environment
     [ -z "$VERSION" ] && echo "⚠ MODE variable is not defined!" && exit 0
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
-    [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
-    [ -z "$BRANCH" ] && BRANCH="master"
+    # [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
+    # [ -z "$BRANCH" ] && BRANCH="master"
     [ -z "$EXO" ] && echo "⚠ EXO variable is not defined!" && exit 0
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ -z "$DEBUG" ] && DEBUG=0
@@ -71,8 +71,8 @@ function SAVEENV()
     rm -f $RUNDIR/env.sh
     echo "VERSION=$VERSION" >> $RUNDIR/env.sh
     echo "MODE=$MODE" >> $RUNDIR/env.sh
-    echo "REPOSITORY=$REPOSITORY" >> $RUNDIR/env.sh
-    echo "BRANCH=$BRANCH" >> $RUNDIR/env.sh
+    # echo "REPOSITORY=$REPOSITORY" >> $RUNDIR/env.sh
+    # echo "BRANCH=$BRANCH" >> $RUNDIR/env.sh
     echo "EXO=$EXO" >> $RUNDIR/env.sh
     echo "RUNDIR=$RUNDIR" >> $RUNDIR/env.sh
     echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
