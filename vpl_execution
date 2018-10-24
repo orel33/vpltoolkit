@@ -1,20 +1,17 @@
 #!/bin/bash
 
-rm -f $0 # for security issue
-
 ### load environment
 # [ -z "$RUNDIR" ] && RUNDIR=$HOME
 [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
-
 source $RUNDIR/vplmodel/toolkit.sh
 LOADENV
 CHECKENV
-EXPORTENV
+# EXPORTENV
 
-### run exo
+### run
 cd $RUNDIR  # set working directory
 BASEDIR="$RUNDIR/download/$EXO"
 [ ! -f $BASEDIR/run.sh ] && echo "⚠ File \"run.sh\" missing!" && exit 0
-$BASEDIR/run.sh
+source $BASEDIR/run.sh
 
 # EOF
