@@ -114,29 +114,22 @@ function PRINTENV()
 
 # TODO: add wget method
 
-function CLONE() {
+function DOWNLOAD() {
     local REPOSITORY=$1
     local BRANCH=$2
-    [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
-    # git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 GIT
-    git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/GIT
-    [ ! $? -eq 0 ] && echo "⚠ GIT clone \"vplmoodle\" failure!" && exit 0
-}
-
-function CHECKOUT() {
-    local DIR=$1
-    cd $RUNDIR/GIT && git -c http.sslVerify=false checkout HEAD -- $DIR && cd
-    [ ! $? -eq 0 ] && echo "⚠ GIT checkout \"$CHECKOUT\" failure!" && exit 0
-}
-
-function DOWNLOAD() {
-    local DIR=$1
+    local SUBDIR=$3
     START=$(date +%s.%N)
-    CLONE $REPOSITORY $BRANCH
-    CHECKOUT $DIR
+    [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
+    [ -z "$BRANCH" ] && echo "⚠ BRANCH variable is not defined!" && exit 0
+    [ -z "$SUBDIR" ] && echo "⚠ SUBDIR variable is not defined!" && exit 0
+    git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download
+    [ ! $? -eq 0 ] && echo "⚠ GIT clone repository failure!" && exit 0
+    cd $RUNDIR/download && git -c http.sslVerify=false checkout HEAD -- $SUBDIR && cd -
+    [ ! $? -eq 0 ] && echo "⚠ GIT checkout subdir failure!" && exit 0
     END=$(date +%s.%N)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
-    ECHOV "Download $EXO in $TIME ms"
+    ECHOV "GIT download in $TIME ms"
+    rm -rf $RUNDIR/download/$SUBDIR/.git
 }
 
 ### EXECUTION ###
@@ -144,7 +137,7 @@ function DOWNLOAD() {
 function START() {
     CHECKENV
     PRINTENV
-    DOWNLOAD $EXO
+    # DOWNLOAD $EXO    # downloaded into $RUNDIR/GIT/$EXO/
     SAVEENV
     cp $RUNDIR/vplmodel/vpl_execution $RUNDIR
     chmod +x $RUNDIR/vpl_execution
