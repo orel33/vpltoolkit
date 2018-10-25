@@ -125,10 +125,11 @@ function DOWNLOAD() {
     [ ! $? -eq 0 ] && echo "⚠ GIT clone repository failure!" && exit 0
     ( cd $RUNDIR/download && git -c http.sslVerify=false checkout HEAD -- $SUBDIR &> /dev/null )
     [ ! $? -eq 0 ] && echo "⚠ GIT checkout subdir failure!" && exit 0
+    [ ! -d $RUNDIR/download/$SUBDIR ] && ECHO "⚠ SUBDIR \"$SUBDIR\" is missing!" && exit 0
     END=$(date +%s.%N)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
     ECHOV "GIT download $SUBDIR in $TIME ms"
-    cp -rf $RUNDIR/download/$SUBDIR/* $RUNDIR/*
+    mv $RUNDIR/download/$SUBDIR/* $RUNDIR/*
     # rm -rf $RUNDIR/download
 }
 
