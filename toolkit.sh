@@ -139,11 +139,11 @@ function START() {
     PRINTENV
     # DOWNLOAD $EXO    # downloaded into $RUNDIR/GIT/$EXO/
     SAVEENV
-    cp $RUNDIR/vplmodel/vpl_execution $RUNDIR # bug -> copy in $HOME if $MODE VPL, or use $HOME as $RUNDIR???
+    # cp $RUNDIR/vplmodel/vpl_execution $RUNDIR # bug -> copy in $HOME if $MODE VPL, or use $HOME as $RUNDIR???
     # ln -sf $RUNDIR/vplmodel/vpl_execution $HOME/vpl_execution
-
-    chmod +x $RUNDIR/vpl_execution
+    # chmod +x $RUNDIR/vpl_execution
     # => implicit execution of vpl_execution
+    tree
 }
 
 # EOF
