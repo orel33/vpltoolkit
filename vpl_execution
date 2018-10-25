@@ -16,6 +16,9 @@ source $RUNDIR/vplmodel/toolkit.sh
 CHECKENV
 EXPORTENV
 
+env | grep VPL
+# COPYINPUTS
+
 ### run
 cd $RUNDIR  # set current working directory
 BASEDIR="$RUNDIR/download/$EXO"
