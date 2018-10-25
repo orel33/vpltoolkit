@@ -66,16 +66,15 @@ function CHECKENV()
 
 function SAVEENV()
 {
-    ENVDIR=$HOME
-    if [ "$ONLINE" = "0" ] ; then ENVDIR=$RUNDIR ; fi
-    rm -f $ENVDIR/env.sh
-    echo "VERSION=$VERSION" >> $ENVDIR/env.sh
-    echo "MODE=$MODE" >> $ENVDIR/env.sh
-    echo "ONLINE=$ONLINE" >> $ENVDIR/env.sh
-    echo "EXO=$EXO" >> $ENVDIR/env.sh
-    echo "RUNDIR=$RUNDIR" >> $ENVDIR/env.sh
-    echo "DEBUG=$DEBUG" >> $ENVDIR/env.sh
-    echo "VERBOSE=$VERBOSE" >> $ENVDIR/env.sh
+    [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
+    rm -f $RUNDIR/env.sh
+    echo "VERSION=$VERSION" >> $RUNDIR/env.sh
+    echo "MODE=$MODE" >> $RUNDIR/env.sh
+    echo "ONLINE=$ONLINE" >> $RUNDIR/env.sh
+    echo "EXO=$EXO" >> $RUNDIR/env.sh
+    echo "RUNDIR=$RUNDIR" >> $RUNDIR/env.sh
+    echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
+    echo "VERBOSE=$VERBOSE" >> $RUNDIR/env.sh
 }
 
 function LOADENV()
@@ -137,15 +136,15 @@ function START() {
     CHECKENV
     PRINTENV
     SAVEENV
-    # EXPORTENV
 
     if [ "$ONLINE" = "1" ] ; then
+        cp $RUNDIR/env.sh $HOME
+        cp $RUNDIR/vplmodel/toolkit.sh $HOME
+        cp $RUNDIR/vplmodel/vpl_execution $HOME && chmod +x $HOME
         # => implicit run of $vpl_execution
-        cp $RUNDIR/vplmodel/vpl_execution $HOME && chmod +x $HOME/vpl_execution
-        # ln -sf $RUNDIR/vplmodel/vpl_execution $HOME/vpl_execution
     else
-        # => explicit run of vpl_execution
         source $RUNDIR/vplmodel/vpl_execution
+        # => explicit run of vpl_execution
     fi
 }
 

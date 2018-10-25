@@ -3,11 +3,19 @@
 echo "START VPL_EXECUTION"
 
 ### load environment
-ENVDIR=$HOME
-if [ "$ONLINE" = "0" ] ; then ENVDIR=$RUNDIR ; fi
+ENVDIR=$RUNDIR
+[ -z "$ENVDIR" ] && ENVDIR=$HOME
+echo "ENVDIR=$ENVDIR"
+
 [ ! -f $ENVDIR/env.sh ] && echo "⚠ File \"env.sh\" missing!" && exit 0
 source $ENVDIR/env.sh
+
+# if [ "$ONLINE" = "0" ] ; then ENVDIR=$RUNDIR ; fi
+# [ ! -f $ENVDIR/env.sh ] && echo "⚠ File \"env.sh\" missing!" && exit 0
+# source $ENVDIR/env.sh
+
 [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
+[ ! -f $RUNDIR/vplmodel/toolkit.sh ] && echo "⚠ File \"toolkit.sh\" missing!" && exit 0
 source $RUNDIR/vplmodel/toolkit.sh
 CHECKENV
 EXPORTENV

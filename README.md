@@ -50,6 +50,15 @@ $RUNDIR
       └── ...
 ```
 
+Besides, you will find some copy of files in $HOME, that are useful for VPL boot for *online* execution only.
+
+```text
+$HOME
+  ├── env.sh
+  ├── vpl_execution
+  └── ...
+```
+
 ## Hello World
 
 Let's consider a VPL activity named *hello*, that you want to develop. In oder to follow our exection model, the *hello* VPL activity must be based on a generic VPL activity (named *vplmodel*), provided here. In other words, the *hello* must inherit from *vplmodel*.
