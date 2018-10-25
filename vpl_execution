@@ -9,7 +9,7 @@ CHECKENV
 # EXPORTENV
 
 ### run
-cd $RUNDIR  # set working directory
+cd $RUNDIR  # set current working directory
 BASEDIR="$RUNDIR/download/$EXO"
 [ ! -f $BASEDIR/run.sh ] && echo "⚠ File \"run.sh\" missing!" && exit 0
 source $BASEDIR/run.sh

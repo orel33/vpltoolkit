@@ -36,7 +36,6 @@ The *run.sh* script is starting from the $RUNDIR directory, organized as follow:
 ```text
 $RUNDIR
   ├── env.sh
-  ├── vpl_execution
   ├── inputs
   │   └── mycat.c
   ├── download
@@ -47,6 +46,7 @@ $RUNDIR
   │       └── ...
   └── vplmodel
       └── toolkit.sh
+      └── vpl_execution
       └── ...
 ```
 
