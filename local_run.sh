@@ -6,7 +6,7 @@ DEBUG=1
 VERBOSE=1
 RUNDIR=$(mktemp -d)
 
-cd $RUNDIR && git clone $VPLMODEL &> /dev/null && cd -
+( cd $RUNDIR && git clone $VPLMODEL &> /dev/null )
 source $RUNDIR/vplmodel/toolkit.sh
 
 EXO="mycat"
