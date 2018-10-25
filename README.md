@@ -3,6 +3,7 @@
 ## Introduction
 
 Features:
+
 * a public & reusable execution model for VPL
 * offline testing using a local *run.sh* script
 * ...

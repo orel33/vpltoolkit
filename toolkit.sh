@@ -138,6 +138,11 @@ function START() {
     PRINTENV
     SAVEENV
 
+    # prepare inputs
+    env
+
+    mkdir $RUNDIR/inputs
+
     if [ "$ONLINE" = "1" ] ; then
         cp $RUNDIR/env.sh $HOME
         cp $RUNDIR/vplmodel/toolkit.sh $HOME
