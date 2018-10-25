@@ -123,7 +123,7 @@ function DOWNLOAD() {
     [ -z "$SUBDIR" ] && echo "⚠ SUBDIR variable is not defined!" && exit 0
     git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download &> /dev/null
     [ ! $? -eq 0 ] && echo "⚠ GIT clone repository failure!" && exit 0
-    ( cd $RUNDIR/tmp && git -c http.sslVerify=false checkout HEAD -- $SUBDIR &> /dev/null )
+    ( cd $RUNDIR/download && git -c http.sslVerify=false checkout HEAD -- $SUBDIR &> /dev/null )
     [ ! $? -eq 0 ] && echo "⚠ GIT checkout subdir failure!" && exit 0
     END=$(date +%s.%N)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
