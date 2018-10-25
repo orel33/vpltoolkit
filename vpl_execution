@@ -3,11 +3,14 @@
 echo "START VPL_EXECUTION"
 
 ### load environment
-[ -z "$RUNDIR" ] && source $HOME/env.sh
+ENVDIR=$HOME
+if [ "$ONLINE" = "0" ] ; then ENVDIR=$RUNDIR ; fi
+[ ! -f $ENVDIR/env.sh ] && echo "⚠ File \"env.sh\" missing!" && exit 0
+source $ENVDIR/env.sh
 [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
 source $RUNDIR/vplmodel/toolkit.sh
 CHECKENV
-# EXPORTENV
+EXPORTENV
 
 ### run
 cd $RUNDIR  # set current working directory
