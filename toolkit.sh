@@ -129,6 +129,7 @@ function DOWNLOAD() {
     END=$(date +%s.%N)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
     ECHOV "GIT download $SUBDIR in $TIME ms"
+    ls -lR $RUNDIR
     mv $RUNDIR/download/$SUBDIR/* $RUNDIR/*   # cp -rf fail ???
     rm -rf $RUNDIR/download
 }
