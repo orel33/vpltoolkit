@@ -143,7 +143,8 @@ function START() {
     # ln -sf $RUNDIR/vplmodel/vpl_execution $HOME/vpl_execution
     # chmod +x $RUNDIR/vpl_execution
     # => implicit execution of vpl_execution
-    tree
+    pwd
+    ls
 }
 
 # EOF
