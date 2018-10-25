@@ -130,6 +130,17 @@ function DOWNLOAD() {
     rm -rf $RUNDIR/download/$SUBDIR/.git
 }
 
+### COPY INPUTS ###
+
+function COPYINPUTS() {
+    echo "=> copy inputs: $@"
+    mkdir $RUNDIR/inputs
+    for FILE in "$@" ; do
+        [ ! -f $FILE ] && ECHO "⚠ Input file \"$FILE\" is missing!" && exit 0
+        cp $FILE $RUNDIR/inputs/
+    done
+}
+
 ### EXECUTION ###
 
 function START() {
@@ -140,6 +151,7 @@ function START() {
 
     source $HOME/vpl_environment.sh
     env | grep VPL
+    COPYINPUTS $VPL_SUBFILES
 
     if [ "$ONLINE" = "1" ] ; then
         cp $RUNDIR/env.sh $HOME
