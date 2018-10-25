@@ -121,15 +121,15 @@ function DOWNLOAD() {
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
     [ -z "$BRANCH" ] && echo "⚠ BRANCH variable is not defined!" && exit 0
     [ -z "$SUBDIR" ] && echo "⚠ SUBDIR variable is not defined!" && exit 0
-    git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/tmp &> /dev/null
+    git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download &> /dev/null
     [ ! $? -eq 0 ] && echo "⚠ GIT clone repository failure!" && exit 0
     ( cd $RUNDIR/tmp && git -c http.sslVerify=false checkout HEAD -- $SUBDIR &> /dev/null )
     [ ! $? -eq 0 ] && echo "⚠ GIT checkout subdir failure!" && exit 0
     END=$(date +%s.%N)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
     ECHOV "GIT download $SUBDIR in $TIME ms"
-    mv $RUNDIR/tmp/$SUBDIR/* $RUNDIR/download/
-    rm -rf $RUNDIR/tmp
+    cp -rf $RUNDIR/download/$SUBDIR/* $RUNDIR/*
+    # rm -rf $RUNDIR/download
 }
 
 ### COPY INPUTS ###
@@ -150,7 +150,7 @@ function START() {
     CHECKENV
     PRINTENV
     SAVEENV
-    
+
     if [ "$ONLINE" = "1" ] ; then
         source $HOME/vpl_environment.sh
         COPYINPUTS $VPL_SUBFILES

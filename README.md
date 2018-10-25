@@ -1,4 +1,4 @@
-# VPL Model
+# VPL Toolkit
 
 ## Introduction
 
@@ -36,15 +36,13 @@ The *run.sh* script is starting from the $RUNDIR directory, organized as follow:
 
 ```text
 $RUNDIR
-  ├── env.sh
-  ├── inputs                   # all input files submitted by VPL by student ($VPL_SUBFILES)
+  ├── env.sh              # environment variable for the VPL toolkit
+  ├── run.sh              # entry point
+  ├── ...                 # all files provided by teacher...
+  ├── inputs              # all input files submitted by VPL by student ($VPL_SUBFILES)
   │   └── student.c
   |   └── ...
-  ├── download                 # all files provided by teacher to perform evaluation
-  |    ├── run.sh              # <-- entry point
-  |    ├── solution.c
-  │    └── ...
-  └── vplmodel                 # VPL toolkit
+  └── vpltoolkit          # VPL toolkit
       └── toolkit.sh
       └── vpl_execution
       └── ...
@@ -63,7 +61,9 @@ $HOME
 
 Let's consider a VPL activity named *hello*, that you want to develop. In oder to follow our exection model, the *hello* VPL activity must be based on a generic VPL activity (named *vplmodel*), provided here. In other words, the *hello* must inherit from *vplmodel*.
 
+## TODO
 
+* use the same docker environment as the one provided by Moodle @ University of Bordeaux
 
 ---
 aurelien.esnard@u-bordeaux.fr
