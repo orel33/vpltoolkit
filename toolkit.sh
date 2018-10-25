@@ -150,7 +150,7 @@ function START() {
     SAVEENV
 
     source $HOME/vpl_environment.sh
-    env | grep VPL
+    # env | grep VPL
     COPYINPUTS $VPL_SUBFILES
 
     if [ "$ONLINE" = "1" ] ; then

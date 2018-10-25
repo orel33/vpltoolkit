@@ -16,9 +16,6 @@ source $RUNDIR/vplmodel/toolkit.sh
 CHECKENV
 EXPORTENV
 
-source $HOME/vpl_environment.sh
-COPYINPUTS $VPL_SUBFILES
-
 ### run
 cd $RUNDIR  # set current working directory
 BASEDIR="$RUNDIR/download/$EXO"
