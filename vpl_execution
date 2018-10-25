@@ -1,5 +1,10 @@
 #!/bin/bash
 
+echo "START VPL_EXECUTION"
+pwd
+ls
+env
+
 ### load environment
 # [ -z "$RUNDIR" ] && RUNDIR=$HOME
 [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
