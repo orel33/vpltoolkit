@@ -140,8 +140,8 @@ function START() {
 
     if [ "$ONLINE" = "1" ] ; then
         # => implicit run of $vpl_execution
-        # cp $RUNDIR/vplmodel/vpl_execution $HOME && chmod +x $RUNDIR/vpl_execution
-        ln -sf $RUNDIR/vplmodel/vpl_execution $HOME/vpl_execution
+        cp $RUNDIR/vplmodel/vpl_execution $HOME && chmod +x $HOME/vpl_execution
+        # ln -sf $RUNDIR/vplmodel/vpl_execution $HOME/vpl_execution
     else
         # => explicit run of vpl_execution
         source $RUNDIR/vplmodel/vpl_execution

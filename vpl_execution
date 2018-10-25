@@ -1,9 +1,6 @@
 #!/bin/bash
 
 echo "START VPL_EXECUTION"
-pwd
-ls
-env
 
 ### load environment
 # [ -z "$RUNDIR" ] && RUNDIR=$HOME

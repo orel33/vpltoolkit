@@ -1,16 +1,14 @@
 #!/bin/bash
-
-# model
 VPLMODEL="https://github.com/orel33/vplmodel.git"
+ONLINE=1
 MODE="EVAL"
-RUNDIR=$HOME
-REPOSITORY="https://github.com/orel33/vplmodel.git"
-BRANCH="demo"
 DEBUG=1
 VERBOSE=1
+RUNDIR=$(mktemp -d)
 
-git clone $VPLMODEL &> /dev/null
+cd $RUNDIR && git clone $VPLMODEL &> /dev/null && cd -
 source $RUNDIR/vplmodel/toolkit.sh
 
 EXO="hello"
+DOWNLOAD "https://github.com/orel33/vplmodel.git" "demo" $EXO
 START
