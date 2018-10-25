@@ -117,24 +117,26 @@ function DOWNLOAD() {
     local BRANCH=$2
     local SUBDIR=$3
     START=$(date +%s.%N)
+    mkdir -p $RUNDIR/download
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
     [ -z "$BRANCH" ] && echo "⚠ BRANCH variable is not defined!" && exit 0
     [ -z "$SUBDIR" ] && echo "⚠ SUBDIR variable is not defined!" && exit 0
-    git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download
+    git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/tmp &> /dev/null
     [ ! $? -eq 0 ] && echo "⚠ GIT clone repository failure!" && exit 0
-    ( cd $RUNDIR/download && git -c http.sslVerify=false checkout HEAD -- $SUBDIR )
+    ( cd $RUNDIR/tmp && git -c http.sslVerify=false checkout HEAD -- $SUBDIR &> /dev/null )
     [ ! $? -eq 0 ] && echo "⚠ GIT checkout subdir failure!" && exit 0
     END=$(date +%s.%N)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
-    ECHOV "GIT download in $TIME ms"
-    rm -rf $RUNDIR/download/$SUBDIR/.git
+    ECHOV "GIT download $SUBDIR in $TIME ms"
+    mv $RUNDIR/tmp/$SUBDIR/* $RUNDIR/download/
+    rm -rf $RUNDIR/tmp
 }
 
 ### COPY INPUTS ###
 
 function COPYINPUTS() {
     echo "=> copy inputs: $@"
-    mkdir $RUNDIR/inputs
+    mkdir -p $RUNDIR/inputs
     for FILE in "$@" ; do
         [ ! -f $FILE ] && ECHO "⚠ Input file \"$FILE\" is missing!" && exit 0
         cp $FILE $RUNDIR/inputs/
@@ -148,17 +150,16 @@ function START() {
     CHECKENV
     PRINTENV
     SAVEENV
-
-    source $HOME/vpl_environment.sh
-    # env | grep VPL
-    COPYINPUTS $VPL_SUBFILES
-
+    
     if [ "$ONLINE" = "1" ] ; then
+        source $HOME/vpl_environment.sh
+        COPYINPUTS $VPL_SUBFILES
         cp $RUNDIR/env.sh $HOME
         cp $RUNDIR/vplmodel/toolkit.sh $HOME
         cp $RUNDIR/vplmodel/vpl_execution $HOME && chmod +x $HOME
         # => implicit run of $vpl_execution
     else
+        # cp -rf $INPUTDIR/* $RUNDIR/inputs/
         source $RUNDIR/vplmodel/vpl_execution
         # => explicit run of vpl_execution
     fi

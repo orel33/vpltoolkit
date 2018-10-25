@@ -37,15 +37,14 @@ The *run.sh* script is starting from the $RUNDIR directory, organized as follow:
 ```text
 $RUNDIR
   ├── env.sh
-  ├── inputs
-  │   └── mycat.c
-  ├── download
-  |   └── mycat
-  |       ├── run.sh
-  │       ├── solution.c
-  │       ├── test1.txt
-  │       └── ...
-  └── vplmodel
+  ├── inputs                   # all input files submitted by VPL by student ($VPL_SUBFILES)
+  │   └── student.c
+  |   └── ...
+  ├── download                 # all files provided by teacher to perform evaluation
+  |    ├── run.sh              # <-- entry point
+  |    ├── solution.c
+  │    └── ...
+  └── vplmodel                 # VPL toolkit
       └── toolkit.sh
       └── vpl_execution
       └── ...
@@ -64,41 +63,6 @@ $HOME
 
 Let's consider a VPL activity named *hello*, that you want to develop. In oder to follow our exection model, the *hello* VPL activity must be based on a generic VPL activity (named *vplmodel*), provided here. In other words, the *hello* must inherit from *vplmodel*.
 
-### Parent Activity
-
-Script *vpl_run.sh*:
-
-```bash
-#!/bin/bash
-VPLMODEL="https://github.com/orel33/vplmodel.git"
-MODE="RUN"
-git clone $VPLMODEL &> /dev/null
-source vplmodel/vplmodel.sh
-```
-
-Script *vpl_evaluate.sh*:
-
-```bash
-#!/bin/bash
-VPLMODEL="https://github.com/orel33/vplmodel.git"
-MODE="EVAL"
-git clone $VPLMODEL &> /dev/null
-source vplmodel/vplmodel.sh
-```
-
-### Demo Actvity
-
-Scripts *vpl_run.sh* and *vpl_evaluate.sh*:
-
-```bash
-#!/bin/bash
-REPOSITORY="https://github.com/orel33/vplmodel.git"
-BRANCH="hello"
-EXO="demo"
-DEBUG=1
-VERBOSE=1
-vplmodel_start
-```
 
 
 ---
