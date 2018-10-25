@@ -3,9 +3,9 @@
 echo "START VPL_EXECUTION"
 
 ### load environment
+[ -z "$RUNDIR" ] && source $HOME/env.sh
 [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
 source $RUNDIR/vplmodel/toolkit.sh
-LOADENV
 CHECKENV
 # EXPORTENV
 

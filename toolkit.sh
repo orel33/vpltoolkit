@@ -137,7 +137,7 @@ function START() {
     CHECKENV
     PRINTENV
     SAVEENV
-    EXPORTENV
+    # EXPORTENV
 
     if [ "$ONLINE" = "1" ] ; then
         # => implicit run of $vpl_execution
