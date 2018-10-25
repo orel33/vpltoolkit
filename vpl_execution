@@ -16,7 +16,9 @@ source $RUNDIR/vplmodel/toolkit.sh
 CHECKENV
 EXPORTENV
 
-# env | grep VPL
+source $HOME/vpl_environment.sh
+env | grep VPL
+
 # COPYINPUTS
 
 ### run
