@@ -133,6 +133,7 @@ function DOWNLOAD() {
 ### EXECUTION ###
 
 function START() {
+    echo "START COMPILATION STAGE"
     CHECKENV
     PRINTENV
     SAVEENV

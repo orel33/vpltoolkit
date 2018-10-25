@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "START VPL_EXECUTION"
+echo "START EXECUTION STAGE"
 
 ### load environment
 ENVDIR=$RUNDIR
@@ -9,10 +9,6 @@ echo "ENVDIR=$ENVDIR"
 
 [ ! -f $ENVDIR/env.sh ] && echo "⚠ File \"env.sh\" missing!" && exit 0
 source $ENVDIR/env.sh
-
-# if [ "$ONLINE" = "0" ] ; then ENVDIR=$RUNDIR ; fi
-# [ ! -f $ENVDIR/env.sh ] && echo "⚠ File \"env.sh\" missing!" && exit 0
-# source $ENVDIR/env.sh
 
 [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
 [ ! -f $RUNDIR/vplmodel/toolkit.sh ] && echo "⚠ File \"toolkit.sh\" missing!" && exit 0
