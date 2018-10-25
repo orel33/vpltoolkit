@@ -9,6 +9,6 @@ RUNDIR=$(mktemp -d)
 cd $RUNDIR && git clone $VPLMODEL &> /dev/null && cd -
 source $RUNDIR/vplmodel/toolkit.sh
 
-EXO="hello"
+EXO="mycat"
 DOWNLOAD "https://github.com/orel33/vplmodel.git" "demo" $EXO
 START
