@@ -138,6 +138,9 @@ function START() {
     PRINTENV
     SAVEENV
 
+    source $HOME/vpl_environment.sh
+    env | grep VPL
+
     if [ "$ONLINE" = "1" ] ; then
         cp $RUNDIR/env.sh $HOME
         cp $RUNDIR/vplmodel/toolkit.sh $HOME

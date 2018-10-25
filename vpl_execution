@@ -17,9 +17,7 @@ CHECKENV
 EXPORTENV
 
 source $HOME/vpl_environment.sh
-env | grep VPL
-
-# COPYINPUTS
+COPYINPUTS $VPL_SUBFILES
 
 ### run
 cd $RUNDIR  # set current working directory
