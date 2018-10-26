@@ -16,6 +16,7 @@ echo "START EXECUTION STAGE"
 # EXPORTENV
 
 ### run
+[ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
 cd $RUNDIR  # set current working directory
 [ ! -f $RUNDIR/run.sh ] && echo "⚠ File \"run.sh\" missing!" && exit 0
 $RUNDIR/run.sh
