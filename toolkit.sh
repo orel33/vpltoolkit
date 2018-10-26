@@ -160,10 +160,8 @@ function START_ONLINE() {
     source $HOME/vpl_environment.sh
     mkdir -p $RUNDIR/inputs
     ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs )
-    INPUTS=$(cd $RUNDIR && ls -d inputs/* 2> /dev/null)
-    CHECKENV
-    PRINTENV
-    SAVEENV
+    INPUTS=$(cd $RUNDIR && find inputs -maxdepth 1 -type f)
+    CHECKENV && PRINTENV && SAVEENV
     cp $RUNDIR/env.sh $HOME
     cp $RUNDIR/vplmodel/toolkit.sh $HOME
     cp $RUNDIR/vplmodel/vpl_execution $HOME
@@ -182,13 +180,10 @@ function START_OFFLINE() {
     [ $(basename $0) == "local_evaluate.sh" ] && MODE="EVAL"
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     mkdir -p $RUNDIR/inputs
-    [ ! -z "$INPUTDIR" ] && cp -rf $INPUTDIR/* $RUNDIR/inputs/
-    [ ! -z "$INPUTDIR" ] && INPUTS=$(cd $RUNDIR && ls -d inputs/* 2> /dev/null)
-    CHECKENV
-    PRINTENV
-    SAVEENV
-    cd $RUNDIR
-    $RUNDIR/vplmodel/vpl_execution
+    [ ! -z "$INPUTDIR" ] && find $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ {} +
+    [ ! -z "$INPUTDIR" ] && INPUTS=$(cd $RUNDIR && find inputs -maxdepth 1 -type f)
+    CHECKENV && PRINTENV && SAVEENV
+    cd $RUNDIR && $RUNDIR/vplmodel/vpl_execution
     # => explicit run of vpl_execution in $RUNDIR
 }
 
