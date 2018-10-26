@@ -157,8 +157,10 @@ function START_ONLINE() {
 
 
 function START_OFFLINE() {
+    [ $# -ne 1 ] && echo "⚠ Usage: START_OFFLINE INPUTDIR" && exit 0
     local INPUTDIR=$1
-    [ ! -d $INPUTDIR ] && echo "⚠ Bad input directory  \"$INPUTDIR\" missing!" && exit 0
+    [ -z $INPUTDIR ] && echo "⚠ No input directory!" && exit 0
+    [ ! -d $INPUTDIR ] && echo "⚠ Bad input directory:  \"$INPUTDIR\"!" && exit 0
     mkdir -p $RUNDIR/inputs
     cp -rf $INPUTDIR/* $RUNDIR/inputs/
     INPUTS=$(ls inputs/*)
