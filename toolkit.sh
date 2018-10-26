@@ -40,13 +40,25 @@ CHECK()
     done
 }
 
+### GRADE ###
+
+BONUS()
+{
+
+}
+
+MALUS()
+{
+
+}
+
 EXIT()
 {
     (( GRADE < 0 )) && GRADE=0
     (( GRADE > 100 )) && GRADE=100
     ECHO "-GRADE" && ECHO "$GRADE / 100"
     if [ "$MODE" = "EVALUATE" ] ; then echo "Grade :=>> $GRADE" ; fi
-    if [ "$MODE" = "RUN" ] ; then echo "Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
+    # if [ "$MODE" = "RUN" ] ; then echo "Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
     exit 0
 }
 
@@ -63,6 +75,7 @@ function CHECKENV()
     [ -z "$DEBUG" ] && DEBUG=0
     [ -z "$VERBOSE" ] && VERBOSE=0
     [ -z "$INPUTS" ] && INPUTS=""
+    [ -z "$GRADE" ] && GRADE=0
 }
 
 function SAVEENV()
@@ -77,6 +90,7 @@ function SAVEENV()
     echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
     echo "VERBOSE=$VERBOSE" >> $RUNDIR/env.sh
     echo "INPUTS=$INPUTS" >> $RUNDIR/env.sh
+    echo "GRADE=$GRADE" >> $RUNDIR/env.sh
 }
 
 function LOADENV()
@@ -102,6 +116,7 @@ function PRINTENV()
     ECHOV "DEBUG=$DEBUG"
     ECHOV "VERBOSE=$VERBOSE"
     ECHOV "INPUTS=$INPUTS"
+    ECHOV "GRADE=$GRADE"
 }
 
 ### DOWNLOAD ###
@@ -134,21 +149,21 @@ function DOWNLOAD() {
 
 ### COPY INPUTS ###
 
-function COPYINPUTS() {
-    ECHOV "INPUTS=\"$@\""
-    mkdir -p $RUNDIR/inputs
-    for FILE in "$@" ; do
-        [ ! -f $FILE ] && ECHO "⚠ Input file \"$FILE\" is missing!" && exit 0
-        cp $FILE $RUNDIR/inputs/
-    done
-}
+# function COPYINPUTS() {
+#     for FILE in "$@" ; do
+#         [ ! -f $FILE ] && ECHO "⚠ Input file \"$FILE\" is missing!" && exit 0
+#         cp $FILE $RUNDIR/inputs/
+#     done
+# }
 
 ### EXECUTION ###
 
 function START_ONLINE() {
     ONLINE=1
     source $HOME/vpl_environment.sh
-    COPYINPUTS $VPL_SUBFILES
+    mkdir -p $RUNDIR/inputs
+    # COPYINPUTS $VPL_SUBFILES
+    ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs )
     cp $RUNDIR/env.sh $HOME
     cp $RUNDIR/vplmodel/toolkit.sh $HOME
     cp $RUNDIR/vplmodel/vpl_execution $HOME
@@ -157,7 +172,7 @@ function START_ONLINE() {
     PRINTENV
     SAVEENV
     cd $RUNDIR
-    # => implicit run of $vpl_execution
+    # => implicit run of vpl_execution
 }
 
 
