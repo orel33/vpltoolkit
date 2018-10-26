@@ -2,21 +2,21 @@
 
 ## Introduction
 
+*VPL Toolkit* is a light toolkit to help *teachers* to program [VPL](http://vpl.dis.ulpgc.es/) activity in [Moodle](https://moodle.org/) for their *students*.
+
 Features:
 
 * a public & reusable execution model for VPL
-* offline testing using a local *run.sh* script
-* ...
+* a toolkit with some basic bash functions
+* offline execution
 
 ## Execution Model
 
-So, what happens now when you click on the *Run/Eval button* of your VPL Editor in Moodle (or in *Test Activity*, if you are teacher)?
+What happens when you click on the *Run/Eval button* of your VPL Editor in Moodle (or in *Test Activity*, if you are teacher)?
 
-First, it will launch the *vpl_run.sh* (resp *vpl_evaluate.sh*) script, that you must provide in the VPL Interface > Execution Files.
+First, it will launch the *vpl_run.sh* (resp *vpl_evaluate.sh*) script, that you must provide in the VPL Interface > Execution Files. Typically, this script must provide in any way a new shell script called *vpl_execution*, that will be implicitly launched after *vpl_run.sh* (resp *vpl_evaluate.sh*) is completed.
 
-Typically, this script must provide in any way a new shell script called *vpl_execution*, that will be implicitly launched after *vpl_run.sh* (resp *vpl_evaluate.sh*) is completed.
-
-At this stage, ...
+At this stage, we introduce a unique script *run.sh* ...
 
 ```text
 click RUN button --> vpl_run.sh ----------+
