@@ -154,9 +154,9 @@ function START_ONLINE() {
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
     ONLINE=1
-    [ -z "$MODE" ] && MODE="RUN"
+    [ $(basename $0) == "vpl_run.sh" ] && MODE="RUN"
     [ $(basename $0) == "vpl_evaluate.sh" ] && MODE="EVAL"
-    echo "MODE = $0"
+    [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     source $HOME/vpl_environment.sh
     mkdir -p $RUNDIR/inputs
     ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs )
@@ -178,7 +178,9 @@ function START_OFFLINE() {
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
     ONLINE=0
-    [ -z "$MODE" ] && MODE="RUN"
+    [ $(basename $0) == "local_run.sh" ] && MODE="RUN"
+    [ $(basename $0) == "local_evaluate.sh" ] && MODE="EVAL"
+    [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     mkdir -p $RUNDIR/inputs
     [ ! -z "$INPUTDIR" ] && cp -rf $INPUTDIR/* $RUNDIR/inputs/
     INPUTS=$(cd $RUNDIR && ls inputs/*)
