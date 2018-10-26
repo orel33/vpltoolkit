@@ -1,6 +1,7 @@
 #!/bin/bash
 
 echo "VPL_EXECUTION in $PWD"
+ls
 
 if [ -f ./env.sh ] ; then 
     source ./env.sh
