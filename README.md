@@ -91,17 +91,17 @@ DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "demo" $EXO
 START_OFFLINE
 ```
 
-Or if you prefer, you can use the [local_run.sh](https://github.com/orel33/vpltoolkit/blob/master/local_run.sh) provided in this repository.
+Or if you prefer, you can use the [local_run.sh](https://github.com/orel33/vpltoolkit/blob/master/local_run.sh) (or [local_evaluate.sh](https://github.com/orel33/vpltoolkit/blob/master/local_evaluate.sh)) provided in this repository.
 
 ```bash
-./local_run.sh hello
+$ ./local_run.sh hello
 hello world!
 ```
 
 Using Bash DEBUG mode (set -x).
 
 ```bash
-DEBUG=1 ./local_run.sh hello
+$ DEBUG=1 ./local_run.sh hello
 + echo 'hello world!'
 hello world!
 ```
