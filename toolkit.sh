@@ -166,8 +166,8 @@ function START_ONLINE() {
     PRINTENV
     SAVEENV
     cp $RUNDIR/env.sh $HOME
-    cp $RUNDIR/vplmodel/toolkit.sh $HOME
-    cp $RUNDIR/vplmodel/vpl_execution $HOME
+    cp $RUNDIR/vpltoolkit/toolkit.sh $HOME
+    cp $RUNDIR/vpltoolkit/vpl_execution $HOME
     # => implicit run of vpl_execution in $HOME
 }
 
@@ -189,7 +189,7 @@ function START_OFFLINE() {
     PRINTENV
     SAVEENV
     cd $RUNDIR
-    $RUNDIR/vplmodel/vpl_execution
+    $RUNDIR/vpltoolkit/vpl_execution
     # => explicit run of vpl_execution in $RUNDIR
 }
 
