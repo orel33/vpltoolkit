@@ -1,10 +1,10 @@
 #!/bin/bash
+
 VPLMODEL="https://github.com/orel33/vplmodel.git"
-ONLINE=0
+RUNDIR=$(mktemp -d)
 MODE="RUN"
 DEBUG=1
 VERBOSE=1
-RUNDIR=$(mktemp -d)
 
 ( cd $RUNDIR && git clone $VPLMODEL &> /dev/null )
 source $RUNDIR/vplmodel/toolkit.sh

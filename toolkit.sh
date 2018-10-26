@@ -109,9 +109,11 @@ function PRINTENV()
 # TODO: add wget method
 
 function DOWNLOAD() {
+    [ $# -ne 3 ] && echo "⚠ Usage: DOWNLOAD REPOSITORY BRANCH SUBDIR" && exit 0
     local REPOSITORY=$1
     local BRANCH=$2
     local SUBDIR=$3
+    [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     START=$(date +%s.%N)
     mkdir -p $RUNDIR/download
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
@@ -144,6 +146,7 @@ function COPYINPUTS() {
 ### EXECUTION ###
 
 function START_ONLINE() {
+    ONLINE=1
     source $HOME/vpl_environment.sh
     COPYINPUTS $VPL_SUBFILES
     cp $RUNDIR/env.sh $HOME
@@ -158,9 +161,10 @@ function START_ONLINE() {
 
 
 function START_OFFLINE() {
+    ONLINE=0
     [ $# -ne 1 ] && echo "⚠ Usage: START_OFFLINE INPUTDIR" && exit 0
     local INPUTDIR=$1
-    [ -z $INPUTDIR ] && echo "⚠ No input directory!" && exit 0
+    [ -z "$INPUTDIR" ] && echo "⚠ INPUTDIR variable is not defined!" && exit 0
     [ ! -d $INPUTDIR ] && echo "⚠ Bad input directory:  \"$INPUTDIR\"!" && exit 0
     mkdir -p $RUNDIR/inputs
     cp -rf $INPUTDIR/* $RUNDIR/inputs/
@@ -172,13 +176,13 @@ function START_OFFLINE() {
     # => explicit run of vpl_execution
 }
 
-function START() {
-    echo "START COMPILATION STAGE"
-    if [ "$ONLINE" = "1" ] ; then
-        START_ONLINE
-    else
-        START_OFFLINE $1
-    fi
-}
+# function START() {
+#     echo "START COMPILATION STAGE"
+#     if [ "$ONLINE" = "1" ] ; then
+#         START_ONLINE
+#     else
+#         START_OFFLINE $1
+#     fi
+# }
 
 # EOF
