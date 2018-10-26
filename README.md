@@ -56,15 +56,50 @@ $HOME
   └── vpl_execution
 ```
 
-## Hello World
+## Examples 
 
-Let's consider a VPL activity named *hello*, that you want to develop.
+### Hello World
 
+Let's consider the example [hello](https://github.com/orel33/vplmodel/tree/demo/hello). This activity is made of a single script *run.sh* that just print "hello world!".
 
+```bash
+#!/bin/bash
+echo "hello world!"
+```
+
+To use the *VPL Toolkit*, start to copy the following script into *vpl_run.sh* & *vpl_evaluate.sh* of VPL@Moodle.
+
+```bash
+#!/bin/bash
+VPLMODEL="https://github.com/orel33/vplmodel.git"
+RUNDIR=$(mktemp -d)
+( cd $RUNDIR && git clone $VPLMODEL &> /dev/null )
+source $RUNDIR/vplmodel/toolkit.sh
+EXO="hello"
+DOWNLOAD "https://github.com/orel33/vplmodel.git" "demo" $EXO
+START_ONLINE
+```
+
+To launch this example *offline*, you nee to write a script named *local_run.sh* & *local_evaluate.sh* as follow.
+
+```bash
+#!/bin/bash
+VPLMODEL="https://github.com/orel33/vplmodel.git"
+RUNDIR=$(mktemp -d)
+( cd $RUNDIR && git clone $VPLMODEL &> /dev/null )
+source $RUNDIR/vplmodel/toolkit.sh
+EXO="hello"
+DOWNLOAD "https://github.com/orel33/vplmodel.git" "demo" $EXO
+START_OFFLINE
+```
+
+### My Cat
+
+(...)
 
 ## TODO
 
-* use the same docker environment as the one provided by Moodle @ University of Bordeaux
+* add an option to use a docker environment for *offline* execution
 
 ---
 aurelien.esnard@u-bordeaux.fr
