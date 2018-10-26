@@ -147,6 +147,25 @@ function COPYINPUTS() {
 
 ### EXECUTION ###
 
+function START_ONLINE() {
+    source $HOME/vpl_environment.sh
+    COPYINPUTS $VPL_SUBFILES
+    cp $RUNDIR/env.sh $HOME
+    cp $RUNDIR/vplmodel/toolkit.sh $HOME
+    cp $RUNDIR/vplmodel/vpl_execution $HOME
+    # => implicit run of $vpl_execution
+}
+
+
+function START_OFFLINE() {
+    local INPUTDIR=$1
+    [ ! -d $INPUTDIR ] && echo "⚠ Bad input directory  \"$INPUTDIR\" missing!" && exit 0
+    cp -rf $INPUTDIR/* $RUNDIR/inputs/
+    $RUNDIR/vplmodel/vpl_execution
+    # => explicit run of vpl_execution
+}
+
+
 function START() {
     echo "START COMPILATION STAGE"
     CHECKENV
@@ -154,16 +173,9 @@ function START() {
     SAVEENV
 
     if [ "$ONLINE" = "1" ] ; then
-        source $HOME/vpl_environment.sh
-        COPYINPUTS $VPL_SUBFILES
-        cp $RUNDIR/env.sh $HOME
-        cp $RUNDIR/vplmodel/toolkit.sh $HOME
-        cp $RUNDIR/vplmodel/vpl_execution $HOME && chmod +x $HOME
-        # => implicit run of $vpl_execution
+        START_ONLINE
     else
-        # cp -rf $INPUTDIR/* $RUNDIR/inputs/
-        source $RUNDIR/vplmodel/vpl_execution
-        # => explicit run of vpl_execution
+        START_OFFLINE $1
     fi
 }
 
