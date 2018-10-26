@@ -150,6 +150,7 @@ function START_ONLINE() {
     cp $RUNDIR/vplmodel/toolkit.sh $HOME
     cp $RUNDIR/vplmodel/vpl_execution $HOME
     INPUTS=$(ls inputs/*)
+    CHECKENV
     PRINTENV
     SAVEENV
     # => implicit run of $vpl_execution
@@ -157,24 +158,22 @@ function START_ONLINE() {
 
 
 function START_OFFLINE() {
-    echo $#
-    [ $# -ne 2 ] && echo "⚠ Usage: START_OFFLINE INPUTDIR" && exit 0
+    [ $# -ne 1 ] && echo "⚠ Usage: START_OFFLINE INPUTDIR" && exit 0
     local INPUTDIR=$1
     [ -z $INPUTDIR ] && echo "⚠ No input directory!" && exit 0
     [ ! -d $INPUTDIR ] && echo "⚠ Bad input directory:  \"$INPUTDIR\"!" && exit 0
     mkdir -p $RUNDIR/inputs
     cp -rf $INPUTDIR/* $RUNDIR/inputs/
     INPUTS=$(ls inputs/*)
+    CHECKENV
     PRINTENV
     SAVEENV
     $RUNDIR/vplmodel/vpl_execution
     # => explicit run of vpl_execution
 }
 
-
 function START() {
     echo "START COMPILATION STAGE"
-    CHECKENV
     if [ "$ONLINE" = "1" ] ; then
         START_ONLINE
     else

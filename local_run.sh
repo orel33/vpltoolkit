@@ -11,4 +11,4 @@ source $RUNDIR/vplmodel/toolkit.sh
 
 EXO="mycat"
 DOWNLOAD "https://github.com/orel33/vplmodel.git" "demo" $EXO
-START
+START_OFFLINE $1
