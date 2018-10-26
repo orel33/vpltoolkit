@@ -5,8 +5,7 @@ echo "START EXECUTION STAGE"
 [ -f ./env.sh ] && source ./env.sh
 [ -f $HOME/env.sh ] && source $HOME/env.sh
 [ -z "$RUNDIR" ] && echo "⚠ VPL Toolkit environment is not defined!" && exit 0
-cd $RUNDIR  # set current working directory
 [ ! -f $RUNDIR/run.sh ] && echo "⚠ File \"run.sh\" missing!" && exit 0
-$RUNDIR/run.sh
+cd $RUNDIR && $RUNDIR/run.sh
 
 # EOF
