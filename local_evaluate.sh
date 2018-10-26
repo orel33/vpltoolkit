@@ -3,7 +3,6 @@
 EXO=$1
 INPUTDIR=$2
 RUNDIR=$(mktemp -d)
-MODE="RUN"
 ( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" &> /dev/null )
 source $RUNDIR/vpltoolkit/toolkit.sh
 DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "demo" $EXO
