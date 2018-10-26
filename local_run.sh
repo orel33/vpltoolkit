@@ -1,5 +1,5 @@
 #!/bin/bash
-[ $# -ne 1 -o $# -ne 2] && echo "⚠ Usage: $0 <exo> [<inputdir>]" && exit 0
+[ $# -ne 1 -a $# -ne 2] && echo "⚠ Usage: $0 <exo> [<inputdir>]" && exit 0
 
 EXO=$1
 INPUTDIR=$2
