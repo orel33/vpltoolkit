@@ -154,8 +154,9 @@ function START_ONLINE() {
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
     ONLINE=1
-    echo "MODE = $0"
     [ -z "$MODE" ] && MODE="RUN"
+    [ $(basename $0) == "vpl_evaluate.sh" ] && MODE="EVAL"
+    echo "MODE = $0"
     source $HOME/vpl_environment.sh
     mkdir -p $RUNDIR/inputs
     ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs )
