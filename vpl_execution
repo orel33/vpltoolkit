@@ -16,6 +16,10 @@ echo "START EXECUTION STAGE"
 # EXPORTENV
 
 ### run
+ECHOD "Current Directory: $PWD"
+[ -f ./env.sh ] && source ./env.sh
+[ -f $HOME/env.sh ] && source $HOME/env.sh
+
 [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
 cd $RUNDIR  # set current working directory
 [ ! -f $RUNDIR/run.sh ] && echo "⚠ File \"run.sh\" missing!" && exit 0
