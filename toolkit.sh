@@ -160,7 +160,7 @@ function START_ONLINE() {
     source $HOME/vpl_environment.sh
     mkdir -p $RUNDIR/inputs
     ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs )
-    INPUTS=$(cd $RUNDIR && ls inputs/*)
+    INPUTS=$(cd $RUNDIR && ls -d inputs/* 2> /dev/null)
     CHECKENV
     PRINTENV
     SAVEENV
@@ -183,7 +183,7 @@ function START_OFFLINE() {
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     mkdir -p $RUNDIR/inputs
     [ ! -z "$INPUTDIR" ] && cp -rf $INPUTDIR/* $RUNDIR/inputs/
-    INPUTS=$(cd $RUNDIR && ls inputs/*)
+    [ ! -z "$INPUTDIR" ] && INPUTS=$(cd $RUNDIR && ls -d inputs/* 2> /dev/null)
     CHECKENV
     PRINTENV
     SAVEENV
