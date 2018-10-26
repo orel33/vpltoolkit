@@ -172,7 +172,7 @@ function START_ONLINE() {
 
 
 function START_OFFLINE() {
-    [ $# -le 1 ] && echo "⚠ Usage: START_OFFLINE [INPUTDIR]" && exit 0
+    [ $# -ne 1 -o $# -ne 2] && echo "⚠ Usage: START_OFFLINE [INPUTDIR]" && exit 0
     local INPUTDIR=$1
     [ ! -z "$INPUTDIR" ] && [ ! -d $INPUTDIR ] && echo "⚠ Bad INPUTDIR: \"$INPUTDIR\"!" && exit 0
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
