@@ -42,14 +42,13 @@ CHECK()
 
 ### GRADE ###
 
-BONUS()
+SCORE()
 {
-
-}
-
-MALUS()
-{
-
+    [ $# -ne 1 ] && echo "⚠ Usage: SCORE VALUE" && exit 0
+    local VALUE=$1
+    [ -z "$GRADE" ] && echo "⚠ GRADE variable is not defined!" && exit 0
+    ECHOD "GRADE += $VALUE"
+    GRADE=$((GRADE+VALUE))
 }
 
 EXIT()
