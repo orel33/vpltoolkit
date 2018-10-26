@@ -183,7 +183,8 @@ function START_OFFLINE() {
     [ ! -z "$INPUTDIR" ] && find $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ {} +
     [ ! -z "$INPUTDIR" ] && INPUTS=$(cd $RUNDIR && find inputs -maxdepth 1 -type f)
     CHECKENV && PRINTENV && SAVEENV
-    cd $RUNDIR && $RUNDIR/vplmodel/vpl_execution
+    cd $RUNDIR
+    $RUNDIR/vplmodel/vpl_execution
     # => explicit run of vpl_execution in $RUNDIR
 }
 
