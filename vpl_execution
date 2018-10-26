@@ -2,24 +2,8 @@
 
 echo "START EXECUTION STAGE"
 
-### load environment
-# ENVDIR=$RUNDIR
-# [ -z "$ENVDIR" ] && ENVDIR=$HOME
-
-# [ ! -f $ENVDIR/env.sh ] && echo "⚠ File \"env.sh\" missing!" && exit 0
-# source $ENVDIR/env.sh
-
-# [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
-# [ ! -f $RUNDIR/vplmodel/toolkit.sh ] && echo "⚠ File \"toolkit.sh\" missing!" && exit 0
-# source $RUNDIR/vplmodel/toolkit.sh
-# CHECKENV
-# EXPORTENV
-
-### run
-ECHOD "Current Directory: $PWD"
 [ -f ./env.sh ] && source ./env.sh
 [ -f $HOME/env.sh ] && source $HOME/env.sh
-
 [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
 cd $RUNDIR  # set current working directory
 [ ! -f $RUNDIR/run.sh ] && echo "⚠ File \"run.sh\" missing!" && exit 0
