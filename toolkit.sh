@@ -62,6 +62,7 @@ function CHECKENV()
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ -z "$DEBUG" ] && DEBUG=0
     [ -z "$VERBOSE" ] && VERBOSE=0
+    [ -z "$INPUTS" ] && INPUTS=""
 }
 
 function SAVEENV()
@@ -75,27 +76,21 @@ function SAVEENV()
     echo "RUNDIR=$RUNDIR" >> $RUNDIR/env.sh
     echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
     echo "VERBOSE=$VERBOSE" >> $RUNDIR/env.sh
+    echo "INPUTS=$INPUTS" >> $RUNDIR/env.sh
 }
 
 function LOADENV()
 {
-    ENVDIR=$HOME
-    if [ "$ONLINE" = "0" ] ; then ENVDIR=$RUNDIR ; fi
-    [ ! -f $ENVDIR/env.sh ] && echo "⚠ File \"env.sh\" missing!" && exit 0
-    source $ENVDIR/env.sh
+    if [ -f $RUNDIR/env.sh ] ; then
+        source $RUNDIR/env.sh
+    elif [ -f ./env.sh ] ; then
+        source ./env.sh
+    elif [ -f $HOME/env.sh ] ; then
+        source $HOME/env.sh
+    else
+        echo "⚠ File \"env.sh\" is missing!" && exit 0
+    fi
 }
-
-function EXPORTENV()
-{
-    export VERSION
-    export ONLINE
-    export MODE
-    export EXO
-    export RUNDIR
-    export DEBUG
-    export VERBOSE
-}
-
 
 function PRINTENV()
 {
@@ -106,6 +101,7 @@ function PRINTENV()
     ECHOV "RUNDIR=$RUNDIR"
     ECHOV "DEBUG=$DEBUG"
     ECHOV "VERBOSE=$VERBOSE"
+    ECHOV "INPUTS=$INPUTS"
 }
 
 ### DOWNLOAD ###
@@ -153,6 +149,9 @@ function START_ONLINE() {
     cp $RUNDIR/env.sh $HOME
     cp $RUNDIR/vplmodel/toolkit.sh $HOME
     cp $RUNDIR/vplmodel/vpl_execution $HOME
+    INPUTS=$(ls inputs/*)
+    PRINTENV
+    SAVEENV
     # => implicit run of $vpl_execution
 }
 
@@ -160,7 +159,11 @@ function START_ONLINE() {
 function START_OFFLINE() {
     local INPUTDIR=$1
     [ ! -d $INPUTDIR ] && echo "⚠ Bad input directory  \"$INPUTDIR\" missing!" && exit 0
+    mkdir -p $RUNDIR/inputs
     cp -rf $INPUTDIR/* $RUNDIR/inputs/
+    INPUTS=$(ls inputs/*)
+    PRINTENV
+    SAVEENV
     $RUNDIR/vplmodel/vpl_execution
     # => explicit run of vpl_execution
 }
@@ -169,9 +172,6 @@ function START_OFFLINE() {
 function START() {
     echo "START COMPILATION STAGE"
     CHECKENV
-    PRINTENV
-    SAVEENV
-
     if [ "$ONLINE" = "1" ] ; then
         START_ONLINE
     else
