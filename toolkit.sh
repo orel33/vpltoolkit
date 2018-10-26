@@ -137,7 +137,7 @@ function DOWNLOAD() {
 ### COPY INPUTS ###
 
 function COPYINPUTS() {
-    ECHOV "Inputs: $@"
+    ECHOV "INPUTS=\"$@\""
     mkdir -p $RUNDIR/inputs
     for FILE in "$@" ; do
         [ ! -f $FILE ] && ECHO "⚠ Input file \"$FILE\" is missing!" && exit 0
