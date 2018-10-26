@@ -157,6 +157,7 @@ function START_ONLINE() {
 
 
 function START_OFFLINE() {
+    echo $#
     [ $# -ne 2 ] && echo "⚠ Usage: START_OFFLINE INPUTDIR" && exit 0
     local INPUTDIR=$1
     [ -z $INPUTDIR ] && echo "⚠ No input directory!" && exit 0
