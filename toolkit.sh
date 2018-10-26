@@ -146,15 +146,6 @@ function DOWNLOAD() {
     # ls -lR $RUNDIR
 }
 
-### COPY INPUTS ###
-
-# function COPYINPUTS() {
-#     for FILE in "$@" ; do
-#         [ ! -f $FILE ] && ECHO "⚠ Input file \"$FILE\" is missing!" && exit 0
-#         cp $FILE $RUNDIR/inputs/
-#     done
-# }
-
 ### EXECUTION ###
 
 function START_ONLINE() {
@@ -163,7 +154,6 @@ function START_ONLINE() {
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
     source $HOME/vpl_environment.sh
     mkdir -p $RUNDIR/inputs
-    # COPYINPUTS $VPL_SUBFILES
     ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs )
     INPUTS=$(cd $RUNDIR && ls inputs/*)
     CHECKENV
