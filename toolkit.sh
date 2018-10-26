@@ -128,7 +128,7 @@ function DOWNLOAD() {
     [ ! -d $RUNDIR/download/$SUBDIR ] && ECHO "⚠ SUBDIR \"$SUBDIR\" is missing!" && exit 0
     END=$(date +%s.%N)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
-    ECHOV "GIT download $SUBDIR in $TIME ms"
+    ECHOV "Download \"$SUBDIR\" in $TIME ms"
     cp -rf $RUNDIR/download/$SUBDIR/* $RUNDIR/
     # rm -rf $RUNDIR/download
     # ls -lR $RUNDIR
@@ -137,7 +137,7 @@ function DOWNLOAD() {
 ### COPY INPUTS ###
 
 function COPYINPUTS() {
-    ECHOD "copy inputs: $@"
+    ECHOV "Inputs: $@"
     mkdir -p $RUNDIR/inputs
     for FILE in "$@" ; do
         [ ! -f $FILE ] && ECHO "⚠ Input file \"$FILE\" is missing!" && exit 0
