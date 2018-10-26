@@ -192,13 +192,4 @@ function START_OFFLINE() {
     # => explicit run of vpl_execution
 }
 
-# function START() {
-#     echo "START COMPILATION STAGE"
-#     if [ "$ONLINE" = "1" ] ; then
-#         START_ONLINE
-#     else
-#         START_OFFLINE $1
-#     fi
-# }
-
 # EOF

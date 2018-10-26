@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "START EXECUTION STAGE"
-
 if [ -f ./env.sh ] ; then 
     source ./env.sh
 elif [ -f $HOME/env.sh ] ; then 
