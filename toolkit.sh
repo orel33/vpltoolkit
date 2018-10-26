@@ -45,6 +45,7 @@ CHECK()
 SCORE()
 {
     [ $# -ne 1 ] && echo "⚠ Usage: SCORE VALUE" && exit 0
+    [ -z "$GRADE" ] && GRADE=0
     local VALUE=$1
     [ -z "$GRADE" ] && echo "⚠ GRADE variable is not defined!" && exit 0
     ECHOD "GRADE += $VALUE"
@@ -53,6 +54,7 @@ SCORE()
 
 EXIT()
 {
+    [ -z "$GRADE" ] && GRADE=0
     (( GRADE < 0 )) && GRADE=0
     (( GRADE > 100 )) && GRADE=100
     ECHO "-GRADE" && ECHO "$GRADE / 100"
@@ -74,7 +76,6 @@ function CHECKENV()
     [ -z "$DEBUG" ] && DEBUG=0
     [ -z "$VERBOSE" ] && VERBOSE=0
     [ -z "$INPUTS" ] && INPUTS=""
-    [ -z "$GRADE" ] && GRADE=0
 }
 
 function SAVEENV()
@@ -89,7 +90,6 @@ function SAVEENV()
     echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
     echo "VERBOSE=$VERBOSE" >> $RUNDIR/env.sh
     echo "INPUTS=$INPUTS" >> $RUNDIR/env.sh
-    echo "GRADE=$GRADE" >> $RUNDIR/env.sh
 }
 
 function LOADENV()
@@ -107,6 +107,7 @@ function LOADENV()
 
 function PRINTENV()
 {
+    ECHOV
     ECHOV "-ENVIRONMENT"
     ECHOV "VERSION=$VERSION"
     ECHOV "ONLINE=$ONLINE"
@@ -116,7 +117,6 @@ function PRINTENV()
     ECHOV "DEBUG=$DEBUG"
     ECHOV "VERBOSE=$VERBOSE"
     ECHOV "INPUTS=$INPUTS"
-    ECHOV "GRADE=$GRADE"
     ECHOV
 }
 
@@ -151,9 +151,11 @@ function DOWNLOAD() {
 ### EXECUTION ###
 
 function START_ONLINE() {
-    ONLINE=1
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
+    ONLINE=1
+    echo "MODE = $0"
+    [ -z "$MODE" ] && MODE="RUN"
     source $HOME/vpl_environment.sh
     mkdir -p $RUNDIR/inputs
     ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs )
@@ -169,15 +171,15 @@ function START_ONLINE() {
 
 
 function START_OFFLINE() {
-    ONLINE=0
-    [ $# -ne 1 ] && echo "⚠ Usage: START_OFFLINE INPUTDIR" && exit 0
+    [ $# -le 1 ] && echo "⚠ Usage: START_OFFLINE [INPUTDIR]" && exit 0
     local INPUTDIR=$1
-    [ -z "$INPUTDIR" ] && echo "⚠ INPUTDIR variable is not defined!" && exit 0
-    [ ! -d $INPUTDIR ] && echo "⚠ Bad INPUTDIR: \"$INPUTDIR\"!" && exit 0
+    [ ! -z "$INPUTDIR" ] && [ ! -d $INPUTDIR ] && echo "⚠ Bad INPUTDIR: \"$INPUTDIR\"!" && exit 0
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
+    ONLINE=0
+    [ -z "$MODE" ] && MODE="RUN"
     mkdir -p $RUNDIR/inputs
-    cp -rf $INPUTDIR/* $RUNDIR/inputs/
+    [ ! -z "$INPUTDIR" ] && cp -rf $INPUTDIR/* $RUNDIR/inputs/
     INPUTS=$(cd $RUNDIR && ls inputs/*)
     CHECKENV
     PRINTENV
