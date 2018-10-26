@@ -156,6 +156,7 @@ function START_ONLINE() {
     CHECKENV
     PRINTENV
     SAVEENV
+    cd $RUNDIR
     # => implicit run of $vpl_execution
 }
 
@@ -172,6 +173,7 @@ function START_OFFLINE() {
     CHECKENV
     PRINTENV
     SAVEENV
+    cd $RUNDIR
     $RUNDIR/vplmodel/vpl_execution
     # => explicit run of vpl_execution
 }
