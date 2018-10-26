@@ -152,7 +152,7 @@ function START_ONLINE() {
     cp $RUNDIR/env.sh $HOME
     cp $RUNDIR/vplmodel/toolkit.sh $HOME
     cp $RUNDIR/vplmodel/vpl_execution $HOME
-    INPUTS=$(ls inputs/*)
+    INPUTS=$(cd $RUNDIR && ls inputs/*)
     CHECKENV
     PRINTENV
     SAVEENV
@@ -168,7 +168,7 @@ function START_OFFLINE() {
     [ ! -d $INPUTDIR ] && echo "⚠ Bad input directory:  \"$INPUTDIR\"!" && exit 0
     mkdir -p $RUNDIR/inputs
     cp -rf $INPUTDIR/* $RUNDIR/inputs/
-    INPUTS=$(ls inputs/*)
+    INPUTS=$(cd $RUNDIR && ls inputs/*)
     CHECKENV
     PRINTENV
     SAVEENV
