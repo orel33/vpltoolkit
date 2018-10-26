@@ -159,6 +159,8 @@ function DOWNLOAD() {
 
 function START_ONLINE() {
     ONLINE=1
+    [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
+    [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR:  \"$RUNDIR\"!" && exit 0
     source $HOME/vpl_environment.sh
     mkdir -p $RUNDIR/inputs
     # COPYINPUTS $VPL_SUBFILES
@@ -180,7 +182,9 @@ function START_OFFLINE() {
     [ $# -ne 1 ] && echo "⚠ Usage: START_OFFLINE INPUTDIR" && exit 0
     local INPUTDIR=$1
     [ -z "$INPUTDIR" ] && echo "⚠ INPUTDIR variable is not defined!" && exit 0
-    [ ! -d $INPUTDIR ] && echo "⚠ Bad input directory:  \"$INPUTDIR\"!" && exit 0
+    [ ! -d $INPUTDIR ] && echo "⚠ Bad INPUTDIR:  \"$INPUTDIR\"!" && exit 0
+    [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
+    [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR:  \"$RUNDIR\"!" && exit 0
     mkdir -p $RUNDIR/inputs
     cp -rf $INPUTDIR/* $RUNDIR/inputs/
     INPUTS=$(cd $RUNDIR && ls inputs/*)
