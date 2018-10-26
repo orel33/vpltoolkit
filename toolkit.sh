@@ -57,7 +57,7 @@ EXIT()
     [ -z "$GRADE" ] && GRADE=0
     (( GRADE < 0 )) && GRADE=0
     (( GRADE > 100 )) && GRADE=100
-    ECHO "-GRADE" && ECHO "$GRADE / 100"
+    ECHO && ECHO "-GRADE" && ECHO "$GRADE / 100"
     if [ "$MODE" = "EVALUATE" ] ; then echo "Grade :=>> $GRADE" ; fi
     # if [ "$MODE" = "RUN" ] ; then echo "Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
     exit 0
