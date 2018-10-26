@@ -160,7 +160,7 @@ function START_ONLINE() {
     source $HOME/vpl_environment.sh
     mkdir -p $RUNDIR/inputs
     ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs )
-    INPUTS=$(cd $RUNDIR && find inputs -maxdepth 1 -type f)
+    INPUTS=$(cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs)
     CHECKENV
     PRINTENV
     SAVEENV
@@ -184,7 +184,7 @@ function START_OFFLINE() {
     mkdir -p $RUNDIR/inputs
     [ ! -z "$INPUTDIR" ] && find $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ {} +
     # [ ! -z "$INPUTDIR" ] && cp -rf $INPUTDIR/* $RUNDIR/inputs/
-    [ ! -z "$INPUTDIR" ] && INPUTS=$(cd $RUNDIR && find inputs -maxdepth 1 -type f)
+    [ ! -z "$INPUTDIR" ] && INPUTS=$(cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs)
     CHECKENV
     PRINTENV
     SAVEENV
