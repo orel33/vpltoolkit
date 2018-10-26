@@ -60,7 +60,7 @@ $HOME
 
 ### Hello World
 
-Let's consider the example [hello](https://github.com/orel33/vplmodel/tree/demo/hello). This activity is made of a single script *run.sh* that just print "hello world!".
+Let's consider the example [hello](https://github.com/orel33/vpltoolkit/tree/demo/hello). This activity is made of a single script *run.sh* that just print "hello world!".
 
 ```bash
 #!/bin/bash
@@ -71,12 +71,11 @@ To use the *VPL Toolkit*, start to copy the following script into *vpl_run.sh* &
 
 ```bash
 #!/bin/bash
-VPLMODEL="https://github.com/orel33/vplmodel.git"
 RUNDIR=$(mktemp -d)
-( cd $RUNDIR && git clone $VPLMODEL &> /dev/null )
-source $RUNDIR/vplmodel/toolkit.sh
+( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" &> /dev/null )
+source $RUNDIR/vpltoolkit/toolkit.sh
 EXO="hello"
-DOWNLOAD "https://github.com/orel33/vplmodel.git" "demo" $EXO
+DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "demo" $EXO
 START_ONLINE
 ```
 
@@ -84,12 +83,11 @@ To launch this example *offline*, you nee to write a script named *local_run.sh*
 
 ```bash
 #!/bin/bash
-VPLMODEL="https://github.com/orel33/vplmodel.git"
 RUNDIR=$(mktemp -d)
-( cd $RUNDIR && git clone $VPLMODEL &> /dev/null )
-source $RUNDIR/vplmodel/toolkit.sh
+( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" &> /dev/null )
+source $RUNDIR/vpltoolkit/toolkit.sh
 EXO="hello"
-DOWNLOAD "https://github.com/orel33/vplmodel.git" "demo" $EXO
+DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "demo" $EXO
 START_OFFLINE
 ```
 
