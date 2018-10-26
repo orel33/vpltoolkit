@@ -160,7 +160,7 @@ function START_ONLINE() {
     source $HOME/vpl_environment.sh
     mkdir -p $RUNDIR/inputs
     ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs )
-    INPUTS=$(cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs)
+    INPUTS=\"$(cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs)\"
     # INPUTS=$(echo -n \" && cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs && echo -n \")
     CHECKENV
     PRINTENV
@@ -184,7 +184,6 @@ function START_OFFLINE() {
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     mkdir -p $RUNDIR/inputs
     [ ! -z "$INPUTDIR" ] && find $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ {} +
-    # [ ! -z "$INPUTDIR" ] && INPUTS=$(echo -n \" && cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs && echo -n \")
     [ ! -z "$INPUTDIR" ] && INPUTS=\"$(cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs)\"
     CHECKENV
     PRINTENV
