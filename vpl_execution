@@ -11,6 +11,11 @@ fi
 [ -z "$RUNDIR" ] && echo "⚠ Variable \"RUNDIR\" is not defined!" && exit 0
 [ ! -f $RUNDIR/run.sh ] && echo "⚠ File \"run.sh\" is missing!" && exit 0
 chmod +x $RUNDIR/run.sh
-cd $RUNDIR && $RUNDIR/run.sh
+cd $RUNDIR 
+if [ "$DEBUG" = "1" ] ; then
+    bash -x $RUNDIR/run.sh
+else
+    bash $RUNDIR/run.sh
+fi
 
 # EOF

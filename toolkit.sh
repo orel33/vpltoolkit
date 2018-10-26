@@ -16,17 +16,10 @@ ECHOV()
     if [ "$VERBOSE" = "1" ] ; then ECHO $@ ; fi
 }
 
-ECHOD()
-{
-    if [ "$DEBUG" = "1" ] ; then ECHO $@ ; fi
-}
-
 TRACE()
 {
-    if [ "$DEBUG" = "1" ] ; then
+    if [ "$VERBOSE" = "1" ] ; then
         echo "+ $@"
-        bash -c "$@"
-        elif [ "$VERBOSE" = "1" ] ; then
         bash -c "$@"
     else
         bash -c "$@" &> /dev/null
@@ -96,9 +89,9 @@ function LOADENV()
 {
     if [ -f $RUNDIR/env.sh ] ; then
         source $RUNDIR/env.sh
-    elif [ -f ./env.sh ] ; then
+        elif [ -f ./env.sh ] ; then
         source ./env.sh
-    elif [ -f $HOME/env.sh ] ; then
+        elif [ -f $HOME/env.sh ] ; then
         source $HOME/env.sh
     else
         echo "⚠ File \"env.sh\" is missing!" && exit 0
