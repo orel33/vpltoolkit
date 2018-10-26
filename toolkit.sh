@@ -159,7 +159,7 @@ function START_ONLINE() {
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     source $HOME/vpl_environment.sh
     mkdir -p $RUNDIR/inputs
-    ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs )
+    [ ! -z "$VPL_SUBFILES" ] && ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs )
     INPUTS=\"$(cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs)\"
     # INPUTS=$(echo -n \" && cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs && echo -n \")
     CHECKENV
