@@ -56,11 +56,11 @@ $HOME
   └── vpl_execution
 ```
 
-## Examples 
+## Examples
 
 ### Hello World
 
-Let's consider the example [hello](https://github.com/orel33/vpltoolkit/tree/demo/hello). This activity is made of a single script *run.sh* that just print "hello world!".
+Let's consider the example [hello](https://github.com/orel33/vpltoolkit/tree/demo/hello). First, you need to add a new activity  This activity is made of a single script *run.sh* that just print "hello world!".
 
 ```bash
 #!/bin/bash
