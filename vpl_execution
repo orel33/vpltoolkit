@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Start VPL Execution Stage"
+
 if [ -f ./env.sh ] ; then 
     source ./env.sh
 elif [ -f $HOME/env.sh ] ; then 

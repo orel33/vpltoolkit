@@ -20,7 +20,10 @@ TRACE()
 {
     ECHO "+ $@"
     if [ "$MODE" = "EVAL" ] ; then
-        bash -c "$@" |& sed -e 's/^/Comment :=>>/;'
+        echo "< | -"
+        # bash -c "$@" |& sed -e 's/^/Comment :=>>/;'
+        bash -c "$@" |& sed -e 's/^/>/;'   # preformated output
+        echo "- | >"
     else
         bash -c "$@"
     fi
@@ -112,17 +115,16 @@ function LOADENV()
 
 function PRINTENV()
 {
-    ECHOV
-    ECHOV "-ENVIRONMENT"
-    ECHOV "VERSION=$VERSION"
-    ECHOV "ONLINE=$ONLINE"
-    ECHOV "MODE=$MODE"
-    ECHOV "EXO=$EXO"
-    ECHOV "RUNDIR=$RUNDIR"
-    ECHOV "DEBUG=$DEBUG"
-    ECHOV "VERBOSE=$VERBOSE"
-    ECHOV "INPUTS=$INPUTS"
-    ECHOV
+    echo
+    echo "VERSION=$VERSION"
+    echo "ONLINE=$ONLINE"
+    echo "MODE=$MODE"
+    echo "EXO=$EXO"
+    echo "RUNDIR=$RUNDIR"
+    echo "DEBUG=$DEBUG"
+    echo "VERBOSE=$VERBOSE"
+    echo "INPUTS=$INPUTS"
+    echo
 }
 
 ### DOWNLOAD ###
@@ -156,6 +158,7 @@ function DOWNLOAD() {
 ### EXECUTION ###
 
 function START_ONLINE() {
+    echo "Start VPL Compilation Stage"
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
     ONLINE=1
@@ -178,6 +181,7 @@ function START_ONLINE() {
 
 
 function START_OFFLINE() {
+    echo "Start VPL Compilation Stage"
     [ $# -ne 0 -a $# -ne 1 ] && echo "⚠ Usage: START_OFFLINE [INPUTDIR]" && exit 0
     local INPUTDIR=$1
     [ ! -z "$INPUTDIR" ] && [ ! -d $INPUTDIR ] && echo "⚠ Bad INPUTDIR: \"$INPUTDIR\"!" && exit 0

@@ -10,7 +10,7 @@ Features:
 * a toolkit with some basic bash functions
 * offline execution
 
-## Execution Model
+## Execution Model of VPL
 
 What happens when you click on the *Run/Eval button* of your VPL Editor in Moodle (or in *Test Activity*, if you are teacher)?
 
@@ -109,6 +109,10 @@ hello world!
 ### My Cat
 
 (...)
+
+## Documentation
+
+* http://vpl.dis.ulpgc.es/index.php/support
 
 ## TODO
 
