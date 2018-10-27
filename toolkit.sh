@@ -7,7 +7,7 @@ VERSION="1.0"
 ECHO()
 {
     local COMMENT=""
-    if [ "$MODE" = "EVALUATE" ] ; then COMMENT="Comment :=>>" ; fi
+    if [ "$MODE" = "EVAL" ] ; then COMMENT="Comment :=>>" ; fi
     echo "${COMMENT}$@"
 }
 
@@ -18,13 +18,25 @@ ECHOV()
 
 TRACE()
 {
-    if [ "$VERBOSE" = "1" ] ; then
-        echo "+ $@"
+    ECHO "+ $@"
+    if [ "$MODE" = "EVAL" ] ; then
+        bash -c "$@" |& sed -e 's/^/Comment :=>>/;'
+    else
         bash -c "$@"
+    fi
+}
+
+TRACEV()
+{
+    ECHOV "$@"
+    if [ "$VERBOSE" = "1" ] ; then
+        TRACE "$@"
     else
         bash -c "$@" &> /dev/null
     fi
 }
+
+### MISC ###
 
 CHECK()
 {
@@ -37,11 +49,11 @@ CHECK()
 
 SCORE()
 {
-    [ $# -ne 1 ] && echo "⚠ Usage: SCORE VALUE" && exit 0
+    [ $# -ne 1 ] && ECHO "⚠ Usage: SCORE VALUE" && exit 0
     [ -z "$GRADE" ] && GRADE=0
     local VALUE=$1
     [ -z "$GRADE" ] && echo "⚠ GRADE variable is not defined!" && exit 0
-    ECHOD "GRADE += $VALUE"
+    ECHOV "GRADE += $VALUE"
     GRADE=$((GRADE+VALUE))
 }
 
@@ -51,7 +63,7 @@ EXIT()
     (( GRADE < 0 )) && GRADE=0
     (( GRADE > 100 )) && GRADE=100
     ECHO && ECHO "-GRADE" && ECHO "$GRADE / 100"
-    if [ "$MODE" = "EVALUATE" ] ; then echo "Grade :=>> $GRADE" ; fi
+    if [ "$MODE" = "EVAL" ] ; then echo "Grade :=>> $GRADE" ; fi
     # if [ "$MODE" = "RUN" ] ; then echo "Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
     exit 0
 }
