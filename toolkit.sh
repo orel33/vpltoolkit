@@ -4,6 +4,8 @@ VERSION="1.0"
 
 ### BASIC ROUTINES ###
 
+# this routines should be used only in run.sh
+
 ECHO()
 {
     local COMMENT=""
@@ -149,7 +151,7 @@ function DOWNLOAD() {
     [ ! -d $RUNDIR/download/$SUBDIR ] && ECHO "⚠ SUBDIR \"$SUBDIR\" is missing!" && exit 0
     END=$(date +%s.%N)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
-    ECHOV "Download \"$SUBDIR\" in $TIME ms"
+    [ "$VERBOSE" = "1" ] && echo "Download \"$SUBDIR\" in $TIME ms"
     cp -rf $RUNDIR/download/$SUBDIR/* $RUNDIR/
     # rm -rf $RUNDIR/download
     # ls -lR $RUNDIR
@@ -158,7 +160,7 @@ function DOWNLOAD() {
 ### EXECUTION ###
 
 function START_ONLINE() {
-    echo "Start VPL Compilation Stage"
+    [ "$VERBOSE" = "1" ] && echo "Start VPL Compilation Stage"
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
     ONLINE=1
@@ -181,7 +183,7 @@ function START_ONLINE() {
 
 
 function START_OFFLINE() {
-    echo "Start VPL Compilation Stage"
+    [ "$VERBOSE" = "1" ] && echo "Start VPL Compilation Stage"
     [ $# -ne 0 -a $# -ne 1 ] && echo "⚠ Usage: START_OFFLINE [INPUTDIR]" && exit 0
     local INPUTDIR=$1
     [ ! -z "$INPUTDIR" ] && [ ! -d $INPUTDIR ] && echo "⚠ Bad INPUTDIR: \"$INPUTDIR\"!" && exit 0

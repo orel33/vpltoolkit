@@ -12,24 +12,22 @@ Features:
 
 ## Execution Model of VPL
 
-What happens when you click on the *Run/Eval button* of your VPL Editor in Moodle (or in *Test Activity*, if you are teacher)?
+What happens when a student clicks on the *Run/Eval button* of your VPL Editor in Moodle (or in *Test Activity*, if you are teacher)?
 
-First, it will launch the *vpl_run.sh* (resp *vpl_evaluate.sh*) script, that you must provide in the VPL Interface > Execution Files. Typically, this script must provide in any way a new shell script called *vpl_execution*, that will be implicitly launched after *vpl_run.sh* (resp *vpl_evaluate.sh*) is completed.
-
-At this stage, we introduce a unique script *run.sh* ...
+First, it will launch the *vpl_run.sh* (resp *vpl_evaluate.sh*) script, that you must provide in the VPL Interface > Execution Files. Typically, this script must provide in any way a new shell script called *vpl_execution*, that will be implicitly launched after *vpl_run.sh* (resp *vpl_evaluate.sh*) is completed. At this stage, *vpl_execution* calls a teacher-defined script *run.sh* (resp. *eval.sh*) depending on the execution mode, either RUN or EVAL. Here is an overview of the 
 
 ```text
-click RUN button --> vpl_run.sh ----------+
-                                          |--> vpl_execution --> run.sh
-click EVAL button --> vpl_evaluate.sh ----+
+click RUN button --> vpl_run.sh ----------+                    +--> run.sh
+                                          |--> vpl_execution --|
+click EVAL button --> vpl_evaluate.sh ----+                    +--> eval.sh
 ```
 
 To develop a new VPL activity, it is often convenient to launch it offline without the Moodle frontend, using *local* scripts, as follow:
 
 ```text
-local_run.sh ----------+
-                       |--> vpl_execution --> run.sh
-local_evaluate.sh -----+
+local_run.sh ----------+                    +--> run.sh
+                       |--> vpl_execution --|
+local_evaluate.sh -----+                    +--> eval.sh
 ```
 
 The *run.sh* script is starting from the $RUNDIR directory, organized as follow:
@@ -37,7 +35,8 @@ The *run.sh* script is starting from the $RUNDIR directory, organized as follow:
 ```text
 $RUNDIR
   ├── env.sh              # environment variable for the VPL toolkit
-  ├── run.sh              # entry point
+  ├── run.sh              # entry point for RUN mode
+  ├── eval.sh             # entry point for EVAL mode
   ├── ...                 # all files provided by teacher...
   ├── inputs              # all input files submitted by VPL by student ($VPL_SUBFILES)
   │   └── student.c
@@ -60,7 +59,7 @@ $HOME
 
 ### Hello World
 
-Let's consider the example [hello](https://github.com/orel33/vpltoolkit/tree/demo/hello). First, you need to add a new activity  This activity is made of a single script *run.sh* that just print "hello world!".
+Let's consider the example [hello](https://github.com/orel33/vpltoolkit/tree/demo/hello). First, you need to add a new activity  This activity is only made of a scripts *run.sh* & *eval.sh* that just print "hello world!" on standard output.
 
 ```bash
 #!/bin/bash
