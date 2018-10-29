@@ -117,16 +117,16 @@ function LOADENV()
 
 function PRINTENV()
 {
-    echo
-    echo "VERSION=$VERSION"
-    echo "ONLINE=$ONLINE"
-    echo "MODE=$MODE"
-    echo "EXO=$EXO"
-    echo "RUNDIR=$RUNDIR"
-    echo "DEBUG=$DEBUG"
-    echo "VERBOSE=$VERBOSE"
-    echo "INPUTS=$INPUTS"
-    echo
+    ECHOV
+    ECHOV "VERSION=$VERSION"
+    ECHOV "ONLINE=$ONLINE"
+    ECHOV "MODE=$MODE"
+    ECHOV "EXO=$EXO"
+    ECHOV "RUNDIR=$RUNDIR"
+    ECHOV "DEBUG=$DEBUG"
+    ECHOV "VERBOSE=$VERBOSE"
+    ECHOV "INPUTS=$INPUTS"
+    ECHOV
 }
 
 ### DOWNLOAD ###
