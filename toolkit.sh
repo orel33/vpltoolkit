@@ -206,7 +206,7 @@ function START_OFFLINE() {
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
     ONLINE=0
     [ $(basename $0) == "local_run.sh" ] && MODE="RUN"
-    [ $(basename $0) == "local_evaluate.sh" ] && MODE="EVAL"
+    [ $(basename $0) == "local_eval.sh" ] && MODE="EVAL"
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     mkdir -p $RUNDIR/inputs
     [ ! -z "$INPUTDIR" ] && find $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ {} +
