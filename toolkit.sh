@@ -50,6 +50,19 @@ CHECK()
     done
 }
 
+CHECKINPUTS()
+{
+    [ -z "$INPUTS" ] && echo "⚠ INPUTS variable is not defined!" && exit 0
+    CHECK $INPUTS
+}
+
+COPYINPUTS()
+{
+    [ -z "$INPUTS" ] && echo "⚠ INPUTS variable is not defined!" && exit 0
+    [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
+    cp -f $INPUTS $RUNDIR/
+}
+
 ### GRADE ###
 
 SCORE()
