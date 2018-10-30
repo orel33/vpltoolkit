@@ -27,10 +27,10 @@ To develop a new VPL activity, it is often convenient to launch it offline witho
 ```text
 local_run.sh ----------+                    +--> run.sh
                        |--> vpl_execution --|
-local_evaluate.sh -----+                    +--> eval.sh
+local_eval.sh ---------+                    +--> eval.sh
 ```
 
-The *run.sh* script is starting from the $RUNDIR directory, organized as follow:
+The *run.sh* (resp. *eval.sh*) script is starting from the $RUNDIR directory, organized as follow:
 
 ```text
 $RUNDIR
