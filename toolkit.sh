@@ -6,18 +6,31 @@ VERSION="1.0"
 
 # this routines should be used only in run.sh & eval.sh
 
+# COMMENT only for EVAL mode
+# no color in EVAL mode 
 
 COMMENT()
 {
     echo "Comment :=>>$@"
 }
 
-
-COMMENTG()
+TITLE()
 {
-    echo -e "Comment :=>>\033[32m"
-    echo "Comment :=>>$@"
-    echo -e "Comment :=>>\033[0m"
+    echo "Comment :=>>-$@"
+}
+
+ECHOGEEN()
+{
+    echo -n -e "\033[32m"
+    echo "$@"
+    echo -n -e "\033[0m"
+}
+
+ECHORED()
+{
+    echo -n -e "\033[31m"
+    ECHO "$@"
+    echo -n -e "\033[0m"
 }
 
 ECHO()
@@ -27,30 +40,27 @@ ECHO()
     echo "${COMMENT}$@"
 }
 
-ECHOV()
-{
-    if [ "$VERBOSE" = "1" ] ; then ECHO "$@" ; fi
-}
-
-
-ECHORED()
-{
-    echo -n -e "\033[31m"
-    ECHO "$@"
-    echo -n -e "\033[0m"
-}
+# echo a command and then execute it (both for RUN & EVAL modes)
 
 TRACE()
 {
-    COMMENTG "$ $@"
     if [ "$MODE" = "EVAL" ] ; then
+        COMMENT "$ $@"
         COMMENT "< | -"
         # bash -c "$@" |& sed -e 's/^/Comment :=>>/;'
         bash -c "$@" |& sed -e 's/^/>/;'   # preformated output
         COMMENT "- | >"
     else
+        ECHOGREEN "$ $@"
         bash -c "$@"
     fi
+}
+
+# ECHO and TRACE in VERBOSE mode
+
+ECHOV()
+{
+    if [ "$VERBOSE" = "1" ] ; then ECHO "$@" ; fi
 }
 
 TRACEV()
