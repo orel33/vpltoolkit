@@ -113,40 +113,6 @@ COPYINPUTS()
 
 ### GRADE ###
 
-SCORE()
-{
-    [ $# -ne 1 ] && ECHO "⚠ Usage: SCORE VALUE" && exit 0
-    [ -z "$GRADE" ] && GRADE=0
-    local VALUE=$1
-    [ -z "$GRADE" ] && echo "⚠ GRADE variable is not defined!" && exit 0
-    ECHOV "GRADE += $VALUE"
-    GRADE=$((GRADE+VALUE))
-}
-
-# inputs: MSG BONUS MALUS [MSGOK MSGKO]
-EVAL()
-{
-    # check input args
-    local MSG=$1
-    local BONUS=$2
-    local MALUS=$3
-    local MSGOK="Success."
-    local MSGKO="Failure!"
-    if [ $# -eq 5 ] ; then
-        MSGOK=$4
-        MSGKO=$5
-    fi
-    if [ $? -eq 0 ] ; then
-        COMMENT "✓ $MSG: $MSGOK [+$BONUS]"
-        [ "$BONUS" = "X" ] && EXIT 0
-        SCORE $BONUS
-    else
-        COMMENT "⚠ $MSG: $MSGKO [-$MALUS]"
-        [ "$MALUS" = "X" ] && EXIT 0
-        SCORE $MALUS
-    fi
-}
-
 # inputs: [GRADE]
 EXIT()
 {
@@ -158,6 +124,42 @@ EXIT()
     if [ "$MODE" = "EVAL" ] ; then echo "Grade :=>> $GRADE" ; fi
     # if [ "$MODE" = "RUN" ] ; then echo "Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
     exit 0
+}
+
+SCORE()
+{
+    [ $# -ne 1 ] && ECHO "⚠ Usage: SCORE VALUE" && exit 0
+    [ -z "$GRADE" ] && GRADE=0
+    local VALUE=$1
+    [ -z "$GRADE" ] && echo "⚠ GRADE variable is not defined!" && exit 0
+    # ECHOV "GRADE += $VALUE"
+    GRADE=$((GRADE+VALUE))
+}
+
+# inputs: MSG BONUS MALUS [MSGOK MSGKO]
+EVAL()
+{
+    local RET=$?
+    echo "EVAL RET=$RET"
+    # check input args
+    local MSG=$1
+    local BONUS=$2
+    local MALUS=$3
+    local MSGOK="Success."
+    local MSGKO="Failure!"
+    if [ $# -eq 5 ] ; then
+        MSGOK=$4
+        MSGKO=$5
+    fi
+    if [ $RET -eq 0 ] ; then
+        COMMENT "✓ $MSG: $MSGOK [+$BONUS]"
+        [ "$BONUS" = "X" ] && EXIT 100
+        SCORE $BONUS
+    else
+        COMMENT "⚠ $MSG: $MSGKO [-$MALUS]"
+        [ "$MALUS" = "X" ] && EXIT 0
+        SCORE $MALUS
+    fi
 }
 
 ### ENVIRONMENT ###
