@@ -15,9 +15,9 @@ COMMENT()
 
 COMMENTG()
 {
-    echo -n -e "Comment :=>>\033[32m"
+    echo -e "Comment :=>>\033[32m"
     echo "Comment :=>>$@"
-    echo -n -e "Comment :=>>\033[0m"
+    echo -e "Comment :=>>\033[0m"
 }
 
 ECHO()
