@@ -19,7 +19,7 @@ TITLE()
     echo "Comment :=>>-$@"
 }
 
-ECHOGEEN()
+ECHOGREEN()
 {
     echo -n -e "\033[32m"
     echo "$@"
