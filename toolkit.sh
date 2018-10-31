@@ -44,21 +44,24 @@ ECHO()
 
 # echo a command and then execute it (both for RUN & EVAL modes)
 
+# basic trace (RUN mode and execution window in EVAL mode)
 TRACE()
 {
-    if [ "$MODE" = "EVAL" ] ; then
-        COMMENT "$ $@"
-        # bash -c "$@" |& sed -e 's/^/Comment :=>>>/;' # preformated output
-        echo "<|--"
-        # bash -c "$@"
-        bash -c "$@" |& sed -e 's/^/>/;' # preformated output
-        echo "--|>"
-        
-    else
-        ECHOGREEN "$ $@"
-        bash -c "$@"
-    fi
+    ECHOGREEN "$ $@"
+    bash -c "$@"
 }
+
+# trace for EVAL mode only (comment window)
+ETRACE()
+{
+    COMMENT "$ $@"
+    # bash -c "$@" |& sed -e 's/^/Comment :=>>>/;' # preformated output
+    echo "<|--"
+    # bash -c "$@"
+    bash -c "$@" |& sed -e 's/^/>/;' # preformated output
+    echo "--|>"
+}
+
 
 # ECHO and TRACE in VERBOSE mode
 
