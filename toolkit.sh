@@ -6,9 +6,6 @@ VERSION="1.0"
 
 # this routines should be used only in run.sh & eval.sh
 
-# COMMENT only for EVAL mode
-# no color in EVAL mode
-
 COMMENT()
 {
     echo "Comment :=>>$@"
@@ -53,7 +50,8 @@ TRACE()
         COMMENT "$ $@"
         # bash -c "$@" |& sed -e 's/^/Comment :=>>>/;' # preformated output
         echo "<|--"
-        bash -c "$@"
+        # bash -c "$@"
+        bash -c "$@" |& sed -e 's/^/>/;' # preformated output
         echo "--|>"
 
     else
