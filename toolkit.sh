@@ -18,9 +18,25 @@ ECHOV()
     if [ "$VERBOSE" = "1" ] ; then ECHO $@ ; fi
 }
 
+ECHOGREEN()
+{
+    echo -n -e "\033[32m"
+    ECHO "$@"
+    echo -n -e "\033[0m"
+}
+
+ECHORED()
+{
+    echo -n -e "\033[31m"
+    ECHO "$@"
+    echo -n -e "\033[0m"
+}
+
+#  echo -e "\033[31mUn texte en rouge et\033[0m retour a la normale"
+
 TRACE()
 {
-    ECHO "$ $@"
+    ECHOGREEN "$ $@"
     if [ "$MODE" = "EVAL" ] ; then
         echo "< | -"
         # bash -c "$@" |& sed -e 's/^/Comment :=>>/;'
@@ -36,7 +52,6 @@ TRACEV()
     if [ "$VERBOSE" = "1" ] ; then
         TRACE "$@"
     else
-        ECHO "$ $@"
         bash -c "$@" &> /dev/null
     fi
 }

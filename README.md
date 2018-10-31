@@ -115,7 +115,9 @@ hello world!
 
 ## TODO
 
-* add an option to use a docker environment for *offline* execution
+* add an option to use a docker environment for *offline* execution (and maybe *online*)
+* use an optional execution file *env.sh* (provided by teacher at Moodle)
+* add "rm -f $0" for security issue in scripts: vpl_execution, vpl_*.sh, run.sh, eval.sh
 
 ---
 aurelien.esnard@u-bordeaux.fr
