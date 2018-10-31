@@ -138,16 +138,20 @@ EVAL()
     fi
     if [ $? -eq 0 ] ; then
         COMMENT "✓ $MSG: $MSGOK [+$BONUS]"
+        [ "$BONUS" = "X" ] && EXIT 0
         SCORE $BONUS
     else
         COMMENT "⚠ $MSG: $MSGKO [-$MALUS]"
+        [ "$MALUS" = "X" ] && EXIT 0
         SCORE $MALUS
     fi
 }
 
+# inputs: [GRADE]
 EXIT()
 {
     [ -z "$GRADE" ] && GRADE=0
+    [ $# -eq 1 ] && GRADE=$1
     (( GRADE < 0 )) && GRADE=0
     (( GRADE > 100 )) && GRADE=100
     ECHO && ECHO "-GRADE" && ECHO "$GRADE / 100"
