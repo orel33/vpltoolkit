@@ -4,7 +4,9 @@ VERSION="1.0"
 
 ### BASIC ROUTINES ###
 
-# this routines should be used only in run.sh
+# this routines should be used only in run.sh & eval.sh
+
+
 
 ECHO()
 {
@@ -15,24 +17,22 @@ ECHO()
 
 ECHOV()
 {
-    if [ "$VERBOSE" = "1" ] ; then ECHO $@ ; fi
+    if [ "$VERBOSE" = "1" ] ; then ECHO "$@" ; fi
 }
 
 ECHOGREEN()
 {
-    echo -n -e "\033[32m"
+    ECHO -n -e "\033[32m"
     ECHO "$@"
-    echo -n -e "\033[0m"
+    ECHO -n -e "\033[0m"
 }
 
 ECHORED()
 {
-    echo -n -e "\033[31m"
+    ECHO -n -e "\033[31m"
     ECHO "$@"
-    echo -n -e "\033[0m"
+    ECHO -n -e "\033[0m"
 }
-
-#  echo -e "\033[31mUn texte en rouge et\033[0m retour a la normale"
 
 TRACE()
 {
