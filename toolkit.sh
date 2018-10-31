@@ -23,26 +23,32 @@ PRE()
 
 ECHOGREEN()
 {
-    echo -n -e "\033[32;1m"   # 32 green ; 1 bold
-    echo "$@"
-    echo -n -e "\033[0m"
+    if [ "$MODE" = "RUN" ] ; then
+        echo -n -e "\033[32;1m" && echo -n "$@" && echo -e "\033[0m"
+    else
+        echo "$@"
+    fi
 }
 
 ECHORED()
 {
-    echo -n -e "\033[31;1m"  # 31 red ; 1 bold
-    ECHO "$@"
-    echo -n -e "\033[0m"
+    if [ "$MODE" = "RUN" ] ; then
+        echo -n -e "\033[31;1m"  && echo -n "$@" && echo -e "\033[0m"
+    else
+        echo "$@"
+    fi
 }
 
 ECHO()
 {
-    local COMMENT=""
-    if [ "$MODE" = "EVAL" ] ; then COMMENT="Comment :=>>" ; fi
-    echo "${COMMENT}$@"
+    if [ "$MODE" = "RUN" ] ; then
+        echo "$@"
+    else
+        echo "Comment :=>>$@"
+    fi
 }
 
-# echo a command and then execute it (both for RUN & EVAL modes)
+### TRACE: echo a command and then execute it (both for RUN & EVAL modes)
 
 # basic trace (RUN mode and execution window in EVAL mode)
 TRACE()
@@ -50,7 +56,7 @@ TRACE()
     ECHOGREEN "$ $@"
     bash -c "$@"
     RET=$?
-    [ "$VERBOSE" = "1" -a $? -eq 0 ] && ECHORED "Error! (status $RET)"
+    [ "$VERBOSE" = "1" -a $RET -ne 0 ] && ECHORED "Error! (status $RET)"
     return $RET
 }
 
