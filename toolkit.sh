@@ -7,7 +7,7 @@ VERSION="1.0"
 # this routines should be used only in run.sh & eval.sh
 
 # COMMENT only for EVAL mode
-# no color in EVAL mode 
+# no color in EVAL mode
 
 COMMENT()
 {
@@ -21,14 +21,14 @@ TITLE()
 
 ECHOGREEN()
 {
-    echo -n -e "\033[32m"
+    echo -n -e "\033[32;1m"   # 32 green ; 1 bold
     echo "$@"
     echo -n -e "\033[0m"
 }
 
 ECHORED()
 {
-    echo -n -e "\033[31m"
+    echo -n -e "\033[31;1m"  # 31 red ; 1 bold
     ECHO "$@"
     echo -n -e "\033[0m"
 }
@@ -46,10 +46,11 @@ TRACE()
 {
     if [ "$MODE" = "EVAL" ] ; then
         COMMENT "$ $@"
-        COMMENT "< | -"
+        echo "< | -"
         # bash -c "$@" |& sed -e 's/^/Comment :=>>/;'
-        bash -c "$@" |& sed -e 's/^/>/;'   # preformated output
-        COMMENT "- | >"
+        # bash -c "$@" |& sed -e 's/^/>/;'   # preformated output
+        bash -c "$@"
+        echo "- | >"
     else
         ECHOGREEN "$ $@"
         bash -c "$@"
