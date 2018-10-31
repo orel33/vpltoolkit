@@ -19,6 +19,11 @@ TITLE()
     echo "Comment :=>>-$@"
 }
 
+PRE()
+{
+    echo "Comment :=>>>$@"
+}
+
 ECHOGREEN()
 {
     echo -n -e "\033[32;1m"   # 32 green ; 1 bold
@@ -46,11 +51,8 @@ TRACE()
 {
     if [ "$MODE" = "EVAL" ] ; then
         COMMENT "$ $@"
-        echo "< | -"
-        # bash -c "$@" |& sed -e 's/^/Comment :=>>/;'
-        # bash -c "$@" |& sed -e 's/^/>/;'   # preformated output
-        bash -c "$@"
-        echo "- | >"
+        bash -c "$@" |& sed -e 's/^/Comment :=>>>/;' # preformated output
+        # bash -c "$@"
     else
         ECHOGREEN "$ $@"
         bash -c "$@"
