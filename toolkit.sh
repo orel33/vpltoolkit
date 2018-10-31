@@ -53,7 +53,7 @@ TRACE()
         # bash -c "$@"
         bash -c "$@" |& sed -e 's/^/>/;' # preformated output
         echo "--|>"
-
+        
     else
         ECHOGREEN "$ $@"
         bash -c "$@"
@@ -108,6 +108,28 @@ SCORE()
     [ -z "$GRADE" ] && echo "⚠ GRADE variable is not defined!" && exit 0
     ECHOV "GRADE += $VALUE"
     GRADE=$((GRADE+VALUE))
+}
+
+# inputs: MSG BONUS MALUS [MSGOK MSGKO]
+EVAL()
+{
+    # check input args
+    local MSG=$1
+    local BONUS=$2
+    local MALUS=$3
+    local MSGOK="Success."
+    local MSGKO="Failure!"
+    if [ $# -eq 5 ] ; then
+        MSGOK=$4
+        MSGKO=$5
+    fi
+    if [ $? -eq 0 ] ; then
+        COMMENT "✓ $MSG: $MSGOK [+$BONUS]"
+        SCORE $BONUS
+    else
+        COMMENT "⚠ $MSG: $MSGKO [-$MALUS]"
+        SCORE $MALUS
+    fi
 }
 
 EXIT()
