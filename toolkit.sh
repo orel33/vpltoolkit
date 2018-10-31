@@ -49,6 +49,9 @@ TRACE()
 {
     ECHOGREEN "$ $@"
     bash -c "$@"
+    RET=$?
+    [ "$VERBOSE" = "1" -a $? -eq 0 ] && ECHORED "Error! (status $RET)"
+    return $RET
 }
 
 # trace for EVAL mode only (comment window)
@@ -59,9 +62,10 @@ ETRACE()
     echo "<|--"
     # bash -c "$@"
     bash -c "$@" |& sed -e 's/^/>/;' # preformated output
+    RET=$?
     echo "--|>"
+    return $RET
 }
-
 
 # ECHO and TRACE in VERBOSE mode
 
