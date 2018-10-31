@@ -51,8 +51,11 @@ TRACE()
 {
     if [ "$MODE" = "EVAL" ] ; then
         COMMENT "$ $@"
-        bash -c "$@" |& sed -e 's/^/Comment :=>>>/;' # preformated output
-        # bash -c "$@"
+        # bash -c "$@" |& sed -e 's/^/Comment :=>>>/;' # preformated output
+        echo "<|--"
+        bash -c "$@"
+        echo "--|>"
+
     else
         ECHOGREEN "$ $@"
         bash -c "$@"
