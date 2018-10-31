@@ -20,7 +20,7 @@ ECHOV()
 
 TRACE()
 {
-    ECHO "+ $@"
+    ECHO "$ $@"
     if [ "$MODE" = "EVAL" ] ; then
         echo "< | -"
         # bash -c "$@" |& sed -e 's/^/Comment :=>>/;'
@@ -33,10 +33,10 @@ TRACE()
 
 TRACEV()
 {
-    ECHOV "$@"
     if [ "$VERBOSE" = "1" ] ; then
         TRACE "$@"
     else
+        ECHO "$ $@"
         bash -c "$@" &> /dev/null
     fi
 }
