@@ -7,6 +7,18 @@ VERSION="1.0"
 # this routines should be used only in run.sh & eval.sh
 
 
+COMMENT()
+{
+    echo "Comment :=>>$@"
+}
+
+
+COMMENTG()
+{
+    echo -n -e "Comment :=>>\033[32m"
+    echo "Comment :=>>$@"
+    echo -n -e "Comment :=>>\033[0m"
+}
 
 ECHO()
 {
@@ -20,28 +32,22 @@ ECHOV()
     if [ "$VERBOSE" = "1" ] ; then ECHO "$@" ; fi
 }
 
-ECHOGREEN()
-{
-    ECHO -n -e "\033[32m"
-    ECHO "$@"
-    ECHO -n -e "\033[0m"
-}
 
 ECHORED()
 {
-    ECHO -n -e "\033[31m"
+    echo -n -e "\033[31m"
     ECHO "$@"
-    ECHO -n -e "\033[0m"
+    echo -n -e "\033[0m"
 }
 
 TRACE()
 {
-    ECHOGREEN "$ $@"
+    COMMENTG "$ $@"
     if [ "$MODE" = "EVAL" ] ; then
-        echo "< | -"
+        COMMENT "< | -"
         # bash -c "$@" |& sed -e 's/^/Comment :=>>/;'
         bash -c "$@" |& sed -e 's/^/>/;'   # preformated output
-        echo "- | >"
+        COMMENT "- | >"
     else
         bash -c "$@"
     fi
