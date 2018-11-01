@@ -56,7 +56,7 @@ function TRACE
     if [ "$MODE" = "RUN" ] ; then
         ECHOGREEN "$ $@"
     else
-        echo -n "Trace :=>>$@"
+        echo "Trace :=>>$@"
     fi
     bash -c "$@"
     RET=$?
