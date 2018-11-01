@@ -56,9 +56,9 @@ function TRACE
     if [ "$MODE" = "RUN" ] ; then
         ECHOGREEN "$ $@"
     else
-        echo "Trace :=>>$@"
+        echo "Trace :=>>\$ $@"
     fi
-    bash -c "$@"
+    bash -c "$@" |& sed -e 's/^/Output :=>>/;'
     RET=$?
     # [ "$VERBOSE" = "1" -a $RET -ne 0 ] && ECHORED "Error! (status $RET)"
     return $RET
