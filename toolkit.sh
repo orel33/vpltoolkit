@@ -74,7 +74,7 @@ function TRACE
     [ "$MODE" != "EVAL" ] && "Error: function TRACE only available in EVAL mode!" && exit 0
     echo "Trace :=>>$ $@"
     bash -c "$@" |& sed -e 's/^/Output :=>>/;'
-    RET=$?
+    RET=${PIPESTATUS[0]}  # return status of first piped command!
     echo "Status :=>> $RET"
     return $RET
 }
@@ -86,7 +86,7 @@ function VTRACE
     COMMENT "$ $@"
     echo "<|--"
     bash -c "$@" |& sed -e 's/^/>/;' # preformated output
-    RET=$?
+    RET=${PIPESTATUS[0]}  # return status of first piped command!
     echo "--|>"
     return $RET
 }
