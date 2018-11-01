@@ -56,7 +56,7 @@ function TRACE
     if [ "$MODE" = "RUN" ] ; then
         ECHOGREEN "$ $@"
     else
-        echo "Trace :=>>\$ $@"
+        echo "Trace :=>>$ $@"
     fi
     bash -c "$@" |& sed -e 's/^/Output :=>>/;'
     RET=$?
