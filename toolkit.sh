@@ -6,22 +6,22 @@ VERSION="1.0"
 
 # this routines should be used only in run.sh & eval.sh
 
-COMMENT()
+function COMMENT
 {
     echo "Comment :=>>$@"
 }
 
-TITLE()
+function TITLE
 {
     echo "Comment :=>>-$@"
 }
 
-PRE()
+function PRE
 {
     echo "Comment :=>>>$@"
 }
 
-ECHOGREEN()
+function ECHOGREEN
 {
     if [ "$MODE" = "RUN" ] ; then
         echo -n -e "\033[32;1m" && echo -n "$@" && echo -e "\033[0m"
@@ -30,7 +30,7 @@ ECHOGREEN()
     fi
 }
 
-ECHORED()
+function ECHORED
 {
     if [ "$MODE" = "RUN" ] ; then
         echo -n -e "\033[31;1m"  && echo -n "$@" && echo -e "\033[0m"
@@ -39,7 +39,7 @@ ECHORED()
     fi
 }
 
-ECHO()
+function ECHO
 {
     if [ "$MODE" = "RUN" ] ; then
         echo "$@"
@@ -51,7 +51,7 @@ ECHO()
 ### TRACE: echo a command and then execute it (both for RUN & EVAL modes)
 
 # basic trace (RUN mode and execution window in EVAL mode)
-TRACE()
+function TRACE
 {
     ECHOGREEN "$ $@"
     bash -c "$@"
@@ -61,7 +61,7 @@ TRACE()
 }
 
 # trace for EVAL mode only (comment window)
-ETRACE()
+function ETRACE
 {
     COMMENT "$ $@"
     # bash -c "$@" |& sed -e 's/^/Comment :=>>>/;' # preformated output
@@ -75,12 +75,12 @@ ETRACE()
 
 # ECHO and TRACE in VERBOSE mode
 
-ECHOV()
+function ECHOV
 {
     if [ "$VERBOSE" = "1" ] ; then ECHO "$@" ; fi
 }
 
-TRACEV()
+function TRACEV
 {
     if [ "$VERBOSE" = "1" ] ; then
         TRACE "$@"
@@ -91,20 +91,20 @@ TRACEV()
 
 ### MISC ###
 
-CHECK()
+function CHECK
 {
     for FILE in "$@" ; do
         [ ! -f $FILE ] && ECHO "⚠ File \"$FILE\" is missing!" && exit 0
     done
 }
 
-CHECKINPUTS()
+function CHECKINPUTS
 {
     [ -z "$INPUTS" ] && echo "⚠ INPUTS variable is not defined!" && exit 0
     CHECK $INPUTS
 }
 
-COPYINPUTS()
+function COPYINPUTS
 {
     [ -z "$INPUTS" ] && echo "⚠ INPUTS variable is not defined!" && exit 0
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
@@ -114,7 +114,7 @@ COPYINPUTS()
 ### GRADE ###
 
 # inputs: [GRADE]
-EXIT()
+function EXIT
 {
     [ -z "$GRADE" ] && GRADE=0
     [ $# -eq 1 ] && GRADE=$1
@@ -126,7 +126,7 @@ EXIT()
     exit 0
 }
 
-SCORE()
+function SCORE
 {
     [ $# -ne 1 ] && ECHO "⚠ Usage: SCORE VALUE" && exit 0
     [ -z "$GRADE" ] && GRADE=0
@@ -136,12 +136,38 @@ SCORE()
     GRADE=$((GRADE+VALUE))
 }
 
+# inputs: MSG VALUE [MSGOK]
+function BONUS
+{
+    local MSG=$1
+    local VALUE=$2
+    local MSGOK="Success."
+    if [ $# -eq 3 ] ; then
+        MSGOK=$3
+    fi
+    COMMENT "✓ $MSG: $MSGOK [+$VALUE]"
+    [ "$VALUE" = "X" ] && EXIT 100
+    GRADE=$((GRADE+VALUE))
+}
+
+# inputs: MSG VALUE [MSGOK]
+function MALUS
+{
+    local MSG=$1
+    local VALUE=$2
+    local MSGKO="Failure!"
+    if [ $# -eq 3 ] ; then
+        MSGKO=$3
+    fi
+    COMMENT "⚠ $MSG: $MSGKO [-$MALUS]"
+    [ "$VALUE" = "X" ] && EXIT 0
+    GRADE=$((GRADE-VALUE))
+}
+
 # inputs: MSG BONUS MALUS [MSGOK MSGKO]
-EVAL()
+function EVAL
 {
     local RET=$?
-    echo "EVAL RET=$RET"
-    # check input args
     local MSG=$1
     local BONUS=$2
     local MALUS=$3
@@ -152,19 +178,15 @@ EVAL()
         MSGKO=$5
     fi
     if [ $RET -eq 0 ] ; then
-        COMMENT "✓ $MSG: $MSGOK [+$BONUS]"
-        [ "$BONUS" = "X" ] && EXIT 100
-        SCORE $BONUS
+        BONUS $MSG $BONUS $MSGOK
     else
-        COMMENT "⚠ $MSG: $MSGKO [-$MALUS]"
-        [ "$MALUS" = "X" ] && EXIT 0
-        SCORE $MALUS
+        MALUS $MSG $MALUS $MSGKO
     fi
 }
 
 ### ENVIRONMENT ###
 
-function CHECKENV()
+function CHECKENV
 {
     # basic environment
     [ -z "$VERSION" ] && echo "⚠ VERSION variable is not defined!" && exit 0
@@ -177,7 +199,7 @@ function CHECKENV()
     [ -z "$INPUTS" ] && INPUTS=""
 }
 
-function SAVEENV()
+function SAVEENV
 {
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     rm -f $RUNDIR/env.sh
@@ -191,7 +213,7 @@ function SAVEENV()
     echo "INPUTS=$INPUTS" >> $RUNDIR/env.sh
 }
 
-function LOADENV()
+function LOADENV
 {
     if [ -f $RUNDIR/env.sh ] ; then
         source $RUNDIR/env.sh
@@ -204,7 +226,7 @@ function LOADENV()
     fi
 }
 
-function PRINTENV()
+function PRINTENV
 {
     if [ "$VERBOSE" = "1" ] ; then
         echo
@@ -224,7 +246,8 @@ function PRINTENV()
 
 # TODO: add wget method
 
-function DOWNLOAD() {
+function DOWNLOAD
+{
     [ $# -ne 3 ] && echo "⚠ Usage: DOWNLOAD REPOSITORY BRANCH SUBDIR" && exit 0
     local REPOSITORY=$1
     local BRANCH=$2
@@ -250,7 +273,8 @@ function DOWNLOAD() {
 
 ### EXECUTION ###
 
-function START_ONLINE() {
+function START_ONLINE
+{
     [ "$VERBOSE" = "1" ] && echo "Start VPL Compilation Stage"
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
@@ -273,7 +297,8 @@ function START_ONLINE() {
 }
 
 
-function START_OFFLINE() {
+function START_OFFLINE
+{
     [ "$VERBOSE" = "1" ] && echo "Start VPL Compilation Stage"
     [ $# -ne 0 -a $# -ne 1 ] && echo "⚠ Usage: START_OFFLINE [INPUTDIR]" && exit 0
     local INPUTDIR=$1
