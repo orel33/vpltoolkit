@@ -139,11 +139,11 @@ function SCORE
 # inputs: MSG VALUE [MSGOK]
 function BONUS
 {
-    local MSG=$1
-    local VALUE=$2
-    local MSGOK="Success."
+    local MSG="$1"
+    local VALUE="$2"
+    local MSGOK="success."
     if [ $# -eq 3 ] ; then
-        MSGOK=$3
+        MSGOK="$3"
     fi
     if [ "$VALUE" = "X" ] ; then
         COMMENT "✓ $MSG: $MSGOK [+∞]" && EXIT 100
@@ -158,11 +158,11 @@ function BONUS
 # inputs: MSG VALUE [MSGOK]
 function MALUS
 {
-    local MSG=$1
-    local VALUE=$2
-    local MSGKO="Failure!"
+    local MSG="$1"
+    local VALUE="$2"
+    local MSGKO="failure!"
     if [ $# -eq 3 ] ; then
-        MSGKO=$3
+        MSGKO="$3"
     fi
     if [ "$VALUE" = "X" ] ; then
         COMMENT "⚠ $MSG: $MSGKO [-∞]" && EXIT 0
@@ -174,23 +174,23 @@ function MALUS
     GRADE=$((GRADE-VALUE))
 }
 
-# inputs: MSG BONUS MALUS [MSGOK MSGKO]
+# inputs: MSG VALUEBONUS VALUEMALUS [MSGOK MSGKO]
 function EVAL
 {
     local RET=$?
-    local MSG=$1
-    local BONUS=$2
-    local MALUS=$3
-    local MSGOK="Success."
-    local MSGKO="Failure!"
+    local MSG="$1"
+    local VALUEBONUS="$2"
+    local VALUEMALUS="$3"
+    local MSGOK="success."
+    local MSGKO="failure!"
     if [ $# -eq 5 ] ; then
         MSGOK=$4
         MSGKO=$5
     fi
     if [ $RET -eq 0 ] ; then
-        BONUS $MSG $BONUS $MSGOK
+        BONUS "$MSG" $VALUEBONUS "$MSGOK"
     else
-        MALUS $MSG $MALUS $MSGKO
+        MALUS "$MSG" $VALUEMALUS "$MSGKO"
     fi
 }
 
