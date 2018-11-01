@@ -60,7 +60,7 @@ function TRACE
     fi
     bash -c "$@"
     RET=$?
-    [ "$VERBOSE" = "1" -a $RET -ne 0 ] && ECHORED "Error! (status $RET)"
+    # [ "$VERBOSE" = "1" -a $RET -ne 0 ] && ECHORED "Error! (status $RET)"
     return $RET
 }
 
