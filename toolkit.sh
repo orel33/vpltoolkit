@@ -53,7 +53,11 @@ function ECHO
 # basic trace (RUN mode and execution window in EVAL mode)
 function TRACE
 {
-    ECHOGREEN "$ $@"
+    if [ "$MODE" = "RUN" ] ; then
+        ECHOGREEN "$ $@"
+    else
+        echo -n "Trace :=>>$@"
+    fi
     bash -c "$@"
     RET=$?
     [ "$VERBOSE" = "1" -a $RET -ne 0 ] && ECHORED "Error! (status $RET)"
@@ -136,14 +140,18 @@ function SCORE
     GRADE=$((GRADE+VALUE))
 }
 
-# inputs: MSG VALUE [MSGOK]
+# inputs: MSG VALUE [MSGOK] [CMDOK]
 function BONUS
 {
     local MSG="$1"
     local VALUE="$2"
     local MSGOK="success."
+    local CMDOK=""
     if [ $# -eq 3 ] ; then
         MSGOK="$3"
+    elif [ $# -eq 4 ] ; then
+        MSGOK="$3"
+        CMDOK="$4"
     fi
     if [ "$VALUE" = "X" ] ; then
         COMMENT "✓ $MSG: $MSGOK [+∞]" && EXIT 100
@@ -153,16 +161,21 @@ function BONUS
         COMMENT "✓ $MSG: $MSGOK [+$VALUE]"
     fi
     GRADE=$((GRADE+VALUE))
+    eval $CMDOK
 }
 
-# inputs: MSG VALUE [MSGOK]
+# inputs: MSG VALUE [MSGOK] [CMDKO]
 function MALUS
 {
     local MSG="$1"
     local VALUE="$2"
     local MSGKO="failure!"
+    local CMDKO=""
     if [ $# -eq 3 ] ; then
         MSGKO="$3"
+    elif [ $# -eq 4 ] ; then
+        MSGKO="$3"
+        CMDKO="$4"
     fi
     if [ "$VALUE" = "X" ] ; then
         COMMENT "⚠ $MSG: $MSGKO [-∞]" && EXIT 0
@@ -172,9 +185,10 @@ function MALUS
         COMMENT "⚠ $MSG: $MSGKO [-$VALUE]"
     fi
     GRADE=$((GRADE-VALUE))
+    eval $CMDKO
 }
 
-# inputs: MSG VALUEBONUS VALUEMALUS [MSGOK MSGKO]
+# inputs: MSG VALUEBONUS VALUEMALUS [MSGOK MSGKO] [CMDOK CMDKO]
 function EVAL
 {
     local RET=$?
@@ -183,14 +197,21 @@ function EVAL
     local VALUEMALUS="$3"
     local MSGOK="success."
     local MSGKO="failure!"
+    local CMDOK=""
+    local CMDKO=""
     if [ $# -eq 5 ] ; then
         MSGOK=$4
         MSGKO=$5
+    elif [ $# -eq 7 ] ; then
+        MSGOK=$4
+        MSGKO=$5
+        CMDOK=$6
+        CMDKO=$7
     fi
     if [ $RET -eq 0 ] ; then
-        BONUS "$MSG" $VALUEBONUS "$MSGOK"
+        BONUS "$MSG" $VALUEBONUS "$MSGOK" "$CMDOK"
     else
-        MALUS "$MSG" $VALUEMALUS "$MSGKO"
+        MALUS "$MSG" $VALUEMALUS "$MSGKO" "$CMDKO"
     fi
 }
 
