@@ -145,8 +145,13 @@ function BONUS
     if [ $# -eq 3 ] ; then
         MSGOK=$3
     fi
-    COMMENT "✓ $MSG: $MSGOK [+$VALUE]"
-    [ "$VALUE" = "X" ] && EXIT 100
+    if [ "$VALUE" = "X" ] ; then
+        COMMENT "✓ $MSG: $MSGOK [+∞]" && EXIT 100
+    elif [ "$VALUE" = "0" ] ; then
+        COMMENT "✓ $MSG: $MSGOK"
+    else
+        COMMENT "✓ $MSG: $MSGOK [+$VALUE]"
+    fi
     GRADE=$((GRADE+VALUE))
 }
 
@@ -159,8 +164,13 @@ function MALUS
     if [ $# -eq 3 ] ; then
         MSGKO=$3
     fi
-    COMMENT "⚠ $MSG: $MSGKO [-$MALUS]"
-    [ "$VALUE" = "X" ] && EXIT 0
+    if [ "$VALUE" = "X" ] ; then
+        COMMENT "⚠ $MSG: $MSGKO [-∞]" && EXIT 0
+    elif [ "$VALUE" = "0" ] ; then
+        COMMENT "⚠ $MSG: $MSGKO"
+    else
+        COMMENT "⚠ $MSG: $MSGKO [-$VALUE]"
+    fi
     GRADE=$((GRADE-VALUE))
 }
 
