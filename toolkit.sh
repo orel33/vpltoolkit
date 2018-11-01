@@ -2,43 +2,44 @@
 
 VERSION="1.0"
 
-### BASIC ROUTINES ###
+### BASIC ECHO ROUTINES ###
 
-# this routines should be used only in run.sh & eval.sh
+# Nota Bene:
+# * in RUN mode, all outputs are visible in a terminal window by students (as a basic shell script)
+# * in EVAL mode, all outputs in comment window are visible by students (it is the main output window)
+# * in EVAL mode, all outputs in execution window are only visible by teacher (for debug purpose)
 
+# echo in comment window (EVAL mode only)
 function COMMENT
 {
     echo "Comment :=>>$@"
 }
 
+# title in comment window (EVAL mode only)
 function TITLE
 {
     echo "Comment :=>>-$@"
 }
 
+# pre-formatted echo in comment window (EVAL mode only)
 function PRE
 {
     echo "Comment :=>>>$@"
 }
 
+# echo in green (RUN mode only)
 function ECHOGREEN
 {
-    if [ "$MODE" = "RUN" ] ; then
-        echo -n -e "\033[32;1m" && echo -n "$@" && echo -e "\033[0m"
-    else
-        echo "$@"
-    fi
+    echo -n -e "\033[32;1m" && echo -n "$@" && echo -e "\033[0m"
 }
 
+# echo in red (RUN mode only)
 function ECHORED
 {
-    if [ "$MODE" = "RUN" ] ; then
-        echo -n -e "\033[31;1m"  && echo -n "$@" && echo -e "\033[0m"
-    else
-        echo "$@"
-    fi
+    echo -n -e "\033[31;1m"  && echo -n "$@" && echo -e "\033[0m"
 }
 
+# echo both in RUN & EVAL modes
 function ECHO
 {
     if [ "$MODE" = "RUN" ] ; then
@@ -48,49 +49,46 @@ function ECHO
     fi
 }
 
-### TRACE: echo a command and then execute it (both for RUN & EVAL modes)
+# echo in verbose mode only
+function ECHOV
+{
+    if [ "$VERBOSE" = "1" ] ; then ECHO "$@" ; fi
+}
 
-# basic trace (RUN mode and execution window in EVAL mode)
+### BASIC TRACE ROUTINES ###
+
+# echo a command (in green) and execute it (RUN mode only)
+function RTRACE
+{
+    [ "$MODE" != "RUN" ] && "Error: function RTRACE only available in RUN mode!" && exit 0
+    ECHOGREEN "$ $@"
+    bash -c "$@"
+    RET=$?
+    [ "$VERBOSE" = "1" -a $RET -ne 0 ] && ECHORED "Error! (status $RET)"
+    return $RET
+}
+
+# echo a command in execution window and execute it (EVAL mode only)
 function TRACE
 {
-    if [ "$MODE" = "RUN" ] ; then
-        ECHOGREEN "$ $@"
-    else
-        echo "Trace :=>>$ $@"
-    fi
+    [ "$MODE" != "EVAL" ] && "Error: function TRACE only available in EVAL mode!" && exit 0
+    echo "Trace :=>>$ $@"
     bash -c "$@" |& sed -e 's/^/Output :=>>/;'
     RET=$?
     # [ "$VERBOSE" = "1" -a $RET -ne 0 ] && ECHORED "Error! (status $RET)"
     return $RET
 }
 
-# trace for EVAL mode only (comment window)
-function ETRACE
+# echo a command in comment window and execute it (EVAL mode only)
+function VTRACE
 {
+    [ "$MODE" != "EVAL" ] && "Error: function VTRACE only available in EVAL mode!" && exit 0
     COMMENT "$ $@"
-    # bash -c "$@" |& sed -e 's/^/Comment :=>>>/;' # preformated output
     echo "<|--"
-    # bash -c "$@"
     bash -c "$@" |& sed -e 's/^/>/;' # preformated output
     RET=$?
     echo "--|>"
     return $RET
-}
-
-# ECHO and TRACE in VERBOSE mode
-
-function ECHOV
-{
-    if [ "$VERBOSE" = "1" ] ; then ECHO "$@" ; fi
-}
-
-function TRACEV
-{
-    if [ "$VERBOSE" = "1" ] ; then
-        TRACE "$@"
-    else
-        bash -c "$@" &> /dev/null
-    fi
 }
 
 ### MISC ###
