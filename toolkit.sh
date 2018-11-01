@@ -75,7 +75,7 @@ function TRACE
     echo "Trace :=>>$ $@"
     bash -c "$@" |& sed -e 's/^/Output :=>>/;'
     RET=$?
-    # [ "$VERBOSE" = "1" -a $RET -ne 0 ] && ECHORED "Error! (status $RET)"
+    echo "Status :=>> $RET"
     return $RET
 }
 
