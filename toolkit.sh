@@ -27,16 +27,22 @@ function PRE
     echo "Comment :=>>>$@"
 }
 
+# echo in blue (RUN mode only)
+function ECHOBLUE
+{
+    echo -n -e "\033[34m" && echo -n "$@" && echo -e "\033[0m"
+}
+
 # echo in green (RUN mode only)
 function ECHOGREEN
 {
-    echo -n -e "\033[32;1m" && echo -n "$@" && echo -e "\033[0m"
+    echo -n -e "\033[32m" && echo -n "$@" && echo -e "\033[0m"
 }
 
 # echo in red (RUN mode only)
 function ECHORED
 {
-    echo -n -e "\033[31;1m"  && echo -n "$@" && echo -e "\033[0m"
+    echo -n -e "\033[31m"  && echo -n "$@" && echo -e "\033[0m"
 }
 
 # echo both in RUN & EVAL modes
@@ -189,8 +195,8 @@ function FAILURE
 # inputs: MSG VALUEBONUS VALUEMALUS [MSGOK MSGKO] [CMDOK CMDKO]
 function EVAL
 {
-    [ "$MODE" != "EVAL" ] && "Error: function EVAL only available in EVAL mode!" && exit 0
     local RET=$?
+    [ "$MODE" != "EVAL" ] && "Error: function EVAL only available in EVAL mode!" && exit 0
     local MSG="$1"
     local VALUEBONUS="$2"
     local VALUEMALUS="$3"
@@ -252,8 +258,8 @@ function RFAILURE
 # inputs: MSG [MSGOK MSGKO] [CMDOK CMDKO]
 function REVAL
 {
-    [ "$MODE" != "RUN" ] && "Error: function REVAL only available in RUN mode!" && exit 0
     local RET=$?
+    [ "$MODE" != "RUN" ] && "Error: function REVAL only available in RUN mode!" && exit 0
     local MSG="$1"
     local MSGOK="success."
     local MSGKO="failure!"
