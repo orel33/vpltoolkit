@@ -270,13 +270,13 @@ function REVAL
     local CMDOK=""
     local CMDKO=""
     if [ $# -eq 3 ] ; then
-        MSGOK=$2
-        MSGKO=$3
+        MSGOK="$2"
+        MSGKO="$3"
     elif [ $# -eq 5 ] ; then
-        MSGOK=$2
-        MSGKO=$3
-        CMDOK=$4
-        CMDKO=$5
+        MSGOK="$2"
+        MSGKO="$3"
+        CMDOK="$4"
+        CMDKO="$5"
     fi
     if [ $RET -eq 0 ] ; then
         RSUCCESS "$MSG" "$MSGOK" "$CMDOK"
