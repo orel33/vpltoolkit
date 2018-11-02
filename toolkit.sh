@@ -237,7 +237,7 @@ function RSUCCESS
         CMDOK="$3"
     fi
     ECHOBLUE "✓ $MSG: $MSGOK"
-    eval $CMDOK
+    eval "$CMDOK"
     return 0
 }
 
@@ -255,7 +255,7 @@ function RFAILURE
         CMDKO="$3"
     fi
     ECHORED "⚠ $MSG: $MSGKO"
-    eval $CMDKO
+    eval "$CMDKO"
     return 0
 }
 
