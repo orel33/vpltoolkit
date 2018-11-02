@@ -256,7 +256,7 @@ function RFAILURE
     fi
     ECHORED "⚠ $MSG: $MSGKO"
     eval $CMDKO
-    return 1
+    return 0
 }
 
 # inputs: MSG [MSGOK MSGKO] [CMDOK CMDKO]
