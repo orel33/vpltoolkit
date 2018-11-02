@@ -264,20 +264,27 @@ function REVAL
 {
     local RET=$?
     [ "$MODE" != "RUN" ] && "Error: function REVAL only available in RUN mode!" && exit 0
-    local MSG="$1"
+    local MSG=""
     local MSGOK="success."
     local MSGKO="failure!"
     local CMDOK=""
     local CMDKO=""
-    if [ $# -eq 3 ] ; then
+    if [ $# -eq 1 ] ; then
+        MSG="$1"
+    elif [ $# -eq 3 ] ; then
+        MSG="$1"
         MSGOK="$2"
         MSGKO="$3"
     elif [ $# -eq 5 ] ; then
+        MSG="$1"
         MSGOK="$2"
         MSGKO="$3"
         CMDOK="$4"
         CMDKO="$5"
+    else
+        echo "Usage: REVAL MSG [MSGOK MSGKO] [CMDOK CMDKO]" && exit 0
     fi
+    # TODO: check args
     if [ $RET -eq 0 ] ; then
         RSUCCESS "$MSG" "$MSGOK" "$CMDOK"
     else
