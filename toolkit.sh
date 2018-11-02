@@ -70,7 +70,6 @@ function RTRACE
     ECHOGREEN "$ $@"
     bash -c "$@"
     RET=$?
-    [ "$VERBOSE" = "1" -a $RET -ne 0 ] && ECHORED "Error! (status $RET)"
     return $RET
 }
 
@@ -234,7 +233,7 @@ function RSUCCESS
         MSGOK="$2"
         CMDOK="$3"
     fi
-    ECHOGREEN "✓ $MSG: $MSGOK"
+    ECHOBLUE "✓ $MSG: $MSGOK"
     eval $CMDOK
 }
 
