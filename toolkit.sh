@@ -269,9 +269,9 @@ function REVAL
         CMDKO=$5
     fi
     if [ $RET -eq 0 ] ; then
-        RSUCCESS "$MSG" $VALUEBONUS "$MSGOK" "$CMDOK"
+        RSUCCESS "$MSG" "$MSGOK" "$CMDOK"
     else
-        RFAILURE "$MSG" $VALUEMALUS "$MSGKO" "$CMDKO"
+        RFAILURE "$MSG" "$MSGKO" "$CMDKO"
     fi
 }
 
