@@ -139,7 +139,7 @@ function SCORE
 }
 
 # inputs: MSG VALUE [MSGOK] [CMDOK]
-function BONUS
+function SUCCESS
 {
     local MSG="$1"
     local VALUE="$2"
@@ -163,7 +163,7 @@ function BONUS
 }
 
 # inputs: MSG VALUE [MSGOK] [CMDKO]
-function MALUS
+function FAILURE
 {
     local MSG="$1"
     local VALUE="$2"
@@ -189,6 +189,7 @@ function MALUS
 # inputs: MSG VALUEBONUS VALUEMALUS [MSGOK MSGKO] [CMDOK CMDKO]
 function EVAL
 {
+    [ "$MODE" != "EVAL" ] && "Error: function EVAL only available in EVAL mode!" && exit 0
     local RET=$?
     local MSG="$1"
     local VALUEBONUS="$2"
@@ -207,11 +208,73 @@ function EVAL
         CMDKO=$7
     fi
     if [ $RET -eq 0 ] ; then
-        BONUS "$MSG" $VALUEBONUS "$MSGOK" "$CMDOK"
+        SUCCESS "$MSG" $VALUEBONUS "$MSGOK" "$CMDOK"
     else
-        MALUS "$MSG" $VALUEMALUS "$MSGKO" "$CMDKO"
+        FAILURE "$MSG" $VALUEMALUS "$MSGKO" "$CMDKO"
     fi
 }
+
+
+# inputs: MSG [MSGOK] [CMDOK]
+function RSUCCESS
+{
+    [ "$MODE" != "RUN" ] && "Error: function REVAL only available in RUN mode!" && exit 0
+    local MSG="$1"
+    local MSGOK="success."
+    local CMDOK=""
+    if [ $# -eq 2 ] ; then
+        MSGOK="$2"
+    elif [ $# -eq 3 ] ; then
+        MSGOK="$2"
+        CMDOK="$3"
+    fi
+    ECHOGREEN "✓ $MSG: $MSGOK"
+    eval $CMDOK
+}
+
+# inputs: MSG [MSGOK] [CMDKO]
+function RFAILURE
+{
+    [ "$MODE" != "RUN" ] && "Error: function REVAL only available in RUN mode!" && exit 0
+    local MSG="$1"
+    local MSGKO="failure!"
+    local CMDKO=""
+    if [ $# -eq 2 ] ; then
+        MSGKO="$2"
+    elif [ $# -eq 3 ] ; then
+        MSGKO="$2"
+        CMDKO="$3"
+    fi
+    ECHORED "⚠ $MSG: $MSGKO"
+    eval $CMDKO
+}
+
+# inputs: MSG [MSGOK MSGKO] [CMDOK CMDKO]
+function REVAL
+{
+    [ "$MODE" != "RUN" ] && "Error: function REVAL only available in RUN mode!" && exit 0
+    local RET=$?
+    local MSG="$1"
+    local MSGOK="success."
+    local MSGKO="failure!"
+    local CMDOK=""
+    local CMDKO=""
+    if [ $# -eq 3 ] ; then
+        MSGOK=$2
+        MSGKO=$3
+    elif [ $# -eq 5 ] ; then
+        MSGOK=$2
+        MSGKO=$3
+        CMDOK=$4
+        CMDKO=$5
+    fi
+    if [ $RET -eq 0 ] ; then
+        RSUCCESS "$MSG" $VALUEBONUS "$MSGOK" "$CMDOK"
+    else
+        RFAILURE "$MSG" $VALUEMALUS "$MSGKO" "$CMDKO"
+    fi
+}
+
 
 ### ENVIRONMENT ###
 
