@@ -133,15 +133,15 @@ function EXIT
     exit 0
 }
 
-function SCORE
-{
-    [ $# -ne 1 ] && ECHO "⚠ Usage: SCORE VALUE" && exit 0
-    [ -z "$GRADE" ] && GRADE=0
-    local VALUE=$1
-    [ -z "$GRADE" ] && echo "⚠ GRADE variable is not defined!" && exit 0
-    # ECHOV "GRADE += $VALUE"
-    GRADE=$((GRADE+VALUE))
-}
+# function SCORE
+# {
+#     [ $# -ne 1 ] && ECHO "⚠ Usage: SCORE VALUE" && exit 0
+#     [ -z "$GRADE" ] && GRADE=0
+#     local VALUE=$1
+#     [ -z "$GRADE" ] && echo "⚠ GRADE variable is not defined!" && exit 0
+#     # ECHOV "GRADE += $VALUE"
+#     GRADE=$((GRADE+VALUE))
+# }
 
 # inputs: MSG VALUE [MSGOK] [CMDOK]
 function SUCCESS
@@ -165,6 +165,7 @@ function SUCCESS
     fi
     GRADE=$((GRADE+VALUE))
     eval $CMDOK
+    return 0
 }
 
 # inputs: MSG VALUE [MSGOK] [CMDKO]
@@ -189,6 +190,7 @@ function FAILURE
     fi
     GRADE=$((GRADE-VALUE))
     eval $CMDKO
+    return 1
 }
 
 # inputs: MSG VALUEBONUS VALUEMALUS [MSGOK MSGKO] [CMDOK CMDKO]
@@ -217,6 +219,7 @@ function EVAL
     else
         FAILURE "$MSG" $VALUEMALUS "$MSGKO" "$CMDKO"
     fi
+    return $RET
 }
 
 
@@ -235,6 +238,7 @@ function RSUCCESS
     fi
     ECHOBLUE "✓ $MSG: $MSGOK"
     eval $CMDOK
+    return 0
 }
 
 # inputs: MSG [MSGOK] [CMDKO]
@@ -252,6 +256,7 @@ function RFAILURE
     fi
     ECHORED "⚠ $MSG: $MSGKO"
     eval $CMDKO
+    return 1
 }
 
 # inputs: MSG [MSGOK MSGKO] [CMDOK CMDKO]
@@ -278,8 +283,8 @@ function REVAL
     else
         RFAILURE "$MSG" "$MSGKO" "$CMDKO"
     fi
+    return $RET
 }
-
 
 ### ENVIRONMENT ###
 
