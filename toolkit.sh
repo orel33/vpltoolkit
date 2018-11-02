@@ -387,7 +387,7 @@ function START_ONLINE
     source $HOME/vpl_environment.sh
     mkdir -p $RUNDIR/inputs
     [ ! -z "$VPL_SUBFILES" ] && ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs )
-    INPUTS=\"$(cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs)\"
+    INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\"
     # INPUTS=$(echo -n \" && cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs && echo -n \")
     CHECKENV
     PRINTENV
@@ -412,8 +412,8 @@ function START_OFFLINE
     [ $(basename $0) == "local_eval.sh" ] && MODE="EVAL"
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     mkdir -p $RUNDIR/inputs
-    [ ! -z "$INPUTDIR" ] && find $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ {} +
-    [ ! -z "$INPUTDIR" ] && INPUTS=\"$(cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs)\"
+    [ ! -z "$INPUTDIR" ] && find -L $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ {} +
+    [ ! -z "$INPUTDIR" ] && INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\"
     CHECKENV
     PRINTENV
     SAVEENV
