@@ -38,21 +38,25 @@ $RUNDIR
   ├── run.sh              # entry point for RUN mode
   ├── eval.sh             # entry point for EVAL mode
   ├── ...                 # all files provided by teacher...
-  ├── inputs              # all input files submitted by VPL by student ($VPL_SUBFILES)
+  ├── inputs              # all student input files ($VPL_SUBFILES)
   │   └── student.c
   |   └── ...
   └── vpltoolkit          # VPL toolkit
-      └── toolkit.sh
+      └── start.sh        # startup script
+      └── toolkit.sh      # useful bash routines
       └── vpl_execution
       └── ...
 ```
 
-Besides, you will find two important files in $HOME, that are useful for VPL execution *online*.
+Besides, you will find important VPL files in $HOME, that are useful for VPL execution *online*. For security issues, some of these files are removed at runtime.
 
 ```text
 $HOME
   ├── env.sh
-  └── vpl_execution
+  ├── vpl_execution
+  ├── vpl_run.sh
+  ├── vpl_evaluate.sh
+  └── ...
 ```
 
 ## Examples
@@ -84,7 +88,7 @@ To launch this example *offline*, you nee to write a script named *local_run.sh*
 #!/bin/bash
 RUNDIR=$(mktemp -d)
 ( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" &> /dev/null )
-source $RUNDIR/vpltoolkit/toolkit.sh
+source $RUNDIR/vpltoolkit/start.sh
 EXO="hello"
 DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "demo" $EXO
 START_OFFLINE
@@ -107,7 +111,7 @@ hello world!
 
 ### My Cat
 
-(...)
+An advanced example is found in the *demo* branch of this repository: see [mycat](https://github.com/orel33/vpltoolkit/tree/demo/mycat).
 
 ## Documentation
 
@@ -117,7 +121,6 @@ hello world!
 
 * add an option to use a docker environment for *offline* execution (and maybe *online*)
 * use an optional execution file *env.sh* (provided by teacher at Moodle)
-* add "rm -f $0" for security issue in scripts: vpl_execution, vpl_*.sh, run.sh, eval.sh
 
 ---
 aurelien.esnard@u-bordeaux.fr
