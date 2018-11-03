@@ -284,7 +284,6 @@ function REVAL
     else
         echo "Usage: REVAL MSG [MSGOK MSGKO] [CMDOK CMDKO]" && exit 0
     fi
-    # TODO: check args
     if [ $RET -eq 0 ] ; then
         RSUCCESS "$MSG" "$MSGOK" "$CMDOK"
     else
