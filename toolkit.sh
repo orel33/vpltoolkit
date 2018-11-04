@@ -2,11 +2,6 @@
 
 ### BASIC ECHO ROUTINES ###
 
-# Nota Bene:
-# * in RUN mode, all outputs are visible in a terminal window by students (as a basic shell script)
-# * in EVAL mode, all outputs in comment window are visible by students (it is the main output window)
-# * in EVAL mode, all outputs in execution window are only visible by teacher (for debug purpose)
-
 # echo in comment window (EVAL mode only)
 function COMMENT
 {

@@ -59,38 +59,50 @@ $HOME
   └── ...
 ```
 
+## Output Format and Assessment
+
+See documentation: http://vpl.dis.ulpgc.es/index.php/support
+
+(...)
+
+Rules:
+
+* in RUN mode, all outputs are visible in a terminal window by students (as a basic shell script)
+* in EVAL mode, all outputs in comment window are visible by students (it is the main output window)
+* in EVAL mode, all outputs in execution window are only visible by teacher (for debug purpose)
+
+To present outputs and grades properly, we provide several useful bash functions in [toolkit.sh](https://github.com/orel33/vpltoolkit/blob/master/toolkit.sh).
+
 ## Examples
 
 ### Hello World
 
-Let's consider the example [hello](https://github.com/orel33/vpltoolkit/tree/demo/hello). First, you need to add a new activity  This activity is only made of a scripts *run.sh* & *eval.sh* that just print "hello world!" on standard output.
+Let's consider the example [hello](https://github.com/orel33/vpltoolkit/tree/demo/hello). First, you need to add a new activity  This activity consists of only scripts *run.sh* & *eval.sh* that just print "hello world!" on standard output. 
 
 ```bash
 #!/bin/bash
 echo "hello world!"
 ```
 
-To use the *VPL Toolkit*, start to copy the following script into *vpl_run.sh* & *vpl_evaluate.sh* of VPL@Moodle.
-
-```bash
-#!/bin/bash
-RUNDIR=$(mktemp -d)
-( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" &> /dev/null )
-source $RUNDIR/vpltoolkit/toolkit.sh
-EXO="hello"
-DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "demo" $EXO
-START_ONLINE
-```
-
-To launch this example *offline*, you nee to write a script named *local_run.sh* & *local_evaluate.sh* as follow.
+To use the *VPL Toolkit* online, start to copy the following script into *vpl_run.sh* & *vpl_evaluate.sh* of VPL@Moodle. Note that on EVAL mode, the "hello world" message is only visible for teacher in execution window.
 
 ```bash
 #!/bin/bash
 RUNDIR=$(mktemp -d)
 ( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" &> /dev/null )
 source $RUNDIR/vpltoolkit/start.sh
-EXO="hello"
-DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "demo" $EXO
+DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "demo" "hello"
+START_ONLINE
+```
+
+To launch this example *offline*, you need to write a script named *local_run.sh* & *local_evaluate.sh* as follow.
+
+```bash
+#!/bin/bash
+RUNDIR=$(mktemp -d)
+( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" &> /dev/null )
+source $RUNDIR/vpltoolkit/start.sh
+DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "demo" "hello"
 START_OFFLINE
 ```
 
@@ -113,6 +125,12 @@ hello world!
 
 An advanced example is found in the *demo* branch of this repository: see [mycat](https://github.com/orel33/vpltoolkit/tree/demo/mycat).
 
+
+```bash
+$ ./local_run.sh hello
+hello world!
+```
+
 ## Documentation
 
 * http://vpl.dis.ulpgc.es/index.php/support
@@ -121,6 +139,7 @@ An advanced example is found in the *demo* branch of this repository: see [mycat
 
 * add an option to use a docker environment for *offline* execution (and maybe *online*)
 * use an optional execution file *env.sh* (provided by teacher at Moodle)
+* add other DOWNLOAD methods for wget and scp
 
 ---
 aurelien.esnard@u-bordeaux.fr

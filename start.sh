@@ -10,7 +10,6 @@ function CHECKENV
     [ -z "$VERSION" ] && echo "⚠ VERSION variable is not defined!" && exit 0
     [ -z "$ONLINE" ] && echo "⚠ ONLINE variable is not defined!" && exit 0
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
-    [ -z "$EXO" ] && echo "⚠ EXO variable is not defined!" && exit 0
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ -z "$DEBUG" ] && DEBUG=0
     [ -z "$VERBOSE" ] && VERBOSE=0
@@ -24,7 +23,6 @@ function SAVEENV
     echo "VERSION=$VERSION" >> $RUNDIR/env.sh
     echo "MODE=$MODE" >> $RUNDIR/env.sh
     echo "ONLINE=$ONLINE" >> $RUNDIR/env.sh
-    echo "EXO=$EXO" >> $RUNDIR/env.sh
     echo "RUNDIR=$RUNDIR" >> $RUNDIR/env.sh
     echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
     echo "VERBOSE=$VERBOSE" >> $RUNDIR/env.sh
@@ -51,7 +49,6 @@ function PRINTENV
         echo "VERSION=$VERSION"
         echo "ONLINE=$ONLINE"
         echo "MODE=$MODE"
-        echo "EXO=$EXO"
         echo "RUNDIR=$RUNDIR"
         echo "DEBUG=$DEBUG"
         echo "VERBOSE=$VERBOSE"
@@ -62,7 +59,7 @@ function PRINTENV
 
 ### DOWNLOAD ###
 
-# TODO: add wget method
+# TODO: add WGET and SCP methods
 
 function DOWNLOAD
 {
