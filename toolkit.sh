@@ -162,7 +162,7 @@ function BONUS
 }
 
 # inputs: MSG VALUE [MSGOK] [CMDKO]
-function FAILURE
+function MALUS
 {
     local MSG="$1"
     local VALUE="$2"
@@ -210,7 +210,7 @@ function EVAL
     if [ $RET -eq 0 ] ; then
         BONUS "$MSG" $VALUEBONUS "$MSGOK" "$CMDOK"
     else
-        FAILURE "$MSG" $VALUEMALUS "$MSGKO" "$CMDKO"
+        MALUS "$MSG" $VALUEMALUS "$MSGKO" "$CMDKO"
     fi
     return $RET
 }
