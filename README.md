@@ -134,7 +134,7 @@ source env.sh
 source vpltoolkit/toolkit.sh
 [ ! "$RUNDIR" = "$PWD" ] && echo "⚠ RUNDIR is not set correctly!" && exit 0
 CHECKINPUTS
-COPYINPUTS
+cp inputs/mycat.c .
 GRADE=0
 
 ### compilation

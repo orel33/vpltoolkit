@@ -111,7 +111,6 @@ function START_ONLINE
     # => implicit run of vpl_execution in $HOME
 }
 
-
 function START_OFFLINE
 {
     [ "$VERBOSE" = "1" ] && echo "Start VPL Compilation Stage"

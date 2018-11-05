@@ -137,6 +137,7 @@ function EXIT
 # }
 
 # inputs: MSG VALUE [MSGOK] [CMDOK]
+# return 0
 function BONUS
 {
     local MSG="$1"
@@ -162,6 +163,7 @@ function BONUS
 }
 
 # inputs: MSG VALUE [MSGOK] [CMDKO]
+# return 0
 function MALUS
 {
     local MSG="$1"
@@ -183,10 +185,11 @@ function MALUS
     fi
     GRADE=$((GRADE-VALUE))
     eval $CMDKO
-    return 1
+    return 0
 }
 
-# inputs: MSG VALUEBONUS VALUEMALUS [MSGOK MSGKO] [CMDOK CMDKO]
+# inputs: MSG VALUEBONUS VALUEMALUS [MSGOK MSGKO] [CMDOK CMDKO] and $?
+# return: $?
 function EVAL
 {
     local RET=$?
@@ -217,7 +220,8 @@ function EVAL
 
 
 # inputs: MSG [MSGOK] [CMDOK]
-function RSUCCESS
+# return 0
+function RBONUS
 {
     [ "$MODE" != "RUN" ] && "Error: function REVAL only available in RUN mode!" && exit 0
     local MSG="$1"
@@ -235,7 +239,8 @@ function RSUCCESS
 }
 
 # inputs: MSG [MSGOK] [CMDKO]
-function RFAILURE
+# return 0
+function RMALUS
 {
     [ "$MODE" != "RUN" ] && "Error: function REVAL only available in RUN mode!" && exit 0
     local MSG="$1"
@@ -253,6 +258,7 @@ function RFAILURE
 }
 
 # inputs: MSG [MSGOK MSGKO] [CMDOK CMDKO]
+# return: $?
 function REVAL
 {
     local RET=$?
@@ -278,9 +284,9 @@ function REVAL
         echo "Usage: REVAL MSG [MSGOK MSGKO] [CMDOK CMDKO]" && exit 0
     fi
     if [ $RET -eq 0 ] ; then
-        RSUCCESS "$MSG" "$MSGOK" "$CMDOK"
+        RBONUS "$MSG" "$MSGOK" "$CMDOK"
     else
-        RFAILURE "$MSG" "$MSGKO" "$CMDKO"
+        RMALUS "$MSG" "$MSGKO" "$CMDKO"
     fi
     return $RET
 }
