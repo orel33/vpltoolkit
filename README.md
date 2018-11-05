@@ -88,6 +88,7 @@ To use the *VPL Toolkit* online, start to copy the following script into *vpl_ru
 
 ```bash
 #!/bin/bash
+rm -f $0 # for security issue
 RUNDIR=$(mktemp -d)
 ( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" &> /dev/null )
 source $RUNDIR/vpltoolkit/start.sh
