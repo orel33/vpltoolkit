@@ -78,9 +78,9 @@ function TRACE
 }
 
 # echo a command in comment window and execute it (EVAL mode only)
-function VTRACE
+function CTRACE
 {
-    [ "$MODE" != "EVAL" ] && "Error: function VTRACE only available in EVAL mode!" && exit 0
+    [ "$MODE" != "EVAL" ] && "Error: function CTRACE only available in EVAL mode!" && exit 0
     COMMENT "$ $@"
     echo "<|--"
     bash -c "$@" |& sed -e 's/^/>/;' # preformated output
@@ -125,16 +125,6 @@ function EXIT
     # if [ "$MODE" = "RUN" ] ; then echo "Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
     exit 0
 }
-
-# function SCORE
-# {
-#     [ $# -ne 1 ] && ECHO "⚠ Usage: SCORE VALUE" && exit 0
-#     [ -z "$GRADE" ] && GRADE=0
-#     local VALUE=$1
-#     [ -z "$GRADE" ] && echo "⚠ GRADE variable is not defined!" && exit 0
-#     # ECHOV "GRADE += $VALUE"
-#     GRADE=$((GRADE+VALUE))
-# }
 
 # inputs: MSG VALUE [MSGOK] [CMDOK]
 # return 0

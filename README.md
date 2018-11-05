@@ -185,6 +185,7 @@ Grade :=>> 100
 
 ## TODO
 
+* add script to launch all local tests offline and compare them against an expected grade
 * add an option to use a docker environment for *offline* execution (and maybe *online*)
 * use an optional execution file *env.sh* (provided by teacher at Moodle)
 * add other DOWNLOAD methods for wget and scp
