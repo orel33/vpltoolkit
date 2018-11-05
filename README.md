@@ -128,8 +128,8 @@ An advanced example is found in the *demo* branch of this repository: see [mycat
 
 
 ```bash
-$ ./local_run.sh hello
-hello world!
+$ git checkout demo
+$ ./local_run.sh mycat mycat/test
 ```
 
 ## Documentation
