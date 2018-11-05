@@ -144,7 +144,7 @@ WFLAGS="-Wl,--wrap=system"
 TRACE "gcc $CFLAGS $WFLAGS mycat.c -o mycat |& tee warnings"
 [ $? -ne 0 ] && FAILURE "Compilation" X "errors"
 [ -s warnings ] && FAILURE "Compilation" 20 "warnings"
-[ -x mycat ] && SUCCESS "Linking" 30
+[ -x mycat ] && BONUS "Linking" 30
 
 ### execution
 TITLE "EXECUTION"

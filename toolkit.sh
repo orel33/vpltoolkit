@@ -137,7 +137,7 @@ function EXIT
 # }
 
 # inputs: MSG VALUE [MSGOK] [CMDOK]
-function SUCCESS
+function BONUS
 {
     local MSG="$1"
     local VALUE="$2"
@@ -208,7 +208,7 @@ function EVAL
         CMDKO=$7
     fi
     if [ $RET -eq 0 ] ; then
-        SUCCESS "$MSG" $VALUEBONUS "$MSGOK" "$CMDOK"
+        BONUS "$MSG" $VALUEBONUS "$MSGOK" "$CMDOK"
     else
         FAILURE "$MSG" $VALUEMALUS "$MSGKO" "$CMDKO"
     fi
