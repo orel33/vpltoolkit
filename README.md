@@ -124,12 +124,59 @@ hello world!
 
 ### My Cat
 
-An advanced example is found in the *demo* branch of this repository: see [mycat](https://github.com/orel33/vpltoolkit/tree/demo/mycat).
+An advanced example is found in the *demo* branch of this repository: see [mycat](https://github.com/orel33/vpltoolkit/tree/demo/mycat). Let's have a look on the *eval.sh* script for instance.
 
+```bash
+#!/bin/bash
+
+### initialization
+source env.sh
+source vpltoolkit/toolkit.sh
+[ ! "$RUNDIR" = "$PWD" ] && echo "⚠ RUNDIR is not set correctly!" && exit 0
+CHECKINPUTS
+COPYINPUTS
+GRADE=0
+
+### compilation
+TITLE "COMPILATION"
+CFLAGS="-std=c99 -Wall"
+WFLAGS="-Wl,--wrap=system"
+TRACE "gcc $CFLAGS $WFLAGS mycat.c -o mycat |& tee warnings"
+[ $? -ne 0 ] && FAILURE "Compilation" X "errors"
+[ -s warnings ] && FAILURE "Compilation" 20 "warnings"
+[ -x mycat ] && SUCCESS "Linking" 30
+
+### execution
+TITLE "EXECUTION"
+TRACE "echo \"abcdef\" > mycat.in"
+TRACE "cat mycat.in | ./mycat > mycat.out"
+[ $? -ne 0 ] && FAILURE "Return" 10 "bad status"
+TRACE "diff -q mycat.in mycat.out"
+EVAL "Program output" 70 0 "valid" "invalid"
+EXIT
+```
+
+Here is the *offline* test of this script with an input directory of the solution (grade 100% expected).
 
 ```bash
 $ git checkout demo
-$ ./local_run.sh mycat mycat/test
+$ ./local_eval.sh mycat mycat/test/solution
+Comment :=>>-COMPILATION
+Trace :=>>$ gcc -std=c99 -Wall -Wl,--wrap=system mycat.c -o mycat |& tee warnings
+Status :=>> 0
+Comment :=>>✓ Linking: success. [+30]
+Comment :=>>-EXECUTION
+Trace :=>>$ echo "abcdef" > mycat.in
+Status :=>> 0
+Trace :=>>$ cat mycat.in | ./mycat > mycat.out
+Status :=>> 0
+Trace :=>>$ diff -q mycat.in mycat.out
+Status :=>> 0
+Comment :=>>✓ Program output: valid [+70]
+Comment :=>>
+Comment :=>>-GRADE
+Comment :=>>100 / 100
+Grade :=>> 100
 ```
 
 ## Documentation
