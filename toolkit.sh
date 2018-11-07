@@ -63,9 +63,9 @@ function RTRACE
     ECHOGREEN "$ $@"
     bash -c "$@"
     RET=$?
-    if [ $ONLINE -eq 1 ] ; then
+    if [ $ONLINE -eq 0 ] ; then
         if [ $RET -eq 0 ] ; then
-            ECHORED "✓ Success."
+            ECHOBLUE "✓ Success."
         else
             ECHORED "⚠ Failure!"
         fi
