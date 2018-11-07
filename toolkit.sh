@@ -63,6 +63,13 @@ function RTRACE
     ECHOGREEN "$ $@"
     bash -c "$@"
     RET=$?
+    if [ $ONLINE -eq 1 ] ; then
+        if [ $RET -eq 0 ] ; then
+            ECHORED "✓ Success."
+        else
+            ECHORED "⚠ Failure!"
+        fi
+    fi
     return $RET
 }
 
@@ -136,13 +143,13 @@ function BONUS
     local CMDOK=""
     if [ $# -eq 3 ] ; then
         MSGOK="$3"
-    elif [ $# -eq 4 ] ; then
+        elif [ $# -eq 4 ] ; then
         MSGOK="$3"
         CMDOK="$4"
     fi
     if [ "$VALUE" = "X" ] ; then
         COMMENT "✓ $MSG: $MSGOK [+∞]" && EXIT 100
-    elif [ "$VALUE" = "0" ] ; then
+        elif [ "$VALUE" = "0" ] ; then
         COMMENT "✓ $MSG: $MSGOK"
     else
         COMMENT "✓ $MSG: $MSGOK [+$VALUE]"
@@ -162,13 +169,13 @@ function MALUS
     local CMDKO=""
     if [ $# -eq 3 ] ; then
         MSGKO="$3"
-    elif [ $# -eq 4 ] ; then
+        elif [ $# -eq 4 ] ; then
         MSGKO="$3"
         CMDKO="$4"
     fi
     if [ "$VALUE" = "X" ] ; then
         COMMENT "⚠ $MSG: $MSGKO [-∞]" && EXIT 0
-    elif [ "$VALUE" = "0" ] ; then
+        elif [ "$VALUE" = "0" ] ; then
         COMMENT "⚠ $MSG: $MSGKO"
     else
         COMMENT "⚠ $MSG: $MSGKO [-$VALUE]"
@@ -194,7 +201,7 @@ function EVAL
     if [ $# -eq 5 ] ; then
         MSGOK=$4
         MSGKO=$5
-    elif [ $# -eq 7 ] ; then
+        elif [ $# -eq 7 ] ; then
         MSGOK=$4
         MSGKO=$5
         CMDOK=$6
@@ -219,7 +226,7 @@ function RBONUS
     local CMDOK=""
     if [ $# -eq 2 ] ; then
         MSGOK="$2"
-    elif [ $# -eq 3 ] ; then
+        elif [ $# -eq 3 ] ; then
         MSGOK="$2"
         CMDOK="$3"
     fi
@@ -238,7 +245,7 @@ function RMALUS
     local CMDKO=""
     if [ $# -eq 2 ] ; then
         MSGKO="$2"
-    elif [ $# -eq 3 ] ; then
+        elif [ $# -eq 3 ] ; then
         MSGKO="$2"
         CMDKO="$3"
     fi
@@ -260,11 +267,11 @@ function REVAL
     local CMDKO=""
     if [ $# -eq 1 ] ; then
         MSG="$1"
-    elif [ $# -eq 3 ] ; then
+        elif [ $# -eq 3 ] ; then
         MSG="$1"
         MSGOK="$2"
         MSGKO="$3"
-    elif [ $# -eq 5 ] ; then
+        elif [ $# -eq 5 ] ; then
         MSG="$1"
         MSGOK="$2"
         MSGKO="$3"
