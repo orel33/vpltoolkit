@@ -61,21 +61,7 @@ function RTRACE
 {
     [ "$MODE" != "RUN" ] && "Error: function RTRACE only available in RUN mode!" && exit 0
     ECHOGREEN "$ $@"
-    bash -c "$@"
-    RET=$?
-    if [ $RET -eq 0 ] ; then
-        ECHOBLUE "✓ Success."
-    else
-        ECHORED "⚠ Failure!"
-    fi
-    return $RET
-}
-
-function RTRACE2
-{
-    [ "$MODE" != "RUN" ] && "Error: function RTRACE only available in RUN mode!" && exit 0
-    ECHOGREEN "$ $@"
-    ( $@ )
+    bash -c "$@"        # how to disable signal messages?
     RET=$?
     if [ $RET -eq 0 ] ; then
         ECHOBLUE "✓ Success."
