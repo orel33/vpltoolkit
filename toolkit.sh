@@ -71,12 +71,13 @@ function RTRACE
     return $RET
 }
 
-# echo a command (in green) and execute it (RUN mode only)
-function RTRACE2
+# echo a command (in green) and execute it using a safe launcher (RUN mode only)
+function RTRACESAFE
 {
-    [ "$MODE" != "RUN" ] && "Error: function RTRACE only available in RUN mode!" && exit 0
+    [ "$MODE" != "RUN" ] && "Error: function RTRACESAFE only available in RUN mode!" && exit 0
     ECHOGREEN "$ $@"
-    bash -s -c "$@"
+    [ ! -x ./launch/launch ] && "Error: safe launcher is not available!" && exit 0
+    ./launch/launch "$@"
     RET=$?
     if [ $RET -eq 0 ] ; then
         ECHOBLUE "✓ Success."
