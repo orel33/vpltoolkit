@@ -75,7 +75,7 @@ function RTRACE2
 {
     [ "$MODE" != "RUN" ] && "Error: function RTRACE only available in RUN mode!" && exit 0
     ECHOGREEN "$ $@"
-    (set +m; bash -c "$@") # disable job control
+    ( $@ )
     RET=$?
     if [ $RET -eq 0 ] ; then
         ECHOBLUE "✓ Success."

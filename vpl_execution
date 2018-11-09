@@ -24,7 +24,7 @@ fi
 
 [ -z "$RUNDIR" ] && echo "⚠ Variable \"RUNDIR\" is not defined!" && exit 0
 if [ "$DEBUG" = "1" ] ; then
-    cd $RUNDIR && bash -x $CMD
+    cd $RUNDIR && bash -x $CMD      # or bash -v ???
 else
     cd $RUNDIR && bash $CMD
 fi
