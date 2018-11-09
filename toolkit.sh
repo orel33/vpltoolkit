@@ -63,13 +63,25 @@ function RTRACE
     ECHOGREEN "$ $@"
     bash -c "$@"
     RET=$?
-    # if [ $ONLINE -eq 0 ] ; then
     if [ $RET -eq 0 ] ; then
         ECHOBLUE "✓ Success."
     else
         ECHORED "⚠ Failure!"
     fi
-    # fi
+    return $RET
+}
+
+function RTRACE2
+{
+    [ "$MODE" != "RUN" ] && "Error: function RTRACE only available in RUN mode!" && exit 0
+    ECHOGREEN "$ $@"
+    $@
+    RET=$?
+    if [ $RET -eq 0 ] ; then
+        ECHOBLUE "✓ Success."
+    else
+        ECHORED "⚠ Failure!"
+    fi
     return $RET
 }
 
