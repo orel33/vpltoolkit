@@ -76,8 +76,9 @@ function RTRACESAFE
 {
     [ "$MODE" != "RUN" ] && "Error: function RTRACESAFE only available in RUN mode!" && exit 0
     ECHOGREEN "$ $@"
-    [ ! -x ./launch/launch ] && "Error: safe launcher is not available!" && exit 0
-    ./launch/launch "$@"
+    LAUNCHER="$RUNDIR/vpltoolkit/launch/launch"
+    [ ! -x $LAUNCHER ] && "Error: safe launcher is not available!" && exit 0
+    $LAUNCHER "$@"
     RET=$?
     if [ $RET -eq 0 ] ; then
         ECHOBLUE "✓ Success."
