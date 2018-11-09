@@ -71,6 +71,22 @@ function RTRACE
     return $RET
 }
 
+# echo a command (in green) and execute it (RUN mode only)
+function RTRACE2
+{
+    [ "$MODE" != "RUN" ] && "Error: function RTRACE only available in RUN mode!" && exit 0
+    ECHOGREEN "$ $@"
+    bash -s -c "$@"
+    RET=$?
+    if [ $RET -eq 0 ] ; then
+        ECHOBLUE "✓ Success."
+    else
+        ECHORED "⚠ Failure!"
+    fi
+    return $RET
+}
+
+
 # echo a command in execution window and execute it (EVAL mode only)
 function TRACE
 {
