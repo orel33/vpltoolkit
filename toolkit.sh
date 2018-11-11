@@ -163,7 +163,7 @@ function BONUS
         MSGOK="$3"
         CMDOK="$4"
     fi
-    if [ "$VALUE" = "x" -o "$VALUE" = "X" ] ; then
+    if [ "$VALUE" = "X" ] ; then
         COMMENT "✓ $MSG: $MSGOK [+∞]" && EXIT 100
         elif [ "$VALUE" = "0" ] ; then
         COMMENT "✓ $MSG: $MSGOK"
@@ -189,9 +189,9 @@ function MALUS
         MSGKO="$3"
         CMDKO="$4"
     fi
-    if [ "$VALUE" = "x" -o "$VALUE" = "X" ] ; then
+    if [ "$VALUE" = "X" ] ; then
         COMMENT "⚠ $MSG: $MSGKO [-∞]" && EXIT 0
-        elif [ "$VALUE" = "0" ] ; then
+    elif [ "$VALUE" = "0" ] ; then
         COMMENT "⚠ $MSG: $MSGKO"
     else
         COMMENT "⚠ $MSG: $MSGKO [-$VALUE]"
