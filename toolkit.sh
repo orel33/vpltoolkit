@@ -217,18 +217,18 @@ function EVAL
     local CMDOK=""
     local CMDKO=""
     if [ $# -eq 5 ] ; then
-        MSGOK=$4
-        MSGKO=$5
-        elif [ $# -eq 7 ] ; then
-        MSGOK=$4
-        MSGKO=$5
-        CMDOK=$6
-        CMDKO=$7
+        MSGOK="$4"
+        MSGKO="$5"
+    elif [ $# -eq 7 ] ; then
+        MSGOK="$4"
+        MSGKO="$5"
+        CMDOK="$6"
+        CMDKO="$7"
     fi
     if [ $RET -eq 0 ] ; then
-        BONUS "$MSG" $VALUEBONUS "$MSGOK" "$CMDOK"
+        BONUS "$MSG" "$VALUEBONUS" "$MSGOK" "$CMDOK"
     else
-        MALUS "$MSG" $VALUEMALUS "$MSGKO" "$CMDKO"
+        MALUS "$MSG" "$VALUEMALUS" "$MSGKO" "$CMDKO"
     fi
     return $RET
 }
