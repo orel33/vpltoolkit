@@ -109,6 +109,7 @@ function CTRACE
     bash -c "$@" |& sed -e 's/^/>/;' # preformated output
     RET=${PIPESTATUS[0]}  # return status of first piped command!
     echo "--|>"
+    echo "Status :=>> $RET"
     return $RET
 }
 

@@ -190,6 +190,7 @@ Grade :=>> 100
 * use an optional execution file *env.sh* (provided by teacher at Moodle)
 * add other DOWNLOAD methods for wget and scp
 * offline mode: replace *local_run/eval.sh exo inputdir* by *run/eval.sh inputdir* if $1 is used!
+* mapping version <=> git branch (in vpltoolkit repository)
 
 ---
 aurelien.esnard@u-bordeaux.fr
