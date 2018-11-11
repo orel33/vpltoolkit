@@ -209,6 +209,7 @@ function EVAL
 {
     local RET=$?
     [ "$MODE" != "EVAL" ] && "Error: function EVAL only available in EVAL mode!" && exit 0
+    TRACE "EVAL $@"
     local MSG="$1"
     local VALUEBONUS="$2"
     local VALUEMALUS="$3"
