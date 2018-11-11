@@ -146,7 +146,7 @@ function EXIT
     (( GRADE > 100 )) && GRADE=100
     ECHO && ECHO "-GRADE" && ECHO "$GRADE / 100"
     if [ "$MODE" = "EVAL" ] ; then echo "Grade :=>> $GRADE" ; fi
-    # if [ "$MODE" = "RUN" ] ; then echo "Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
+    # if [ "$MODE" = "RUN" ] ; then echo "👉 Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
     exit 0
 }
 
@@ -164,7 +164,6 @@ function BONUS
         MSGOK="$3"
         CMDOK="$4"
     fi
-    echo "GRADE=$GRADE + VALUE=$VALUE"
     if [ "$VALUE" = "X" ] ; then
         COMMENT "✓ $MSG: $MSGOK [+∞]" && EXIT 100
         elif [ "$VALUE" = "0" ] ; then
@@ -191,7 +190,6 @@ function MALUS
         MSGKO="$3"
         CMDKO="$4"
     fi
-    echo "GRADE=$GRADE - VALUE=$VALUE"
     if [ "$VALUE" = "X" ] ; then
         COMMENT "⚠ $MSG: $MSGKO [-∞]" && EXIT 0
     elif [ "$VALUE" = "0" ] ; then
@@ -209,7 +207,7 @@ function MALUS
 function EVAL
 {
     local RET=$?
-    [ "$MODE" != "EVAL" ] && "Error: function EVAL only available in EVAL mode!" && exit 0
+    [ "$MODE" != "EVAL" ] && echo "Error: function EVAL only available in EVAL mode!" && exit 0
     echo "Debug :=>> EVAL $@"
     local MSG="$1"
     local VALUEBONUS="$2"
@@ -240,7 +238,7 @@ function EVAL
 # return 0
 function RBONUS
 {
-    [ "$MODE" != "RUN" ] && "Error: function REVAL only available in RUN mode!" && exit 0
+    [ "$MODE" != "RUN" ] && echo "Error: function REVAL only available in RUN mode!" && exit 0
     local MSG="$1"
     local MSGOK="success."
     local CMDOK=""
@@ -250,7 +248,7 @@ function RBONUS
         MSGOK="$2"
         CMDOK="$3"
     fi
-    ECHOBLUE "✓ $MSG: $MSGOK"
+    ECHOGREEN "✓ $MSG: $MSGOK"
     eval "$CMDOK"
     return 0
 }
@@ -259,7 +257,7 @@ function RBONUS
 # return 0
 function RMALUS
 {
-    [ "$MODE" != "RUN" ] && "Error: function REVAL only available in RUN mode!" && exit 0
+    [ "$MODE" != "RUN" ] && echo "Error: function REVAL only available in RUN mode!" && exit 0
     local MSG="$1"
     local MSGKO="failure!"
     local CMDKO=""
@@ -279,7 +277,7 @@ function RMALUS
 function REVAL
 {
     local RET=$?
-    [ "$MODE" != "RUN" ] && "Error: function REVAL only available in RUN mode!" && exit 0
+    [ "$MODE" != "RUN" ] && echo "Error: function REVAL only available in RUN mode!" && exit 0
     local MSG=""
     local MSGOK="success."
     local MSGKO="failure!"
