@@ -60,11 +60,11 @@ function ECHOV
 function RTRACE
 {
     [ "$MODE" != "RUN" ] && "Error: function RTRACE only available in RUN mode!" && exit 0
-    ECHOGREEN "$ $@"
+    ECHOBLUE "$ $@"
     bash -c "$@"        # how to disable signal messages?
     RET=$?
     if [ $RET -eq 0 ] ; then
-        ECHOBLUE "✓ Success."
+        ECHOGREEN "✓ Success."
     else
         ECHORED "⚠ Failure!"
     fi
@@ -75,13 +75,13 @@ function RTRACE
 function RTRACESAFE
 {
     [ "$MODE" != "RUN" ] && "Error: function RTRACESAFE only available in RUN mode!" && exit 0
-    ECHOGREEN "$ $@"
+    ECHOBLUE "$ $@"
     LAUNCHER="$RUNDIR/vpltoolkit/launch/launch"
     [ ! -x $LAUNCHER ] && "Error: safe launcher is not available!" && exit 0
     $LAUNCHER "$@"
     RET=$?
     if [ $RET -eq 0 ] ; then
-        ECHOBLUE "✓ Success."
+        ECHOGREEN "✓ Success."
     else
         ECHORED "⚠ Failure!"
     fi
