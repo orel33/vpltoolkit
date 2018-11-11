@@ -159,10 +159,11 @@ function BONUS
     local CMDOK=""
     if [ $# -eq 3 ] ; then
         MSGOK="$3"
-        elif [ $# -eq 4 ] ; then
+    elif [ $# -eq 4 ] ; then
         MSGOK="$3"
         CMDOK="$4"
     fi
+    echo "GRADE=$GRADE + VALUE=$VALUE"
     if [ "$VALUE" = "X" ] ; then
         COMMENT "✓ $MSG: $MSGOK [+∞]" && EXIT 100
         elif [ "$VALUE" = "0" ] ; then
@@ -185,10 +186,11 @@ function MALUS
     local CMDKO=""
     if [ $# -eq 3 ] ; then
         MSGKO="$3"
-        elif [ $# -eq 4 ] ; then
+    elif [ $# -eq 4 ] ; then
         MSGKO="$3"
         CMDKO="$4"
     fi
+    echo "GRADE=$GRADE - VALUE=$VALUE"
     if [ "$VALUE" = "X" ] ; then
         COMMENT "⚠ $MSG: $MSGKO [-∞]" && EXIT 0
     elif [ "$VALUE" = "0" ] ; then
