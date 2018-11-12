@@ -9,8 +9,6 @@ else
     echo "⚠ File \"env.sh\" is missing!" && exit 0
 fi
 
-[ "$VERBOSE" = "1" ] && echo "Start VPL Execution Stage in $MODE mode"
-
 [ -z "$MODE" ] && echo "⚠ Variable \"MODE\" is not defined!" && exit 0
 if [ "$MODE" = "RUN" ] ; then
     CMD="$RUNDIR/run.sh"
@@ -21,12 +19,12 @@ else
 fi
 
 [ ! -f "$CMD" ] && echo "⚠ File \"$CMD\" not found!" && exit 0
-
 [ -z "$RUNDIR" ] && echo "⚠ Variable \"RUNDIR\" is not defined!" && exit 0
+
 if [ "$DEBUG" = "1" ] ; then
-    cd $RUNDIR && bash -x $CMD      # or bash -v ???
+    cd $RUNDIR && bash -x $CMD $ARGS   # or bash -v ???
 else
-    cd $RUNDIR && bash $CMD
+    cd $RUNDIR && bash $CMD $ARGS
 fi
 
 # EOF

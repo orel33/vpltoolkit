@@ -13,6 +13,7 @@ function CHECKENV
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ -z "$DEBUG" ] && DEBUG=0
     [ -z "$VERBOSE" ] && VERBOSE=0
+    [ -z "$ARGS" ] && ARGS=""
     [ -z "$INPUTS" ] && INPUTS=""
 }
 
@@ -26,6 +27,7 @@ function SAVEENV
     echo "RUNDIR=$RUNDIR" >> $RUNDIR/env.sh
     echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
     echo "VERBOSE=$VERBOSE" >> $RUNDIR/env.sh
+    echo "ARGS=$ARGS" >> $RUNDIR/env.sh
     echo "INPUTS=$INPUTS" >> $RUNDIR/env.sh
 }
 
@@ -52,6 +54,7 @@ function PRINTENV
         echo "RUNDIR=$RUNDIR"
         echo "DEBUG=$DEBUG"
         echo "VERBOSE=$VERBOSE"
+        echo "ARGS=$INPUTS"
         echo "INPUTS=$INPUTS"
         echo
     fi
@@ -90,7 +93,6 @@ function DOWNLOAD
 
 function START_ONLINE
 {
-    [ "$VERBOSE" = "1" ] && echo "Start VPL Compilation Stage"
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
     ONLINE=1
@@ -108,15 +110,17 @@ function START_ONLINE
     cp $RUNDIR/env.sh $HOME
     cp $RUNDIR/vpltoolkit/toolkit.sh $HOME
     cp $RUNDIR/vpltoolkit/vpl_execution $HOME
+    echo "Start VPL Execution in $SECONDS sec... ($MODE mode)"
     # => implicit run of vpl_execution in $HOME
 }
 
 function START_OFFLINE
 {
-    [ "$VERBOSE" = "1" ] && echo "Start VPL Compilation Stage"
-    [ $# -ne 0 -a $# -ne 1 ] && echo "⚠ Usage: START_OFFLINE [INPUTDIR]" && exit 0
-    local INPUTDIR=$1
-    [ ! -z "$INPUTDIR" ] && [ ! -d $INPUTDIR ] && echo "⚠ Bad INPUTDIR: \"$INPUTDIR\"!" && exit 0
+    [ ! $# -ge 1 ] && echo "⚠ Usage: START_OFFLINE INPUTDIR [...]" && exit 0
+    local INPUTDIR="$1"
+    local ARGS="${@:2}"
+    [ -z "$INPUTDIR" ] && echo "⚠ INPUTDIR variable is not defined!" && exit 0
+    [ ! -d $INPUTDIR ] && echo "⚠ Bad INPUTDIR: \"$INPUTDIR\"!" && exit 0
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
     ONLINE=0
@@ -129,6 +133,7 @@ function START_OFFLINE
     CHECKENV
     PRINTENV
     SAVEENV
+    echo "Start VPL Execution in $SECONDS sec... ($MODE mode)"
     cd $RUNDIR
     $RUNDIR/vpltoolkit/vpl_execution
     # => explicit run of vpl_execution in $RUNDIR
