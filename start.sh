@@ -118,7 +118,7 @@ function START_OFFLINE
 {
     [ ! $# -ge 1 ] && echo "⚠ Usage: START_OFFLINE INPUTDIR [...]" && exit 0
     local INPUTDIR="$1"
-    local ARGS="${@:2}"
+    local ARGS=\"${@:2}\"
     [ -z "$INPUTDIR" ] && echo "⚠ INPUTDIR variable is not defined!" && exit 0
     [ ! -d $INPUTDIR ] && echo "⚠ Bad INPUTDIR: \"$INPUTDIR\"!" && exit 0
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
