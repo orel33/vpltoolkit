@@ -190,7 +190,8 @@ Grade :=>> 100
 * use an optional execution file *env.sh* (provided by teacher at Moodle)
 * add other DOWNLOAD methods for wget and scp
 * offline mode: replace *local_run/eval.sh exo inputdir* by *run/eval.sh inputdir* if $1 is used!
-* mapping version <=> git branch (in vpltoolkit repository)
+* add branch 1.0 for version 1.0 and use it when cloning vpltoolkit repository
+* add foating point calculation of GRADE (using command bc)
 
 ---
 aurelien.esnard@u-bordeaux.fr
