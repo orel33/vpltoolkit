@@ -171,7 +171,8 @@ function BONUS
     else
         COMMENT "✓ $MSG: $MSGOK [+$VALUE]"
     fi
-    GRADE=$((GRADE+VALUE))
+    # GRADE=$((GRADE+VALUE))
+    GRADE=$(python3 -c "$GRADE+$VALUE")
     eval $CMDOK
     return 0
 }
@@ -197,7 +198,8 @@ function MALUS
     else
         COMMENT "⚠ $MSG: $MSGKO [-$VALUE]"
     fi
-    GRADE=$((GRADE-VALUE))
+    # GRADE=$((GRADE-VALUE))
+    GRADE=$(python3 -c "$GRADE-$VALUE")
     eval $CMDKO
     return 0
 }
