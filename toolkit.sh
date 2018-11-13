@@ -172,7 +172,7 @@ function BONUS
         COMMENT "✓ $MSG: $MSGOK [+$VALUE]"
     fi
     # GRADE=$((GRADE+VALUE))
-    GRADE=$(python3 -c "$GRADE+$VALUE")
+    GRADE=$(python3 -c "print($GRADE+$VALUE)")
     ECHO "GRADE=$GRADE"
     eval $CMDOK
     return 0
@@ -200,7 +200,7 @@ function MALUS
         COMMENT "⚠ $MSG: $MSGKO [-$VALUE]"
     fi
     # GRADE=$((GRADE-VALUE))
-    GRADE=$(python3 -c "$GRADE-$VALUE")
+    GRADE=$(python3 -c "print($GRADE-$VALUE)")
     ECHO "GRADE=$GRADE"
     eval $CMDKO
     return 0
