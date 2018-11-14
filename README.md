@@ -185,6 +185,10 @@ Grade :=>> 100
 
 ## Changes
 
+### Version 1.0
+
+* initial version
+
 ### Version 2.0
 
 * add arguments to START_ONLINE and START_OFFLINE functions
@@ -197,6 +201,7 @@ Grade :=>> 100
 * add an option to use a docker environment for *offline* execution (and maybe *online*)
 * use an optional execution file *env.sh* (provided by teacher at Moodle)
 * add other DOWNLOAD methods for wget and scp
+* update documentation in README.md
 
 ---
 aurelien.esnard@u-bordeaux.fr
