@@ -183,15 +183,20 @@ Grade :=>> 100
 
 * http://vpl.dis.ulpgc.es/index.php/support
 
-## TODO
+## Changes
+
+### Version 2.0
+
+* add arguments to START_ONLINE and START_OFFLINE functions
+* add foating point calculation of GRADE (using python3)
+* add branch 1.0 for version 1.0 and use it when cloning vpltoolkit repository
+
+### To Do
 
 * add script to launch all local tests offline and compare them against an expected grade
 * add an option to use a docker environment for *offline* execution (and maybe *online*)
 * use an optional execution file *env.sh* (provided by teacher at Moodle)
 * add other DOWNLOAD methods for wget and scp
-* offline mode: replace *local_run/eval.sh exo inputdir* by *run/eval.sh inputdir* if $1 is used!
-* add branch 1.0 for version 1.0 and use it when cloning vpltoolkit repository
-* add foating point calculation of GRADE (using command bc)
 
 ---
 aurelien.esnard@u-bordeaux.fr
