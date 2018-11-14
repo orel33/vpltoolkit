@@ -158,7 +158,7 @@ function BONUS
     local VALUE="$2"
     local MSGOK="success."
     local CMDOK=""
-    local RVALUE=$(print("\"%.2f\" % ($VALUE))")
+    local RVALUE=$(python3 -c "print(\"%.2f\" % ($VALUE))")
     if [ $# -eq 3 ] ; then
         MSGOK="$3"
     elif [ $# -eq 4 ] ; then
@@ -172,7 +172,7 @@ function BONUS
     else
         COMMENT "✓ $MSG: $MSGOK [+$RVALUE%]"
     fi
-    GRADE=$(python3 -c "print($GRADE+($VALUE))")
+    GRADE=$(python3 -c "print($GRADE+$RVALUE)")
     eval $CMDOK
     return 0
 }
@@ -185,7 +185,7 @@ function MALUS
     local VALUE="$2"
     local MSGKO="failure!"
     local CMDKO=""
-    local RVALUE=$(print("\"%.2f\" % ($VALUE))")
+    local RVALUE=$(python3 -c "print(\"%.2f\" % ($VALUE))")
     if [ $# -eq 3 ] ; then
         MSGKO="$3"
     elif [ $# -eq 4 ] ; then
@@ -199,7 +199,7 @@ function MALUS
     else
         COMMENT "⚠ $MSG: $MSGKO [-$RVALUE%]"
     fi
-    GRADE=$(python3 -c "print($GRADE-($VALUE))")
+    GRADE=$(python3 -c "print($GRADE-$RVALUE)")
     eval $CMDKO
     return 0
 }
