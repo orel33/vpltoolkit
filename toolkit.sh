@@ -142,9 +142,11 @@ function EXIT
 {
     [ -z "$GRADE" ] && GRADE=0
     [ $# -eq 1 ] && GRADE=$1
-    (( GRADE < 0 )) && GRADE=0
-    (( GRADE > 100 )) && GRADE=100
-    ECHO "-GRADE" && ECHO "$GRADE / 100"
+    # (( GRADE < 0 )) && GRADE=0
+    # (( GRADE > 100 )) && GRADE=100
+    GRADE=$(python3 -c "print(0 if $GRADE < 0 else round($GRADE))")
+    GRADE=$(python3 -c "print(100 if $GRADE > 100 else round($GRADE)")
+    ECHO "-GRADE" && ECHO "$GRADE%"
     if [ "$MODE" = "EVAL" ] ; then echo "Grade :=>> $GRADE" ; fi
     # if [ "$MODE" = "RUN" ] ; then echo "👉 Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
     exit 0
