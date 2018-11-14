@@ -142,8 +142,6 @@ function EXIT
 {
     [ -z "$GRADE" ] && GRADE=0
     [ $# -eq 1 ] && GRADE=$1
-    # (( GRADE < 0 )) && GRADE=0
-    # (( GRADE > 100 )) && GRADE=100
     GRADE=$(python3 -c "print(0 if $GRADE < 0 else round($GRADE))")
     GRADE=$(python3 -c "print(100 if $GRADE > 100 else round($GRADE))")
     ECHO "-GRADE" && ECHO "$GRADE%"
@@ -160,6 +158,7 @@ function BONUS
     local VALUE="$2"
     local MSGOK="success."
     local CMDOK=""
+    local RVALUE=$(print("\"%.2f\" % ($VALUE))")
     if [ $# -eq 3 ] ; then
         MSGOK="$3"
     elif [ $# -eq 4 ] ; then
@@ -171,12 +170,9 @@ function BONUS
         elif [ "$VALUE" = "0" ] ; then
         COMMENT "✓ $MSG: $MSGOK"
     else
-        COMMENT "✓ $MSG: $MSGOK [+$VALUE]"
+        COMMENT "✓ $MSG: $MSGOK [+$RVALUE%]"
     fi
-    # GRADE=$((GRADE+VALUE))
-    # GRADE=$(python3 -c "print($GRADE+$VALUE)")
-    GRADE=$(python3 -c "print(\"%.2f\" % ($GRADE+$VALUE))")
-    ECHO "GRADE=$GRADE"
+    GRADE=$(python3 -c "print($GRADE+($VALUE))")
     eval $CMDOK
     return 0
 }
@@ -189,6 +185,7 @@ function MALUS
     local VALUE="$2"
     local MSGKO="failure!"
     local CMDKO=""
+    local RVALUE=$(print("\"%.2f\" % ($VALUE))")
     if [ $# -eq 3 ] ; then
         MSGKO="$3"
     elif [ $# -eq 4 ] ; then
@@ -200,12 +197,9 @@ function MALUS
     elif [ "$VALUE" = "0" ] ; then
         COMMENT "⚠ $MSG: $MSGKO"
     else
-        COMMENT "⚠ $MSG: $MSGKO [-$VALUE]"
+        COMMENT "⚠ $MSG: $MSGKO [-$RVALUE%]"
     fi
-    # GRADE=$((GRADE-VALUE))
-    # GRADE=$(python3 -c "print($GRADE-$VALUE)")
-    GRADE=$(python3 -c "print(\"%.2f\" % ($GRADE-$VALUE))")
-    ECHO "GRADE=$GRADE"
+    GRADE=$(python3 -c "print($GRADE-($VALUE))")
     eval $CMDKO
     return 0
 }
