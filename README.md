@@ -201,7 +201,9 @@ Grade :=>> 100
 * add an option to use a docker environment for *offline* execution (and maybe *online*)
 * use an optional execution file *env.sh* (provided by teacher at Moodle)
 * add other DOWNLOAD methods for wget and scp
-* update documentation in README.md
+* update documentation in README.md (details on how to build an exercice: file hierarchy, tests, ...)
+* update hello example that should not work since version 2.0
+* add timeout in (R)TRACE/(R)EVAL/ ou use timeout command???
 
 ---
 aurelien.esnard@u-bordeaux.fr
