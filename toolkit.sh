@@ -115,6 +115,12 @@ function CTRACE
 
 ### MISC ###
 
+function CHECKVERSION
+{
+    local EXPECTED="$1"
+    [ "$EXPECTED" != "$VERSION" ] && "Error: Toolkit version \"$EXPECTED\" expected (but version \"$VERSION\" found)!" && exit 0
+}
+
 function CHECK
 {
     for FILE in "$@" ; do
