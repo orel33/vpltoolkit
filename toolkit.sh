@@ -118,7 +118,7 @@ function CTRACE
 function CHECKVERSION
 {
     local EXPECTED="$1"
-    [ "$EXPECTED" != "$VERSION" ] && "Error: Toolkit version \"$EXPECTED\" expected (but version \"$VERSION\" found)!" && exit 0
+    [ "$EXPECTED" != "$VERSION" ] && ECHO "⚠ Error: Toolkit version $EXPECTED expected (but version $VERSION found)!" && exit 0
 }
 
 function CHECK
