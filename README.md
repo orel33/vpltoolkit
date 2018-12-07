@@ -185,9 +185,9 @@ Grade :=>> 100
 
 ## Changes
 
-### Version 3.0 (future release)
+### Version 3.0
 
-* use a optionnal docker environment for *offline* / *online* execution
+* add a docker support and an optionnal DOCKER variable to set a docker image
 
 ### Version 2.0
 
