@@ -39,11 +39,3 @@ else
 fi
 
 # Let's rock
-
-# join session
-if [ -n "$DOCKER" ] ; then 
-
-[ "$ONLINE" -eq "0" ] && 
-
-
-# EOF
