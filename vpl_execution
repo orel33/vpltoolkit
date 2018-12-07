@@ -33,7 +33,7 @@ if [ -n "$DOCKER" ] ; then
      # check if docker image is already installed
     docker image inspect $DOCKER &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not installed!" && exit 0
-    LAUNCHCMD="docker run -v $RUNDIR:$RUNDIR -w $RUNDIR -t $DOCKER $LAUNCHCMD"
+    LAUNCHCMD="docker run -i -v $RUNDIR:$RUNDIR -w $RUNDIR -t $DOCKER $LAUNCHCMD"
 fi
 
 # Let's rock
