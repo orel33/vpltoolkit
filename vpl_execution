@@ -21,23 +21,29 @@ fi
 [ ! -f "$CMD" ] && echo "⚠ File \"$CMD\" not found!" && exit 0
 [ -z "$RUNDIR" ] && echo "⚠ Variable \"RUNDIR\" is not defined!" && exit 0
 
-### launch command
+### launch command in online vs offline mode 
 
 LAUNCHCMD="bash"
 [ "$DEBUG" = "1" ] && LAUNCHCMD="bash -x"
 
-# docker support
-DOCKER=""
-[ "$ONLINE" -eq "0" ] && DOCKER="gblin/vpljail"
-if [ -n "$DOCKER" ] ; then 
+if [ "$ONLINE" -eq "0" ] ; then
+    DOCKER="gblin/vpljail" 
      # check if docker image is already installed
     docker image inspect $DOCKER &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not installed!" && exit 0
-    LAUNCHCMD="docker run -i -v $RUNDIR:$RUNDIR -w $RUNDIR -t $DOCKER $LAUNCHCMD"
+    DOCKERCMD="docker run -i -v $RUNDIR:$RUNDIR -w $RUNDIR -t $DOCKER"
+    $DOCKERCMD $LAUNCHCMD $CMD $ARGS
+    echo "=> $DOCKERCMD bash"
+else
+    cd $RUNDIR && $LAUNCHCMD $CMD $ARGS
 fi
 
 # Let's rock
-echo "$LAUNCHCMD $CMD $ARGS"
-cd $RUNDIR && $LAUNCHCMD $CMD $ARGS
+
+# join session
+if [ -n "$DOCKER" ] ; then 
+
+[ "$ONLINE" -eq "0" ] && 
+
 
 # EOF
