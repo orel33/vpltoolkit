@@ -18,26 +18,25 @@ else
     echo "⚠ Invalid \"MODE\" selected!" && exit 0
 fi
 
+[ ! -f "$CMD" ] && echo "⚠ File \"$CMD\" not found!" && exit 0
+[ -z "$RUNDIR" ] && echo "⚠ Variable \"RUNDIR\" is not defined!" && exit 0
+
+### launch command
+
+LAUNCHCMD="bash"
+[ "$DEBUG" = "1" ] && LAUNCHCMD="bash -x"
+
 # docker support
 DOCKER="gblin/vpljail"
+
 if [ -n "$DOCKER" ] ; then 
      # check if docker image is already installed
     docker image inspect $DOCKER &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not installed!" && exit 0
+    LAUNCHCMD="docker run -t $DOCKER $LAUNCHCMD"
 fi
 
-# DOCKERCMD=""
-# if [ -n "$DOCKER" ] ; then 
-#     DOCKERCMD=""
-# fi
-
-[ ! -f "$CMD" ] && echo "⚠ File \"$CMD\" not found!" && exit 0
-[ -z "$RUNDIR" ] && echo "⚠ Variable \"RUNDIR\" is not defined!" && exit 0
-
-if [ "$DEBUG" = "1" ] ; then
-    cd $RUNDIR && bash -x $CMD $ARGS   # or bash -v ???
-else
-    cd $RUNDIR && bash $CMD $ARGS
-fi
+# Let's rock
+cd $RUNDIR && $LAUNCHCMD $CMD $ARGS
 
 # EOF
