@@ -18,6 +18,19 @@ else
     echo "⚠ Invalid \"MODE\" selected!" && exit 0
 fi
 
+# docker support
+DOCKER="gblin/vpljail"
+if [ -n "$DOCKER" ] ; then 
+     # check if docker image is already installed
+    docker image inspect $DOCKER &> /dev/null
+    [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not installed!" && exit 0
+fi
+
+# DOCKERCMD=""
+# if [ -n "$DOCKER" ] ; then 
+#     DOCKERCMD=""
+# fi
+
 [ ! -f "$CMD" ] && echo "⚠ File \"$CMD\" not found!" && exit 0
 [ -z "$RUNDIR" ] && echo "⚠ Variable \"RUNDIR\" is not defined!" && exit 0
 
