@@ -185,9 +185,9 @@ Grade :=>> 100
 
 ## Changes
 
-### Version 1.0
+### Version 3.0 (future release)
 
-* initial version
+* use a optionnal docker environment for *offline* / *online* execution
 
 ### Version 2.0
 
@@ -195,10 +195,13 @@ Grade :=>> 100
 * add foating point calculation of GRADE (using python3)
 * add branch 1.0 for version 1.0 and use it when cloning vpltoolkit repository
 
+### Version 1.0
+
+* initial version
+
 ### To Do
 
 * add script to launch all local tests offline and compare them against an expected grade
-* add an option to use a docker environment for *offline* execution (and maybe *online*)
 * use an optional execution file *env.sh* (provided by teacher at Moodle)
 * add other DOWNLOAD methods for wget and scp
 * update documentation in README.md (details on how to build an exercice: file hierarchy, tests, ...)
