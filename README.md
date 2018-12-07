@@ -201,6 +201,7 @@ Grade :=>> 100
 
 ### To Do
 
+* improve version management
 * add script to launch all local tests offline and compare them against an expected grade
 * use an optional execution file *env.sh* (provided by teacher at Moodle)
 * add other DOWNLOAD methods for wget and scp
