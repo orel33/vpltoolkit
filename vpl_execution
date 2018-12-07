@@ -37,6 +37,7 @@ if [ -n "$DOCKER" ] ; then
 fi
 
 # Let's rock
+echo "$LAUNCHCMD $CMD $ARGS"
 cd $RUNDIR && $LAUNCHCMD $CMD $ARGS
 
 # EOF
