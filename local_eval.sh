@@ -1,9 +1,15 @@
 #!/bin/bash
-[ $# -ne 1 -a $# -ne 2 ] && echo "⚠ Usage: $0 <exo> [<inputdir>]" && exit 0
-EXO=$1
-INPUTDIR=$2
+[ $# -ge 2 ] && echo "⚠ Usage: $0 <exo> <inputdir> <...>" && exit 0
+GIT="https://github.com/orel33/vpltoolkit.git"
+BRANCH="demo"
+SUBDIR=$1   # GIT SUBDIR
+INPUTDIR=$2 # for local test
+ARGS="${@:3}"
+TKGIT="https://github.com/orel33/vpltoolkit.git"
+TKBRANCH="master"
 RUNDIR=$(mktemp -d)
-( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" &> /dev/null )
+echo "RUNDIR=$RUNDIR"
+( cd $RUNDIR && git clone $TKGIT -b $TKBRANCH &> /dev/null )
 source $RUNDIR/vpltoolkit/start.sh
-DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "demo" $EXO
-START_OFFLINE $INPUTDIR
+DOWNLOAD $GIT $BRANCH $SUBDIR
+START_OFFLINE $INPUTDIR $ARGS
