@@ -1,5 +1,5 @@
 #!/bin/bash
-[ $# -ge 2 ] && echo "⚠ Usage: $0 <exo> <inputdir> <...>" && exit 0
+[ $# -lt 2 ] && echo "⚠ Usage: $0 <exo> <inputdir> <...>" && exit 0
 GIT="https://github.com/orel33/vpltoolkit.git"
 BRANCH="demo"
 SUBDIR=$1   # GIT SUBDIR
