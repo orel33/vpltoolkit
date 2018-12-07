@@ -27,8 +27,8 @@ LAUNCHCMD="bash"
 [ "$DEBUG" = "1" ] && LAUNCHCMD="bash -x"
 
 # docker support
-DOCKER="gblin/vpljail"
-
+DOCKER=""
+[ "$ONLINE" -eq "0" ] && DOCKER="gblin/vpljail"
 if [ -n "$DOCKER" ] ; then 
      # check if docker image is already installed
     docker image inspect $DOCKER &> /dev/null
