@@ -21,21 +21,21 @@ fi
 [ ! -f "$CMD" ] && echo "⚠ File \"$CMD\" not found!" && exit 0
 [ -z "$RUNDIR" ] && echo "⚠ Variable \"RUNDIR\" is not defined!" && exit 0
 
-### launch command in online vs offline mode 
+### shell command
+SHELLCMD="bash"
+[ "$DEBUG" = "1" ] && SHELLCMD="bash -x"
 
-LAUNCHCMD="bash"
-[ "$DEBUG" = "1" ] && LAUNCHCMD="bash -x"
-
-if [ "$ONLINE" -eq "0" ] ; then
-    DOCKER="gblin/vpljail" 
+### docker support
+DOCKERCMD=""
+if [ -n "$DOCKER" ] ; then
      # check if docker image is already installed
     docker image inspect $DOCKER &> /dev/null
-    [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not installed!" && exit 0
+    [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && exit 0
     DOCKERCMD="docker run -i -v $RUNDIR:$RUNDIR -w $RUNDIR -t $DOCKER"
-    $DOCKERCMD $LAUNCHCMD $CMD $ARGS
-    echo "=> $DOCKERCMD bash"
-else
-    cd $RUNDIR && $LAUNCHCMD $CMD $ARGS
 fi
 
-# Let's rock
+### Let's rock
+cd $RUNDIR && $DOCKERCMD $SHELLCMD $CMD $ARGS
+[ "$ONLINE" = "0" ] && echo "=> cd $RUNDIR && $DOCKERCMD bash"
+
+# EOF

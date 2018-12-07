@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="2.0"
+VERSION="3.0"
 
 ### ENVIRONMENT ###
 
@@ -11,6 +11,7 @@ function CHECKENV
     [ -z "$ONLINE" ] && echo "⚠ ONLINE variable is not defined!" && exit 0
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
+    [ -z "$DOCKER" ] && DOCKER=""
     [ -z "$DEBUG" ] && DEBUG=0
     [ -z "$VERBOSE" ] && VERBOSE=0
     [ -z "$ARGS" ] && ARGS=""
@@ -25,6 +26,7 @@ function SAVEENV
     echo "MODE=$MODE" >> $RUNDIR/env.sh
     echo "ONLINE=$ONLINE" >> $RUNDIR/env.sh
     echo "RUNDIR=$RUNDIR" >> $RUNDIR/env.sh
+    echo "DOCKER=$DOCKER" >> $RUNDIR/env.sh
     echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
     echo "VERBOSE=$VERBOSE" >> $RUNDIR/env.sh
     echo "ARGS=$ARGS" >> $RUNDIR/env.sh
@@ -52,6 +54,7 @@ function PRINTENV
         echo "ONLINE=$ONLINE"
         echo "MODE=$MODE"
         echo "RUNDIR=$RUNDIR"
+        echo "DOCKER=$DOCKER"
         echo "DEBUG=$DEBUG"
         echo "VERBOSE=$VERBOSE"
         echo "ARGS=$INPUTS"
