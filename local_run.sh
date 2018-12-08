@@ -11,6 +11,7 @@ DOCKER="gblin/vpljail"
 RUNDIR=$(mktemp -d)
 echo "RUNDIR=$RUNDIR"
 ( cd $RUNDIR && git clone $TKGIT -b $TKBRANCH &> /dev/null )
+[ ! $? -eq 0 ] && echo "⚠ Fail to download VPL Toolkit!" && exit 0
 source $RUNDIR/vpltoolkit/start.sh
 DOWNLOAD $GIT $BRANCH $SUBDIR
 START_OFFLINE $INPUTDIR $ARGS
