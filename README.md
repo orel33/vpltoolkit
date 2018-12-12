@@ -201,6 +201,7 @@ Grade :=>> 100
 
 ### To Do
 
+* add the possibility for local/offline run & eval to clone local repository instead of remote one
 * improve version management
 * add script to launch all local tests offline and compare them against an expected grade
 * use an optional execution file *env.sh* (provided by teacher at Moodle)
