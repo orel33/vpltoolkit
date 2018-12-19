@@ -246,7 +246,7 @@ function EVAL
 # return 0
 function RBONUS
 {
-    [ "$MODE" != "RUN" ] && echo "Error: function REVAL only available in RUN mode!" && exit 0
+    [ "$MODE" != "RUN" ] && echo "Error: function RBONUS only available in RUN mode!" && exit 0
     local MSG="$1"
     local MSGOK="success."
     local CMDOK=""
@@ -265,7 +265,7 @@ function RBONUS
 # return 0
 function RMALUS
 {
-    [ "$MODE" != "RUN" ] && echo "Error: function REVAL only available in RUN mode!" && exit 0
+    [ "$MODE" != "RUN" ] && echo "Error: function RMALUS only available in RUN mode!" && exit 0
     local MSG="$1"
     local MSGKO="failure!"
     local CMDKO=""

@@ -115,7 +115,8 @@ function START_ONLINE
     cp $RUNDIR/env.sh $HOME
     cp $RUNDIR/vpltoolkit/toolkit.sh $HOME
     cp $RUNDIR/vpltoolkit/vpl_execution $HOME
-    echo "Start VPL Execution in $SECONDS sec... ($MODE mode, online)"
+    if [ -z "$DOCKER" ] ; then DOCKERMSG="no docker" ; else DOCKERMSG="docker $DOCKER" ; fi
+    echo "Start VPL Execution in $SECONDS sec... ($MODE mode, online, $DOCKERMSG)"
     # => implicit run of vpl_execution in $HOME
 }
 
@@ -138,7 +139,8 @@ function START_OFFLINE
     CHECKENV
     PRINTENV
     SAVEENV
-    echo "Start VPL Execution in $SECONDS sec... ($MODE mode, offline)"
+    if [ -z "$DOCKER" ] ; then DOCKERMSG="no docker" ; else DOCKERMSG="docker $DOCKER" ; fi
+    echo "Start VPL Execution in $SECONDS sec... ($MODE mode, offline, $DOCKERMSG)"
     cd $RUNDIR && $RUNDIR/vpltoolkit/vpl_execution
     # => explicit run of vpl_execution in $RUNDIR
 }
