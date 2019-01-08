@@ -61,7 +61,7 @@ function RTRACE
 {
     [ "$MODE" != "RUN" ] && "Error: function RTRACE only available in RUN mode!" && exit 0
     ECHOBLUE "$ $@"
-    bash -c "$@"        # how to disable signal messages?
+    bash -c "setsid -w $@"
     RET=$?
     if [ $RET -eq 0 ] ; then
         ECHOGREEN "✓ Success."
@@ -94,7 +94,8 @@ function TRACE
 {
     [ "$MODE" != "EVAL" ] && "Error: function TRACE only available in EVAL mode!" && exit 0
     echo "Trace :=>>$ $@"
-    bash -c "$@" |& sed -e 's/^/Output :=>>/;'
+    # bash -c "$@" |& sed -e 's/^/Output :=>>/;'
+    bash -c "setsid -w $@" |& sed -e 's/^/Output :=>>/;' # setsid is used for safe exec (setpgid(0,0))
     RET=${PIPESTATUS[0]}  # return status of first piped command!
     echo "Status :=>> $RET"
     return $RET
@@ -106,7 +107,7 @@ function CTRACE
     [ "$MODE" != "EVAL" ] && "Error: function CTRACE only available in EVAL mode!" && exit 0
     COMMENT "$ $@"
     echo "<|--"
-    bash -c "$@" |& sed -e 's/^/>/;' # preformated output
+    bash -c "setsid -w $@" |& sed -e 's/^/>/;' # preformated output
     RET=${PIPESTATUS[0]}  # return status of first piped command!
     echo "--|>"
     echo "Status :=>> $RET"
