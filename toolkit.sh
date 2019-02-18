@@ -71,24 +71,6 @@ function RTRACE
     return $RET
 }
 
-# echo a command (in green) and execute it using a safe launcher (RUN mode only)
-function RTRACESAFE
-{
-    [ "$MODE" != "RUN" ] && "Error: function RTRACESAFE only available in RUN mode!" && exit 0
-    ECHOBLUE "$ $@"
-    LAUNCHER="$RUNDIR/vpltoolkit/launch/launch"
-    [ ! -x $LAUNCHER ] && "Error: safe launcher is not available!" && exit 0
-    $LAUNCHER "$@"
-    RET=$?
-    if [ $RET -eq 0 ] ; then
-        ECHOGREEN "✓ Success."
-    else
-        ECHORED "⚠ Failure!"
-    fi
-    return $RET
-}
-
-
 # echo a command in execution window and execute it (EVAL mode only)
 function TRACE
 {
