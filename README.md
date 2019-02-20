@@ -181,17 +181,17 @@ Grade :=>> 100
 
 ## Docker Support
 
-VPLToolkit enables to use a docker image since version 3.0.
-
-First, you need to create a docker image. Given the following [Dockerfile](docker/Dockerfile), you can build your own Debian-like image and push it on [DockerHub](https://hub.docker.com/)
+VPL Toolkit enables to use a docker image since version 3.0. First, you need to create a docker image. Given the following [Dockerfile](docker/Dockerfile), you can build your own Debian-like image and push it on [DockerHub](https://hub.docker.com/).
 
 ```bash
 # build image
-$ docker build -t "mydebian:latest" .
+$ docker build -t "orel33/mydebian:latest" .
 # test it
-$ docker run -i -t qemu:debian /bin/bash
-# push it ()
-docker push orel33/mydebian:tagname
+$ docker run -i -t orel33/mydebian /bin/bash
+# login (need to be registered)
+$ docker login
+# push image
+$ docker push orel33/mydebian:latest
 ```
 
 ## Documentation

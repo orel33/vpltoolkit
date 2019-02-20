@@ -1,102 +1,8 @@
 #!/bin/bash
 
-### BASIC ECHO ROUTINES ###
-
-# echo in comment window (EVAL mode only)
-function COMMENT
-{
-    echo "Comment :=>>$@"
-}
-
-# title in comment window (EVAL mode only)
-function TITLE
-{
-    echo "Comment :=>>-$@"
-}
-
-# pre-formatted echo in comment window (EVAL mode only)
-function PRE
-{
-    echo "Comment :=>>>$@"
-}
-
-# echo in blue (RUN mode only)
-function ECHOBLUE
-{
-    echo -n -e "\033[34m" && echo -n "$@" && echo -e "\033[0m"
-}
-
-# echo in green (RUN mode only)
-function ECHOGREEN
-{
-    echo -n -e "\033[32m" && echo -n "$@" && echo -e "\033[0m"
-}
-
-# echo in red (RUN mode only)
-function ECHORED
-{
-    echo -n -e "\033[31m"  && echo -n "$@" && echo -e "\033[0m"
-}
-
-# echo both in RUN & EVAL modes
-function ECHO
-{
-    if [ "$MODE" = "RUN" ] ; then
-        echo "$@"
-    else
-        echo "Comment :=>>$@"
-    fi
-}
-
-# echo in verbose mode only
-function ECHOV
-{
-    if [ "$VERBOSE" = "1" ] ; then ECHO "$@" ; fi
-}
-
-### BASIC TRACE ROUTINES ###
-
-# echo a command (in green) and execute it (RUN mode only)
-function RTRACE
-{
-    [ "$MODE" != "RUN" ] && "Error: function RTRACE only available in RUN mode!" && exit 0
-    ECHOBLUE "$ $@"
-    bash -c "setsid -w $@"
-    RET=$?
-    if [ $RET -eq 0 ] ; then
-        ECHOGREEN "✓ Success."
-    else
-        ECHORED "⚠ Failure!"
-    fi
-    return $RET
-}
-
-# echo a command in execution window and execute it (EVAL mode only)
-function TRACE
-{
-    [ "$MODE" != "EVAL" ] && "Error: function TRACE only available in EVAL mode!" && exit 0
-    echo "Trace :=>>$ $@"
-    # bash -c "$@" |& sed -e 's/^/Output :=>>/;'
-    bash -c "setsid -w $@" |& sed -e 's/^/Output :=>>/;' # setsid is used for safe exec (setpgid(0,0))
-    RET=${PIPESTATUS[0]}  # return status of first piped command!
-    echo "Status :=>> $RET"
-    return $RET
-}
-
-# echo a command in comment window and execute it (EVAL mode only)
-function CTRACE
-{
-    [ "$MODE" != "EVAL" ] && "Error: function CTRACE only available in EVAL mode!" && exit 0
-    COMMENT "$ $@"
-    echo "<|--"
-    bash -c "setsid -w $@" |& sed -e 's/^/>/;' # preformated output
-    RET=${PIPESTATUS[0]}  # return status of first piped command!
-    echo "--|>"
-    echo "Status :=>> $RET"
-    return $RET
-}
-
-### MISC ###
+####################################################
+#                      MISC                        #
+####################################################
 
 function CHECKVERSION
 {
@@ -124,19 +30,160 @@ function COPYINPUTS
     cp -f $INPUTS $RUNDIR/
 }
 
-### GRADE ###
+####################################################
+#                  RUN MODE                        #
+####################################################
 
-# inputs: [GRADE]
-function EXIT
+# echo in blue (RUN mode only)
+function ECHOBLUE
 {
-    [ -z "$GRADE" ] && GRADE=0
-    [ $# -eq 1 ] && GRADE=$1
-    GRADE=$(python3 -c "print(0 if $GRADE < 0 else round($GRADE))")
-    GRADE=$(python3 -c "print(100 if $GRADE > 100 else round($GRADE))")
-    ECHO "-GRADE" && ECHO "$GRADE%"
-    if [ "$MODE" = "EVAL" ] ; then echo "Grade :=>> $GRADE" ; fi
-    # if [ "$MODE" = "RUN" ] ; then echo "👉 Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
-    exit 0
+    echo -n -e "\033[34m" && echo -n "$@" && echo -e "\033[0m"
+}
+
+# echo in green (RUN mode only)
+function ECHOGREEN
+{
+    echo -n -e "\033[32m" && echo -n "$@" && echo -e "\033[0m"
+}
+
+# echo in red (RUN mode only)
+function ECHORED
+{
+    echo -n -e "\033[31m"  && echo -n "$@" && echo -e "\033[0m"
+}
+
+# echo a command (in green) and execute it (RUN mode only)
+function RTRACE
+{
+    [ "$MODE" != "RUN" ] && "Error: function RTRACE only available in RUN mode!" && exit 0
+    ECHOBLUE "$ $@"
+    bash -c "setsid -w $@"
+    RET=$?
+    if [ $RET -eq 0 ] ; then
+        ECHOGREEN "✓ Success."
+    else
+        ECHORED "⚠ Failure!"
+    fi
+    return $RET
+}
+
+# inputs: MSG [MSGOK] [CMDOK]
+# return 0
+function RBONUS
+{
+    [ "$MODE" != "RUN" ] && echo "Error: function RBONUS only available in RUN mode!" && exit 0
+    local MSG="$1"
+    local MSGOK="success."
+    local CMDOK=""
+    if [ $# -eq 2 ] ; then
+        MSGOK="$2"
+        elif [ $# -eq 3 ] ; then
+        MSGOK="$2"
+        CMDOK="$3"
+    fi
+    ECHOGREEN "✓ $MSG: $MSGOK"
+    eval "$CMDOK"
+    return 0
+}
+
+# inputs: MSG [MSGKO] [CMDKO]
+# return 0
+function RMALUS
+{
+    [ "$MODE" != "RUN" ] && echo "Error: function RMALUS only available in RUN mode!" && exit 0
+    local MSG="$1"
+    local MSGKO="failure!"
+    local CMDKO=""
+    if [ $# -eq 2 ] ; then
+        MSGKO="$2"
+        elif [ $# -eq 3 ] ; then
+        MSGKO="$2"
+        CMDKO="$3"
+    fi
+    ECHORED "⚠ $MSG: $MSGKO"
+    eval "$CMDKO"
+    return 0
+}
+
+# inputs: MSG [MSGOK MSGKO] [CMDOK CMDKO]
+# return: $?
+function REVAL
+{
+    local RET=$?
+    [ "$MODE" != "RUN" ] && echo "Error: function REVAL only available in RUN mode!" && exit 0
+    local MSG=""
+    local MSGOK="success."
+    local MSGKO="failure!"
+    local CMDOK=""
+    local CMDKO=""
+    if [ $# -eq 1 ] ; then
+        MSG="$1"
+        elif [ $# -eq 3 ] ; then
+        MSG="$1"
+        MSGOK="$2"
+        MSGKO="$3"
+        elif [ $# -eq 5 ] ; then
+        MSG="$1"
+        MSGOK="$2"
+        MSGKO="$3"
+        CMDOK="$4"
+        CMDKO="$5"
+    else
+        echo "Usage: REVAL MSG [MSGOK MSGKO] [CMDOK CMDKO]" && exit 0
+    fi
+    if [ $RET -eq 0 ] ; then
+        RBONUS "$MSG" "$MSGOK" "$CMDOK"
+    else
+        RMALUS "$MSG" "$MSGKO" "$CMDKO"
+    fi
+    return $RET
+}
+
+####################################################
+#                  EVAL MODE                       #
+####################################################
+
+# echo in comment window (EVAL mode only)
+function COMMENT
+{
+    echo "Comment :=>>$@"
+}
+
+# title in comment window (EVAL mode only)
+function TITLE
+{
+    echo "Comment :=>>-$@"
+}
+
+# pre-formatted echo in comment window (EVAL mode only)
+function PRE
+{
+    echo "Comment :=>>>$@"
+}
+
+# echo a command in execution window and execute it (EVAL mode only)
+function TRACE
+{
+    [ "$MODE" != "EVAL" ] && "Error: function TRACE only available in EVAL mode!" && exit 0
+    echo "Trace :=>>$ $@"
+    # bash -c "$@" |& sed -e 's/^/Output :=>>/;'
+    bash -c "setsid -w $@" |& sed -e 's/^/Output :=>>/;' # setsid is used for safe exec (setpgid(0,0))
+    RET=${PIPESTATUS[0]}  # return status of first piped command!
+    echo "Status :=>> $RET"
+    return $RET
+}
+
+# echo a command in comment window and execute it (EVAL mode only)
+function CTRACE
+{
+    [ "$MODE" != "EVAL" ] && "Error: function CTRACE only available in EVAL mode!" && exit 0
+    COMMENT "$ $@"
+    echo "<|--"
+    bash -c "setsid -w $@" |& sed -e 's/^/>/;' # preformated output
+    RET=${PIPESTATUS[0]}  # return status of first piped command!
+    echo "--|>"
+    echo "Status :=>> $RET"
+    return $RET
 }
 
 # inputs: MSG VALUE [MSGOK] [CMDOK]
@@ -224,77 +271,38 @@ function EVAL
     return $RET
 }
 
-
-# inputs: MSG [MSGOK] [CMDOK]
-# return 0
-function RBONUS
+# inputs: [GRADE]
+function EXIT
 {
-    [ "$MODE" != "RUN" ] && echo "Error: function RBONUS only available in RUN mode!" && exit 0
-    local MSG="$1"
-    local MSGOK="success."
-    local CMDOK=""
-    if [ $# -eq 2 ] ; then
-        MSGOK="$2"
-        elif [ $# -eq 3 ] ; then
-        MSGOK="$2"
-        CMDOK="$3"
-    fi
-    ECHOGREEN "✓ $MSG: $MSGOK"
-    eval "$CMDOK"
-    return 0
+    [ -z "$GRADE" ] && GRADE=0
+    [ $# -eq 1 ] && GRADE=$1
+    GRADE=$(python3 -c "print(0 if $GRADE < 0 else round($GRADE))")
+    GRADE=$(python3 -c "print(100 if $GRADE > 100 else round($GRADE))")
+    ECHO "-GRADE" && ECHO "$GRADE%"
+    if [ "$MODE" = "EVAL" ] ; then echo "Grade :=>> $GRADE" ; fi
+    # if [ "$MODE" = "RUN" ] ; then echo "👉 Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
+    exit 0
 }
 
-# inputs: MSG [MSGOK] [CMDKO]
-# return 0
-function RMALUS
-{
-    [ "$MODE" != "RUN" ] && echo "Error: function RMALUS only available in RUN mode!" && exit 0
-    local MSG="$1"
-    local MSGKO="failure!"
-    local CMDKO=""
-    if [ $# -eq 2 ] ; then
-        MSGKO="$2"
-        elif [ $# -eq 3 ] ; then
-        MSGKO="$2"
-        CMDKO="$3"
-    fi
-    ECHORED "⚠ $MSG: $MSGKO"
-    eval "$CMDKO"
-    return 0
-}
+####################################################
+#                RUN & EVAL MODE                   #
+####################################################
 
-# inputs: MSG [MSGOK MSGKO] [CMDOK CMDKO]
-# return: $?
-function REVAL
+# echo both in RUN & EVAL modes
+function ECHO
 {
-    local RET=$?
-    [ "$MODE" != "RUN" ] && echo "Error: function REVAL only available in RUN mode!" && exit 0
-    local MSG=""
-    local MSGOK="success."
-    local MSGKO="failure!"
-    local CMDOK=""
-    local CMDKO=""
-    if [ $# -eq 1 ] ; then
-        MSG="$1"
-        elif [ $# -eq 3 ] ; then
-        MSG="$1"
-        MSGOK="$2"
-        MSGKO="$3"
-        elif [ $# -eq 5 ] ; then
-        MSG="$1"
-        MSGOK="$2"
-        MSGKO="$3"
-        CMDOK="$4"
-        CMDKO="$5"
+    if [ "$MODE" = "RUN" ] ; then
+        echo "$@"
     else
-        echo "Usage: REVAL MSG [MSGOK MSGKO] [CMDOK CMDKO]" && exit 0
+        echo "Comment :=>>$@"
     fi
-    if [ $RET -eq 0 ] ; then
-        RBONUS "$MSG" "$MSGOK" "$CMDOK"
-    else
-        RMALUS "$MSG" "$MSGKO" "$CMDKO"
-    fi
-    return $RET
 }
+
+# echo in verbose mode only
+function ECHOV
+{
+    if [ "$VERBOSE" = "1" ] ; then ECHO "$@" ; fi
+}
+
 
 # EOF
