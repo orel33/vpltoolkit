@@ -422,15 +422,29 @@ function XCAT
     if [ "$MODE" = "EVAL" ] ; then
         # cat $@ |& sed -e 's/^/Comment :=>>/;'    
         echo "<|--"
-        cat $@
-        OK=$?
+        cat $@ |& sed -e 's/^/>/;' # preformated output
+        RET=$?
         echo "--|>"
     else
         cat $@
-        OK=$?
+        RET=$?
     fi
-    return $OK
+    return $RET
 }
 
+function XTRACE
+{
+    if [ "$MODE" = "EVAL" ] ; then    
+        echo "<|--"
+        bash -c "setsid -w $@" |& sed -e 's/^/>/;' # preformated output
+        RET=${PIPESTATUS[0]}  # return status of first piped command!
+        echo "--|>"
+    else
+        bash -c "setsid -w $@"
+        RET=$?
+    fi
+
+    return $RET
+}
 
 # EOF
