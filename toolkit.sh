@@ -320,6 +320,33 @@ function ECHOV
 # }
 
 
+function XECHOBLUE
+{
+    if [ "$MODE" = "RUN" ] ; then
+        echo -n -e "\033[34m" && echo -n "$@" && echo -e "\033[0m"
+    else
+        echo "Comment :=>>$@"
+    fi
+}
+
+function XECHOGREEN
+{
+    if [ "$MODE" = "RUN" ] ; then
+        echo -n -e "\033[32m" && echo -n "$@" && echo -e "\033[0m"
+    else
+        echo "Comment :=>>$@"
+    fi
+}
+
+function XECHORED
+{
+    if [ "$MODE" = "RUN" ] ; then
+        echo -n -e "\033[31m"  && echo -n "$@" && echo -e "\033[0m"
+    else
+        echo "Comment :=>>$@"
+    fi
+}
+
 function XECHO
 {
     if [ "$MODE" = "RUN" ] ; then
@@ -348,8 +375,7 @@ function XPRINTOK
     if [ $# -eq 2 ] ; then
         MSGOK="$2"
     fi
-    # XECHOGREEN "✓ $MSG: $MSGOK"
-    XECHO "✓ $MSG: $MSGOK"
+    XECHOGREEN "✓ $MSG: $MSGOK"
     return 0
 }
 
@@ -362,9 +388,33 @@ function XPRINTKO
     if [ $# -eq 2 ] ; then
         MSGKO="$2"
     fi
-    # XECHORED "⚠ $MSG: $MSGKO"
-    XECHO "⚠ $MSG: $MSGKO"
+    XECHORED "⚠ $MSG: $MSGKO"
     return 0
+}
+
+# inputs: MSG [MSGOK MSGKO]
+# return: $?
+function XEVAL
+{
+    local RET=$?
+    local MSG=""
+    local MSGOK="success."
+    local MSGKO="failure!"
+    if [ $# -eq 1 ] ; then
+        MSG="$1"
+        elif [ $# -eq 3 ] ; then
+        MSG="$1"
+        MSGOK="$2"
+        MSGKO="$3"
+    else
+        XECHO "Usage: REVAL MSG [MSGOK MSGKO]" && exit 0
+    fi
+    if [ $RET -eq 0 ] ; then
+        XPRINTOK "$MSG" "$MSGOK"
+    else
+        XPRINTKO "$MSG" "$MSGKO"
+    fi
+    return $RET
 }
 
 # EOF
