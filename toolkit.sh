@@ -320,6 +320,15 @@ function ECHOV
 # }
 
 
+function XECHO
+{
+    if [ "$MODE" = "RUN" ] ; then
+        echo "$@"
+    else
+        echo "Comment :=>>$@"
+    fi
+}
+
 function XTITLE()
 {
     if [ "$MODE" = "EVAL" ] ; then
@@ -329,5 +338,33 @@ function XTITLE()
     fi
 }
 
+
+# inputs: MSG [MSGOK]
+# return 0
+function XPRINTOK
+{
+    local MSG="$1"
+    local MSGOK="success."
+    if [ $# -eq 2 ] ; then
+        MSGOK="$2"
+    fi
+    # XECHOGREEN "✓ $MSG: $MSGOK"
+    XECHO "✓ $MSG: $MSGOK"
+    return 0
+}
+
+# inputs: MSG [MSGKO]
+# return 0
+function XPRINTKO
+{
+    local MSG="$1"
+    local MSGKO="failure!"
+    if [ $# -eq 2 ] ; then
+        MSGKO="$2"
+    fi
+    # XECHORED "⚠ $MSG: $MSGKO"
+    XECHO "⚠ $MSG: $MSGKO"
+    return 0
+}
 
 # EOF
