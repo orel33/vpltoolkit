@@ -402,12 +402,12 @@ function XEVAL
     local MSGKO="failure!"
     if [ $# -eq 1 ] ; then
         MSG="$1"
-        elif [ $# -eq 3 ] ; then
+    elif [ $# -eq 3 ] ; then
         MSG="$1"
         MSGOK="$2"
         MSGKO="$3"
     else
-        XECHO "Usage: REVAL MSG [MSGOK MSGKO]" && exit 0
+        XECHO "Usage: XEVAL MSG [MSGOK MSGKO]" && exit 0
     fi
     if [ $RET -eq 0 ] ; then
         XPRINTOK "$MSG" "$MSGOK"
