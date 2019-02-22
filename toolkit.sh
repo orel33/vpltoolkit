@@ -388,7 +388,7 @@ function XPRINTKO
     if [ $# -eq 2 ] ; then
         MSGKO="$2"
     fi
-    XECHORED "⚠ $MSG: $MSGKO"
+    XECHORED "⚠️ $MSG: $MSGKO"
     return 0
 }
 
@@ -441,6 +441,32 @@ function XTRACE
         echo "--|>"
     else
         bash -c "setsid -w $@"
+        RET=$?
+    fi
+
+    return $RET
+}
+
+function XCAT_TEACHER
+{
+    RET=0
+    if [ "$MODE" = "EVAL" ] ; then
+        echo "Trace :=>>$ cat $@"
+        bash -c "cat $@" |& sed -e 's/^/Output :=>>/;' # setsid is used for safe exec (setpgid(0,0))
+        RET=${PIPESTATUS[0]}  # return status of first piped command!
+    fi
+    return $RET
+}
+
+function XTRACE_TEACHER
+{
+    if [ "$MODE" = "EVAL" ] ; then    
+        echo "Trace :=>>$ $@"
+        bash -c "setsid -w $@" |& sed -e 's/^/Output :=>>/;' # setsid is used for safe exec (setpgid(0,0))
+        RET=${PIPESTATUS[0]}  # return status of first piped command!
+        echo "Status :=>> $RET"
+    else
+        bash -c "setsid -w $@" &> /dev/null
         RET=$?
     fi
 
