@@ -309,15 +309,15 @@ function ECHOV
 #                RUN & EVAL MODE                   #
 ####################################################
 
-function STUDENT_ECHO()
-{
+# function STUDENT_ECHO()
+# {
 
-}
+# }
 
-function TEACHER_ECHO()
-{
+# function TEACHER_ECHO()
+# {
 
-}
+# }
 
 
 function XTITLE()
