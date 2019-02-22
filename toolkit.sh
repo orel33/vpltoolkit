@@ -375,7 +375,8 @@ function XPRINTOK
     if [ $# -eq 2 ] ; then
         MSGOK="$2"
     fi
-    XECHOGREEN "✓ $MSG: $MSGOK"
+    # ✓
+    XECHOGREEN "✔️ $MSG: $MSGOK"
     return 0
 }
 
