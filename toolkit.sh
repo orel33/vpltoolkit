@@ -320,12 +320,12 @@ function TEACHER_ECHO()
 }
 
 
-function XTITLE
+function XTITLE()
 {
     if [ "$MODE" = "EVAL" ] ; then
         echo "Comment :=>>-$@"
     else
-        ECHOBLUE "######### $@ ##########"    
+        ECHOBLUE "######### $@ ##########"
     fi
 }
 
