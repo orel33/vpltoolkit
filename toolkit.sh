@@ -417,4 +417,20 @@ function XEVAL
     return $RET
 }
 
+function XCAT
+{
+    if [ "$MODE" = "EVAL" ] ; then
+        # cat $@ |& sed -e 's/^/Comment :=>>/;'    
+        echo "<|--"
+        cat $@
+        OK=$?
+        echo "--|>"
+    else
+        cat $@
+        OK=$?
+    fi
+    return $OK
+}
+
+
 # EOF
