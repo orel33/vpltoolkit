@@ -309,17 +309,6 @@ function ECHOV
 #                RUN & EVAL MODE                   #
 ####################################################
 
-# function STUDENT_ECHO()
-# {
-
-# }
-
-# function TEACHER_ECHO()
-# {
-
-# }
-
-
 function XECHOBLUE
 {
     if [ "$MODE" = "RUN" ] ; then
@@ -356,7 +345,7 @@ function XECHO
     fi
 }
 
-function XTITLE()
+function XTITLE
 {
     if [ "$MODE" = "EVAL" ] ; then
         echo "Comment :=>>-$@"
@@ -375,7 +364,6 @@ function XPRINTOK
     if [ $# -eq 2 ] ; then
         MSGOK="$2"
     fi
-    # ✓
     XECHOGREEN "✔️ $MSG: $MSGOK"
     return 0
 }
@@ -391,31 +379,6 @@ function XPRINTKO
     fi
     XECHORED "⚠️ $MSG: $MSGKO"
     return 0
-}
-
-# inputs: MSG [MSGOK MSGKO]
-# return: $?
-function XEVAL
-{
-    local RET=$?
-    local MSG=""
-    local MSGOK="success."
-    local MSGKO="failure!"
-    if [ $# -eq 1 ] ; then
-        MSG="$1"
-    elif [ $# -eq 3 ] ; then
-        MSG="$1"
-        MSGOK="$2"
-        MSGKO="$3"
-    else
-        XECHO "Usage: XEVAL MSG [MSGOK MSGKO]" && exit 0
-    fi
-    if [ $RET -eq 0 ] ; then
-        XPRINTOK "$MSG" "$MSGOK"
-    else
-        XPRINTKO "$MSG" "$MSGKO"
-    fi
-    return $RET
 }
 
 function XCAT
@@ -473,5 +436,125 @@ function XTRACE_TEACHER
 
     return $RET
 }
+
+# inputs: SCORE
+# return: 0
+# function XGRADE
+# {
+#     local SCORE=0
+#     if [ $# -eq 1 ] ; then
+#         SCORE="$1"
+#     else
+#         XECHO "Usage: XGRADE SCORE" && exit 0
+#     fi
+
+
+#     return 0
+# }
+
+
+# inputs: MSG SCORE [MSGOK MSGKO]
+# global inputs: $GRADE $?
+# return: $?
+function XEVAL
+{
+    local RET=$?
+    local MSG=""
+    local SCORE=0
+    local MSGOK="success."
+    local MSGKO="failure!"
+    if [ $# -eq 2 ] ; then
+        MSG="$1"
+        SCORE="$2"
+    elif [ $# -eq 4 ] ; then
+        MSG="$1"
+        SCORE="$2"
+        MSGOK="$3"
+        MSGKO="$4"
+    else
+        XECHO "Usage: XEVAL MSG SCORE [MSGOK MSGKO]" && exit 0
+    fi
+    local LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))")
+    local MSGSCORE=""
+    if [ $SCORE -ne 0 ] ; then
+        MSGSCORE="[$LGRADE%]"
+    fi
+    if [ $RET -eq 0 ] ; then
+        XPRINTOK "$MSG" "$MSGOK $MSGSCORE"
+    else
+        XPRINTKO "$MSG" "$MSGKO $MSGSCORE"
+    fi
+    GRADE=$(python3 -c "print($GRADE+$LGRADE)")
+    echo "GRADE=$GRADE"
+    return $RET
+}
+
+
+# # inputs: MSG VALUE [MSGOK] [CMDOK]
+# # return 0
+# function BONUS
+# {
+#     local MSG="$1"
+#     local VALUE="$2"
+#     local MSGOK="success."
+#     local CMDOK=""
+#     local RVALUE=$(python3 -c "print(\"%.2f\" % ($VALUE))")
+#     if [ $# -eq 3 ] ; then
+#         MSGOK="$3"
+#     elif [ $# -eq 4 ] ; then
+#         MSGOK="$3"
+#         CMDOK="$4"
+#     fi
+#     if [ "$VALUE" = "X" ] ; then
+#         COMMENT "✓ $MSG: $MSGOK [+∞]" && EXIT 100
+#         elif [ "$VALUE" = "0" ] ; then
+#         COMMENT "✓ $MSG: $MSGOK"
+#     else
+#         COMMENT "✓ $MSG: $MSGOK [+$RVALUE%]"
+#     fi
+#     GRADE=$(python3 -c "print($GRADE+$RVALUE)")
+#     eval $CMDOK
+#     return 0
+# }
+
+# # inputs: MSG VALUE [MSGOK] [CMDKO]
+# # return 0
+# function MALUS
+# {
+#     local MSG="$1"
+#     local VALUE="$2"
+#     local MSGKO="failure!"
+#     local CMDKO=""
+#     local RVALUE=$(python3 -c "print(\"%.2f\" % ($VALUE))")
+#     if [ $# -eq 3 ] ; then
+#         MSGKO="$3"
+#     elif [ $# -eq 4 ] ; then
+#         MSGKO="$3"
+#         CMDKO="$4"
+#     fi
+#     if [ "$VALUE" = "X" ] ; then
+#         COMMENT "⚠ $MSG: $MSGKO [-∞]" && EXIT 0
+#     elif [ "$VALUE" = "0" ] ; then
+#         COMMENT "⚠ $MSG: $MSGKO"
+#     else
+#         COMMENT "⚠ $MSG: $MSGKO [-$RVALUE%]"
+#     fi
+#     GRADE=$(python3 -c "print($GRADE-$RVALUE)")
+#     eval $CMDKO
+#     return 0
+# }
+
+# inputs: [GRADE]
+# function EXIT
+# {
+#     [ -z "$GRADE" ] && GRADE=0
+#     [ $# -eq 1 ] && GRADE=$1
+#     GRADE=$(python3 -c "print(0 if $GRADE < 0 else round($GRADE))")
+#     GRADE=$(python3 -c "print(100 if $GRADE > 100 else round($GRADE))")
+#     ECHO "-GRADE" && ECHO "$GRADE%"
+#     if [ "$MODE" = "EVAL" ] ; then echo "Grade :=>> $GRADE" ; fi
+#     # if [ "$MODE" = "RUN" ] ; then echo "👉 Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
+#     exit 0
+# }
 
 # EOF
