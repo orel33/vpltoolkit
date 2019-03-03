@@ -354,33 +354,6 @@ function XTITLE
     fi
 }
 
-
-# inputs: MSG [MSGOK]
-# return 0
-function XPRINTOK
-{
-    local MSG="$1"
-    local MSGOK="success."
-    if [ $# -eq 2 ] ; then
-        MSGOK="$2"
-    fi
-    XECHOGREEN "✔️ $MSG: $MSGOK"
-    return 0
-}
-
-# inputs: MSG [MSGKO]
-# return 0
-function XPRINTKO
-{
-    local MSG="$1"
-    local MSGKO="failure!"
-    if [ $# -eq 2 ] ; then
-        MSGKO="$2"
-    fi
-    XECHORED "⚠️ $MSG: $MSGKO"
-    return 0
-}
-
 function XCAT
 {
     if [ "$MODE" = "EVAL" ] ; then
@@ -437,21 +410,85 @@ function XTRACE_TEACHER
     return $RET
 }
 
-# inputs: SCORE
-# return: 0
-# function XGRADE
-# {
-#     local SCORE=0
-#     if [ $# -eq 1 ] ; then
-#         SCORE="$1"
-#     else
-#         XECHO "Usage: XGRADE SCORE" && exit 0
-#     fi
+# inputs: MSG [MSGOK]
+# return 0
+function XPRINTOK
+{
+    local MSG="$1"
+    local MSGOK="success"
+    if [ $# -eq 2 ] ; then
+        MSGOK="$2"
+    fi
+    XECHOGREEN "✔️ $MSG: $MSGOK"
+    return 0
+}
 
+# inputs: MSG [MSGKO]
+# return 0
+function XPRINTKO
+{
+    local MSG="$1"
+    local MSGKO="failure"
+    if [ $# -eq 2 ] ; then
+        MSGKO="$2"
+    fi
+    XECHORED "⚠️ $MSG: $MSGKO"
+    return 0
+}
 
-#     return 0
-# }
+# inputs: MSG SCORE [MSGOK]
+# return 0
+function XPRINTOK_GRADE
+{
+    local MSG=""
+    local SCORE=0
+    local MSGOK="success"
+    if [ $# -eq 2 ] ; then
+        MSG="$1"
+        SCORE="$2" # TODO: check score is >= 0
+    elif [ $# -eq 3 ] ; then
+        MSG="$1"
+        SCORE="$2"
+        MSGOK="$3"
+    else
+        XECHO "Usage: $0 MSG SCORE [MSGOK]" && exit 0
+    fi
+    local MSGSCORE=""
+    if [ $SCORE -ne 0 ] ; then
+        local LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be positive
+        GRADE=$(python3 -c "print($GRADE+$LGRADE)")
+        MSGSCORE="[$LGRADE%]"
+    fi
+    XPRINTOK "$MSG" "$MSGOK $MSGSCORE"
+    return 0
+}
 
+# inputs: MSG SCORE [MSGKO]
+# return 0
+function XPRINTKO_GRADE
+{
+    local MSG=""
+    local SCORE=0
+    local MSGKO="failure"
+    if [ $# -eq 2 ] ; then
+        MSG="$1"
+        SCORE="$2" # TODO: check score is <= 0
+    elif [ $# -eq 3 ] ; then
+        MSG="$1"
+        SCORE="$2"
+        MSGKO="$3"
+    else
+        XECHO "Usage: $0 MSG SCORE [MSGKO]" && exit 0
+    fi
+    local MSGSCORE=""
+    if [ $SCORE -ne 0 ] ; then
+        local LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be negative
+        GRADE=$(python3 -c "print($GRADE+$LGRADE)")
+        MSGSCORE="[$LGRADE%]"
+    fi
+    XPRINTKO "$MSG" "$MSGOK $MSGSCORE"
+    return 0
+}
 
 # inputs: MSG SCORE [MSGOK MSGKO]
 # global inputs: $GRADE $?
@@ -461,8 +498,8 @@ function XEVAL
     local RET=$?
     local MSG=""
     local SCORE=0
-    local MSGOK="success."
-    local MSGKO="failure!"
+    local MSGOK="success"
+    local MSGKO="failure"
     if [ $# -eq 2 ] ; then
         MSG="$1"
         SCORE="$2"
@@ -480,12 +517,10 @@ function XEVAL
         MSGSCORE="[$LGRADE%]"
     fi
     if [ $RET -eq 0 ] ; then
-        XPRINTOK "$MSG" "$MSGOK $MSGSCORE"
+        XPRINTOK_GRADE "$MSG" "$SCORE" "$MSGOK"
     else
-        XPRINTKO "$MSG" "$MSGKO $MSGSCORE"
+        XPRINTKO_GRADE "$MSG" "$SCORE" "$MSGKO"
     fi
-    GRADE=$(python3 -c "print($GRADE+$LGRADE)")
-    echo "GRADE=$GRADE"
     return $RET
 }
 
