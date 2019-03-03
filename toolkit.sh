@@ -31,7 +31,7 @@ function COPYINPUTS
 }
 
 ####################################################
-#                RUN & EVAL MODE                   #
+#                       ECHO                       #
 ####################################################
 
 function ECHOBLUE
@@ -70,6 +70,10 @@ function ECHO
     fi
 }
 
+####################################################
+#                       TITLE                      #
+####################################################
+
 function TITLE
 {
     if [ "$MODE" = "EVAL" ] ; then
@@ -78,6 +82,10 @@ function TITLE
         ECHOBLUE "######### $@ ##########"
     fi
 }
+
+####################################################
+#                        CAT                       #
+####################################################
 
 function CAT
 {
@@ -94,6 +102,21 @@ function CAT
     return $RET
 }
 
+function CAT_TEACHER
+{
+    RET=0
+    if [ "$MODE" = "EVAL" ] ; then
+        echo "Trace :=>>$ cat $@"
+        bash -c "cat $@" |& sed -e 's/^/Output :=>>/;' # setsid is used for safe exec (setpgid(0,0))
+        RET=${PIPESTATUS[0]}  # return status of first piped command!
+    fi
+    return $RET
+}
+
+####################################################
+#                       TRACE                      #
+####################################################
+
 function TRACE
 {
     if [ "$MODE" = "EVAL" ] ; then    
@@ -106,17 +129,6 @@ function TRACE
         RET=$?
     fi
 
-    return $RET
-}
-
-function CAT_TEACHER
-{
-    RET=0
-    if [ "$MODE" = "EVAL" ] ; then
-        echo "Trace :=>>$ cat $@"
-        bash -c "cat $@" |& sed -e 's/^/Output :=>>/;' # setsid is used for safe exec (setpgid(0,0))
-        RET=${PIPESTATUS[0]}  # return status of first piped command!
-    fi
     return $RET
 }
 
@@ -134,6 +146,10 @@ function TRACE_TEACHER
 
     return $RET
 }
+
+####################################################
+#                      EVAL                        #
+####################################################
 
 # inputs: MSG [MSGOK]
 # return 0
@@ -176,7 +192,7 @@ function PRINTOK_GRADE
         SCORE="$2"
         MSGOK="$3"
     else
-        ECHO "Usage: $0 MSG SCORE [MSGOK]" && exit 0
+        ECHO "Usage: PRINTOK_GRADE MSG SCORE [MSGOK]" && exit 0
     fi
     local MSGSCORE=""
     if [ -z "$NOGRADE" -a "$SCORE" -ne 0 ] ; then
@@ -203,7 +219,7 @@ function PRINTKO_GRADE
         SCORE="$2"
         MSGKO="$3"
     else
-        ECHO "Usage: $0 MSG SCORE [MSGKO]" && exit 0
+        ECHO "Usage: PRINTKO_GRADE MSG SCORE [MSGKO]" && exit 0
     fi
     local MSGSCORE=""
     if [ -z "$NOGRADE" -a "$SCORE" -ne 0 ] ; then
@@ -234,7 +250,7 @@ function EVAL
         MSGOK="$3"
         MSGKO="$4"
     else
-        ECHO "Usage: XEVAL MSG SCORE [MSGOK MSGKO]" && exit 0
+        ECHO "Usage: EVAL MSG SCORE [MSGOK MSGKO]" && exit 0
     fi
     if [ $RET -eq 0 ] ; then
         PRINTOK_GRADE "$MSG" "$SCORE" "$MSGOK"
