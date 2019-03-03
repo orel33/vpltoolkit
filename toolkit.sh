@@ -144,7 +144,7 @@ function PRINTOK
     if [ $# -eq 2 ] ; then
         MSGOK="$2"
     fi
-    XECHOGREEN "✔️ $MSG: $MSGOK"
+    ECHOGREEN "✔️ $MSG: $MSGOK"
     return 0
 }
 
@@ -157,7 +157,7 @@ function PRINTKO
     if [ $# -eq 2 ] ; then
         MSGKO="$2"
     fi
-    XECHORED "⚠️ $MSG: $MSGKO"
+    ECHORED "⚠️ $MSG: $MSGKO"
     return 0
 }
 
@@ -176,7 +176,7 @@ function PRINTOK_GRADE
         SCORE="$2"
         MSGOK="$3"
     else
-        XECHO "Usage: $0 MSG SCORE [MSGOK]" && exit 0
+        ECHO "Usage: $0 MSG SCORE [MSGOK]" && exit 0
     fi
     local MSGSCORE=""
     if [ -z "$NOGRADE" -a "$SCORE" -ne 0 ] ; then
@@ -184,7 +184,7 @@ function PRINTOK_GRADE
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         MSGSCORE="[$LGRADE%]"
     fi
-    XPRINTOK "$MSG" "$MSGOK $MSGSCORE"
+    PRINTOK "$MSG" "$MSGOK $MSGSCORE"
     return 0
 }
 
@@ -203,7 +203,7 @@ function PRINTKO_GRADE
         SCORE="$2"
         MSGKO="$3"
     else
-        XECHO "Usage: $0 MSG SCORE [MSGKO]" && exit 0
+        ECHO "Usage: $0 MSG SCORE [MSGKO]" && exit 0
     fi
     local MSGSCORE=""
     if [ -z "$NOGRADE" -a "$SCORE" -ne 0 ] ; then
@@ -211,7 +211,7 @@ function PRINTKO_GRADE
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         MSGSCORE="[$LGRADE%]"
     fi
-    XPRINTKO "$MSG" "$MSGOK $MSGSCORE"
+    PRINTKO "$MSG" "$MSGOK $MSGSCORE"
     return 0
 }
 
@@ -234,12 +234,12 @@ function EVAL
         MSGOK="$3"
         MSGKO="$4"
     else
-        XECHO "Usage: XEVAL MSG SCORE [MSGOK MSGKO]" && exit 0
+        ECHO "Usage: XEVAL MSG SCORE [MSGOK MSGKO]" && exit 0
     fi
     if [ $RET -eq 0 ] ; then
-        XPRINTOK_GRADE "$MSG" "$SCORE" "$MSGOK"
+        PRINTOK_GRADE "$MSG" "$SCORE" "$MSGOK"
     else
-        XPRINTKO_GRADE "$MSG" "$SCORE" "$MSGKO"
+        PRINTKO_GRADE "$MSG" "$SCORE" "$MSGKO"
     fi
     return $RET
 }
