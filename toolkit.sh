@@ -83,6 +83,11 @@ function TITLE
     fi
 }
 
+function PRINTINFO
+{
+    ECHOBLUE "👉 $@"
+}
+
 ####################################################
 #                        CAT                       #
 ####################################################
@@ -91,6 +96,7 @@ function CAT
 {
     if [ "$MODE" = "EVAL" ] ; then
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
+        echo "Trace :=>>$ cat $@"
         echo "<|--"
         cat $@ |& sed -e 's/^/>/;' # preformated output
         RET=$?
@@ -120,6 +126,7 @@ function CAT_TEACHER
 function TRACE
 {
     if [ "$MODE" = "EVAL" ] ; then    
+        echo "Trace :=>>$ $@"
         echo "<|--"
         bash -c "setsid -w $@" |& sed -e 's/^/>/;' # preformated output
         RET=${PIPESTATUS[0]}  # return status of first piped command!
