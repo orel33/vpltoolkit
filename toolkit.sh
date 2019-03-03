@@ -454,7 +454,7 @@ function XPRINTOK_GRADE
         XECHO "Usage: $0 MSG SCORE [MSGOK]" && exit 0
     fi
     local MSGSCORE=""
-    if [ $SCORE -ne 0 ] ; then
+    if [ -z "$NOGRADE" -a "$SCORE" -ne 0 ] ; then
         local LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be positive
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         MSGSCORE="[$LGRADE%]"
@@ -481,7 +481,7 @@ function XPRINTKO_GRADE
         XECHO "Usage: $0 MSG SCORE [MSGKO]" && exit 0
     fi
     local MSGSCORE=""
-    if [ $SCORE -ne 0 ] ; then
+    if [ -z "$NOGRADE" -a "$SCORE" -ne 0 ] ; then
         local LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be negative
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         MSGSCORE="[$LGRADE%]"
@@ -511,11 +511,6 @@ function XEVAL
     else
         XECHO "Usage: XEVAL MSG SCORE [MSGOK MSGKO]" && exit 0
     fi
-    local LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))")
-    local MSGSCORE=""
-    if [ $SCORE -ne 0 ] ; then
-        MSGSCORE="[$LGRADE%]"
-    fi
     if [ $RET -eq 0 ] ; then
         XPRINTOK_GRADE "$MSG" "$SCORE" "$MSGOK"
     else
@@ -523,61 +518,6 @@ function XEVAL
     fi
     return $RET
 }
-
-
-# # inputs: MSG VALUE [MSGOK] [CMDOK]
-# # return 0
-# function BONUS
-# {
-#     local MSG="$1"
-#     local VALUE="$2"
-#     local MSGOK="success."
-#     local CMDOK=""
-#     local RVALUE=$(python3 -c "print(\"%.2f\" % ($VALUE))")
-#     if [ $# -eq 3 ] ; then
-#         MSGOK="$3"
-#     elif [ $# -eq 4 ] ; then
-#         MSGOK="$3"
-#         CMDOK="$4"
-#     fi
-#     if [ "$VALUE" = "X" ] ; then
-#         COMMENT "✓ $MSG: $MSGOK [+∞]" && EXIT 100
-#         elif [ "$VALUE" = "0" ] ; then
-#         COMMENT "✓ $MSG: $MSGOK"
-#     else
-#         COMMENT "✓ $MSG: $MSGOK [+$RVALUE%]"
-#     fi
-#     GRADE=$(python3 -c "print($GRADE+$RVALUE)")
-#     eval $CMDOK
-#     return 0
-# }
-
-# # inputs: MSG VALUE [MSGOK] [CMDKO]
-# # return 0
-# function MALUS
-# {
-#     local MSG="$1"
-#     local VALUE="$2"
-#     local MSGKO="failure!"
-#     local CMDKO=""
-#     local RVALUE=$(python3 -c "print(\"%.2f\" % ($VALUE))")
-#     if [ $# -eq 3 ] ; then
-#         MSGKO="$3"
-#     elif [ $# -eq 4 ] ; then
-#         MSGKO="$3"
-#         CMDKO="$4"
-#     fi
-#     if [ "$VALUE" = "X" ] ; then
-#         COMMENT "⚠ $MSG: $MSGKO [-∞]" && EXIT 0
-#     elif [ "$VALUE" = "0" ] ; then
-#         COMMENT "⚠ $MSG: $MSGKO"
-#     else
-#         COMMENT "⚠ $MSG: $MSGKO [-$RVALUE%]"
-#     fi
-#     GRADE=$(python3 -c "print($GRADE-$RVALUE)")
-#     eval $CMDKO
-#     return 0
-# }
 
 # inputs: [GRADE]
 function XEXIT
