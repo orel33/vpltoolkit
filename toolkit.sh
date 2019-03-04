@@ -224,7 +224,7 @@ function PRINTOK_GRADE
     fi
     local MSGSCORE=""
     local LGRADE=0
-    if [ "$SCORE" -ne 0 ] ; then
+    if [ "$SCORE" != "0" ] ; then
         LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be positive
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
@@ -253,7 +253,7 @@ function PRINTKO_GRADE
     fi
     local MSGSCORE=""
     local LGRADE=0
-    if [ "$SCORE" -ne 0 ] ; then
+    if [ "$SCORE" != "0" ] ; then
         LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be negative
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
@@ -268,6 +268,7 @@ function PRINTKO_GRADE
 # return: $?
 function EVAL
 {
+
     local RET=$?
     local MSG=""
     local SCORE=0
