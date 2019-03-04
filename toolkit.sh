@@ -222,7 +222,7 @@ function PRINTOK_GRADE
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
     PRINTOK "$MSG" "$MSGOK $MSGSCORE"
-    ECHO_TEACHER "Update Grade: $LGRADE%"
+    ECHO_TEACHER "Update Grade: $LGRADE% ($GRADE%)"
     return 0
 }
 
@@ -251,7 +251,7 @@ function PRINTKO_GRADE
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
     PRINTKO "$MSG" "$MSGOK $MSGSCORE"
-    ECHO_TEACHER "Update Grade: $LGRADE%"
+    ECHO_TEACHER "Update Grade: $LGRADE% ($GRADE%)"
     return 0
 }
 
