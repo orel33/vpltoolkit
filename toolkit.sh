@@ -296,7 +296,7 @@ function PRINTKO_GRADE
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
-    PRINTKO "$MSG" "$MSGOK $MSGSCORE"
+    PRINTKO "$MSG" "$MSGKO $MSGSCORE"
     ECHO_TEACHER "Update Grade: $LGRADE%"
     return 0
 }
