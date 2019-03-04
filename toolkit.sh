@@ -36,11 +36,11 @@ function COPYINPUTS
 #                       ECHO                       #
 ####################################################
 
-local BLUE='\033[34m'
-local GREEN='\033[32m'
-local RED='\033[31m'
-local ORANGE='\033[33m'
-local NC='\033[0m'    # no color
+BLUE='\033[34m'
+GREEN='\033[32m'
+RED='\033[31m'
+ORANGE='\033[33m'
+NC='\033[0m'    # no color
 
 
 function ECHOBLUE
@@ -84,7 +84,7 @@ function ECHO_TEACHER
     if [ "$MODE" = "RUN" ] ; then
         echo "$@" &>> $RUNDIR/$LOG
     else
-        echo "Teacher :=>>${BLUE}$@${NC}"
+        echo -n "Teacher :=>>" && echo -n -e "${BLUE}" && echo -n "$@" && echo -e "${NC}"
     fi
 }
 
