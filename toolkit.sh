@@ -39,7 +39,7 @@ function COPYINPUTS
 BLUE='\033[34m'
 GREEN='\033[32m'
 RED='\033[31m'
-ORANGE='\033[33m'
+YELLOW='\033[33m'
 NC='\033[0m'    # no color
 
 
@@ -66,9 +66,16 @@ function ECHORED
     if [ "$MODE" = "RUN" ] ; then
         echo -n -e "${RED}"  && echo -n "$@" && echo -e "${NC}"
     else
-        # echo "Comment :=>>$@"
-        echo -n "Comment :=>>" && echo -n -e "${RED}" && echo -n "$@" && echo -e "${NC}"
+        echo "Comment :=>>$@"
+    fi
+}
 
+function ECHOYELLOW
+{
+    if [ "$MODE" = "RUN" ] ; then
+        echo -n -e "${YELLOW}"  && echo -n "$@" && echo -e "${NC}"
+    else
+        echo "Comment :=>>$@"
     fi
 }
 
@@ -86,7 +93,7 @@ function ECHO_TEACHER
     if [ "$MODE" = "RUN" ] ; then
         echo "$@" &>> $RUNDIR/$LOG
     else
-        echo -n "Teacher :=>>" && echo -n -e "${BLUE}" && echo -n "$@" && echo -e "${NC}"
+        echo "Teacher :=>>$@"
     fi
 }
 
@@ -98,7 +105,7 @@ function ECHO_TEACHER
 function WARNING
 {
     local MSG="$1"
-    ECHORED "⚠️ Warning: $MSG"
+    ECHOYELLOW "⚠️ Warning: $MSG"
     return 0
 }
 
@@ -113,7 +120,7 @@ function ERROR
 # inputs: MSG
 function INFO
 {
-    ECHOBLUE "👉 $@"
+    ECHOBLUE "👉 $@" # ➡
 }
 
 ####################################################
@@ -218,7 +225,7 @@ function PRINTOK
     if [ $# -eq 2 ] ; then
         MSGOK="$2"
     fi
-    ECHOGREEN "✔️ $MSG: $MSGOK"
+    ECHOGREEN "✔️ $MSG: $MSGOK" # 🆗
     return 0
 }
 
