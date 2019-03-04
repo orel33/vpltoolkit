@@ -66,7 +66,9 @@ function ECHORED
     if [ "$MODE" = "RUN" ] ; then
         echo -n -e "${RED}"  && echo -n "$@" && echo -e "${NC}"
     else
-        echo "Comment :=>>$@"
+        # echo "Comment :=>>$@"
+        echo -n "Comment :=>>" && echo -n -e "${BLUE}" && echo -n "$@" && echo -e "${NC}"
+
     fi
 }
 
