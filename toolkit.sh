@@ -215,13 +215,14 @@ function PRINTOK_GRADE
         ECHO "Usage: PRINTOK_GRADE MSG SCORE [MSGOK]" && exit 0
     fi
     local MSGSCORE=""
+    local LGRADE=0
     if [ "$SCORE" -ne 0 ] ; then
-        local LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be positive
+        LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be positive
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
-        ECHO_TEACHER "Update Grade: $LGRADE%"
     fi
     PRINTOK "$MSG" "$MSGOK $MSGSCORE"
+    ECHO_TEACHER "Update Grade: $LGRADE%"
     return 0
 }
 
@@ -243,13 +244,14 @@ function PRINTKO_GRADE
         ECHO "Usage: PRINTKO_GRADE MSG SCORE [MSGKO]" && exit 0
     fi
     local MSGSCORE=""
+    local LGRADE=0
     if [ "$SCORE" -ne 0 ] ; then
-        local LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be negative
+        LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be negative
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
-        ECHO_TEACHER "Update Grade: $LGRADE%"
     fi
     PRINTKO "$MSG" "$MSGOK $MSGSCORE"
+    ECHO_TEACHER "Update Grade: $LGRADE%"
     return 0
 }
 
