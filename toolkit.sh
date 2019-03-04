@@ -77,7 +77,7 @@ function ECHO_TEACHER
     if [ "$MODE" = "RUN" ] ; then
         echo "$@" &>> $RUNDIR/$LOG
     else
-        echo "$@"
+        echo "Teacher :=>>$@"
     fi
 }
 
@@ -107,7 +107,7 @@ function CAT
 {
     if [ "$MODE" = "EVAL" ] ; then
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
-        echo "Trace :=>>$ cat $@"
+        echo "Teacher :=>>$ cat $@"
         echo "<|--"
         cat $@ |& sed -e 's/^/>/;' # preformated output
         RET=$?
@@ -123,8 +123,8 @@ function CAT_TEACHER
 {
     RET=0
     if [ "$MODE" = "EVAL" ] ; then
-        echo "Trace :=>>$ cat $@"
-        bash -c "cat $@" |& sed -e 's/^/Output :=>>/;' # setsid is used for safe exec (setpgid(0,0))
+        echo "Teacher :=>>$ cat $@"
+        bash -c "cat $@" |& sed -e 's/^/Teacher :=>>/;' # setsid is used for safe exec (setpgid(0,0))
         RET=${PIPESTATUS[0]}  # return status of first piped command!
     else
         cat $@ &>> $RUNDIR/$LOG
@@ -140,11 +140,12 @@ function CAT_TEACHER
 function TRACE
 {
     if [ "$MODE" = "EVAL" ] ; then    
-        echo "Trace :=>>$ $@"
+        echo "Teacher :=>>$ $@"
         echo "<|--"
         bash -c "setsid -w $@" |& sed -e 's/^/>/;' # preformated output
         RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "--|>"
+        echo "Teacher :=>> Status $RET"
     else
         bash -c "setsid -w $@"
         RET=$?
@@ -155,10 +156,10 @@ function TRACE
 function TRACE_TEACHER
 {
     if [ "$MODE" = "EVAL" ] ; then    
-        echo "Trace :=>>$ $@"
-        bash -c "setsid -w $@" |& sed -e 's/^/Output :=>>/;' # setsid is used for safe exec (setpgid(0,0))
+        echo "Teacher :=>>$ $@"
+        bash -c "setsid -w $@" |& sed -e 's/^/Teacher :=>>/;' # setsid is used for safe exec (setpgid(0,0))
         RET=${PIPESTATUS[0]}  # return status of first piped command!
-        echo "Status :=>> $RET"
+        echo "Teacher :=>> Status $RET"
     else
         bash -c "setsid -w $@" &>> $RUNDIR/$LOG
         RET=$?
