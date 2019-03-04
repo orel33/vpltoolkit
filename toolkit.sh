@@ -67,7 +67,7 @@ function ECHORED
         echo -n -e "${RED}"  && echo -n "$@" && echo -e "${NC}"
     else
         # echo "Comment :=>>$@"
-        echo -n "Comment :=>>" && echo -n -e "${BLUE}" && echo -n "$@" && echo -e "${NC}"
+        echo -n "Comment :=>>" && echo -n -e "${RED}" && echo -n "$@" && echo -e "${NC}"
 
     fi
 }
