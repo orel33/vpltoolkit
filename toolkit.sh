@@ -1,5 +1,7 @@
 #!/bin/bash
 
+LOG="teacher.log"
+
 ####################################################
 #                      MISC                        #
 ####################################################
@@ -72,7 +74,9 @@ function ECHO
 
 function ECHO_TEACHER
 {
-    if [ "$MODE" = "EVAL" ] ; then
+    if [ "$MODE" = "RUN" ] ; then
+        echo "$@" &>> $RUNDIR/$LOG
+    else
         echo "$@"
     fi
 }
@@ -122,6 +126,9 @@ function CAT_TEACHER
         echo "Trace :=>>$ cat $@"
         bash -c "cat $@" |& sed -e 's/^/Output :=>>/;' # setsid is used for safe exec (setpgid(0,0))
         RET=${PIPESTATUS[0]}  # return status of first piped command!
+    else
+        cat $@ &>> $RUNDIR/$LOG
+        RET=$?
     fi
     return $RET
 }
@@ -142,7 +149,6 @@ function TRACE
         bash -c "setsid -w $@"
         RET=$?
     fi
-
     return $RET
 }
 
@@ -154,10 +160,9 @@ function TRACE_TEACHER
         RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "Status :=>> $RET"
     else
-        bash -c "setsid -w $@" &> /dev/null
+        bash -c "setsid -w $@" &>> $RUNDIR/$LOG
         RET=$?
     fi
-
     return $RET
 }
 
@@ -213,7 +218,7 @@ function PRINTOK_GRADE
         local LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be positive
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
-        ECHO_TEACHER "Update Grade = $GRADE% $MSGSCORE"
+        ECHO_TEACHER "Update Grade: $LGRADE%"
     fi
     PRINTOK "$MSG" "$MSGOK $MSGSCORE"
     return 0
@@ -241,7 +246,7 @@ function PRINTKO_GRADE
         local LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be negative
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
-        ECHO_TEACHER "Update Grade = $GRADE% $MSGSCORE"
+        ECHO_TEACHER "Update Grade: $LGRADE%"
     fi
     PRINTKO "$MSG" "$MSGOK $MSGSCORE"
     return 0
@@ -277,7 +282,7 @@ function EVAL
 }
 
 # inputs: [GRADE]
-function EXIT
+function EXIT_GRADE
 {
     [ -z "$GRADE" ] && GRADE=0
     [ $# -eq 1 ] && GRADE=$1
