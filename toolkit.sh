@@ -214,7 +214,8 @@ function PRINTKO
     if [ $# -eq 2 ] ; then
         MSGKO="$2"
     fi
-    ECHORED "⚠️ $MSG: $MSGKO"
+    # ECHORED "⚠️ $MSG: $MSGKO"
+    ECHORED "❌ $MSG: $MSGKO" # ❎ ⛔
     return 0
 }
 
