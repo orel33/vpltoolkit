@@ -171,6 +171,14 @@ function TRACE_TEACHER
 #                      EVAL                        #
 ####################################################
 
+# inputs: FORMULA
+function PYCOMPUTE
+{
+    local FORMULA="$1"
+    python3 -c "print(\"%+.2f\" % ($FORMULA))"
+    return $?
+}
+
 # inputs: MSG [MSGOK]
 # return 0
 function PRINTOK
