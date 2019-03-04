@@ -36,10 +36,17 @@ function COPYINPUTS
 #                       ECHO                       #
 ####################################################
 
+local BLUE='\033[34m'
+local GREEN='\033[32m'
+local RED='\033[31m'
+local ORANGE='\033[33m'
+local NC='\033[0m'    # no color
+
+
 function ECHOBLUE
 {
     if [ "$MODE" = "RUN" ] ; then
-        echo -n -e "\033[34m" && echo -n "$@" && echo -e "\033[0m"
+        echo -n -e "${BLUE}" && echo -n "$@" && echo -e "${NC}"
     else
         echo "Comment :=>>$@"
     fi
@@ -48,7 +55,7 @@ function ECHOBLUE
 function ECHOGREEN
 {
     if [ "$MODE" = "RUN" ] ; then
-        echo -n -e "\033[32m" && echo -n "$@" && echo -e "\033[0m"
+        echo -n -e "${GREEN}" && echo -n "$@" && echo -e "${NC}"
     else
         echo "Comment :=>>$@"
     fi
@@ -57,7 +64,7 @@ function ECHOGREEN
 function ECHORED
 {
     if [ "$MODE" = "RUN" ] ; then
-        echo -n -e "\033[31m"  && echo -n "$@" && echo -e "\033[0m"
+        echo -n -e "${RED}"  && echo -n "$@" && echo -e "${NC}"
     else
         echo "Comment :=>>$@"
     fi
@@ -77,8 +84,34 @@ function ECHO_TEACHER
     if [ "$MODE" = "RUN" ] ; then
         echo "$@" &>> $RUNDIR/$LOG
     else
-        echo "Teacher :=>>$@"
+        echo "Teacher :=>>${BLUE}$@${NC}"
     fi
+}
+
+####################################################
+#                WARNING & ERROR                   #
+####################################################
+
+# inputs: MSG
+function WARNING
+{
+    local MSG="$1"
+    ECHORED "⚠️ Warning: $MSG"
+    return 0
+}
+
+# inputs: MSG
+function ERROR
+{
+    local MSG="$1"
+    ECHORED "⛔️ Error: $MSG"
+    return 0
+}
+
+# inputs: MSG
+function INFO
+{
+    ECHOBLUE "👉 $@"
 }
 
 ####################################################
@@ -92,11 +125,6 @@ function TITLE
     else
         ECHOBLUE "######### $@ ##########"
     fi
-}
-
-function PRINTINFO
-{
-    ECHOBLUE "👉 $@"
 }
 
 ####################################################
@@ -165,19 +193,6 @@ function TRACE_TEACHER
         RET=$?
     fi
     return $RET
-}
-
-####################################################
-#                      ERROR                       #
-####################################################
-
-# inputs: MSG
-# exit
-function ERROR
-{
-    local MSG="$1"
-    ECHORED "⚠️ Error: $MSG"
-    exit 0
 }
 
 ####################################################
