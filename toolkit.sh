@@ -120,7 +120,8 @@ function ERROR
 # inputs: MSG
 function INFO
 {
-    ECHOBLUE "👉 $@" # ➡
+    local MSG="$1"
+    ECHOBLUE "👉 $MSG" # ➡
 }
 
 ####################################################
