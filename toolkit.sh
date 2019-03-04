@@ -214,7 +214,7 @@ function PRINTOK_GRADE
         ECHO "Usage: PRINTOK_GRADE MSG SCORE [MSGOK]" && exit 0
     fi
     local MSGSCORE=""
-    if [ -z "$NOGRADE" -a "$SCORE" -ne 0 ] ; then
+    if [ "$SCORE" -ne 0 ] ; then
         local LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be positive
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
