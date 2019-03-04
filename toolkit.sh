@@ -227,7 +227,7 @@ function PRINTOK_GRADE
     if [ "$SCORE" != "0" ] ; then
         LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be positive
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
-        if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
+        if [ "$NOGRADE" != "1" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
     PRINTOK "$MSG" "$MSGOK $MSGSCORE"
     ECHO_TEACHER "Update Grade: $LGRADE%"
@@ -300,8 +300,12 @@ function EXIT_GRADE
     [ $# -eq 1 ] && GRADE=$1
     GRADE=$(python3 -c "print(0 if $GRADE < 0 else round($GRADE))")
     GRADE=$(python3 -c "print(100 if $GRADE > 100 else round($GRADE))")
-    ECHO "-GRADE" && ECHO "$GRADE%"
-    if [ "$MODE" = "EVAL" ] ; then echo "Grade :=>> $GRADE" ; fi
+    if [ "$NOGRADE" != "1" ] ; then
+        ECHO "-GRADE" && ECHO "$GRADE%"
+        if [ "$MODE" = "EVAL" ] ; then echo "Grade :=>> $GRADE" ; fi
+    else
+        ECHO_TEACHER "GRADE: $GRADE%"
+    fi
     # if [ "$MODE" = "RUN" ] ; then echo "👉 Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
     exit 0
 }
