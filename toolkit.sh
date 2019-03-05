@@ -158,7 +158,9 @@ function PRINTKO
 function TITLE
 {
     if [ "$MODE" = "EVAL" ] ; then
+        echo "Teacher :=>> ##############################"
         echo "Comment :=>>-$@"
+        echo "Teacher :=>> ##############################"
     else
         ECHOBLUE "######### $@ ##########"
     fi
