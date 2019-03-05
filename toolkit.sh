@@ -98,7 +98,7 @@ function ECHO_TEACHER
 }
 
 ####################################################
-#                WARNING & ERROR                   #
+#                STANDARD PRINT                    #
 ####################################################
 
 # inputs: MSG
@@ -122,6 +122,33 @@ function INFO
 {
     local MSG="$1"
     ECHOBLUE "👉 $MSG" # ➡
+}
+
+# inputs: MSG [MSGOK]
+# return 0
+function PRINTOK
+{
+    local MSG="$1"
+    local MSGOK="success"
+    if [ $# -eq 2 ] ; then
+        MSGOK="$2"
+    fi
+    ECHOGREEN "✔️ $MSG: $MSGOK" # 🆗
+    return 0
+}
+
+# inputs: MSG [MSGKO]
+# return 0
+function PRINTKO
+{
+    local MSG="$1"
+    local MSGKO="failure"
+    if [ $# -eq 2 ] ; then
+        MSGKO="$2"
+    fi
+    # ECHORED "⚠️ $MSG: $MSGKO"
+    ECHORED "❌ $MSG: $MSGKO" # ❎ ⛔
+    return 0
 }
 
 ####################################################
@@ -217,36 +244,9 @@ function PYCOMPUTE
     return $?
 }
 
-# inputs: MSG [MSGOK]
-# return 0
-function PRINTOK
-{
-    local MSG="$1"
-    local MSGOK="success"
-    if [ $# -eq 2 ] ; then
-        MSGOK="$2"
-    fi
-    ECHOGREEN "✔️ $MSG: $MSGOK" # 🆗
-    return 0
-}
-
-# inputs: MSG [MSGKO]
-# return 0
-function PRINTKO
-{
-    local MSG="$1"
-    local MSGKO="failure"
-    if [ $# -eq 2 ] ; then
-        MSGKO="$2"
-    fi
-    # ECHORED "⚠️ $MSG: $MSGKO"
-    ECHORED "❌ $MSG: $MSGKO" # ❎ ⛔
-    return 0
-}
-
 # inputs: MSG SCORE [MSGOK]
 # return 0
-function PRINTOK_GRADE
+function GRADEOK
 {
     local MSG=""
     local SCORE=0
@@ -259,7 +259,7 @@ function PRINTOK_GRADE
         SCORE="$2"
         MSGOK="$3"
     else
-        ECHO "Usage: PRINTOK_GRADE MSG SCORE [MSGOK]" && exit 0
+        ECHO "Usage: GRADEOK MSG SCORE [MSGOK]" && exit 0
     fi
     local MSGSCORE=""
     local LGRADE=0
@@ -269,13 +269,13 @@ function PRINTOK_GRADE
         if [ "$NOGRADE" != "1" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
     PRINTOK "$MSG" "$MSGOK $MSGSCORE"
-    ECHO_TEACHER "Update Grade: $LGRADE%"
+    [ "$SCORE" != "0" ] && ECHO_TEACHER "Update Grade: $LGRADE%"
     return 0
 }
 
 # inputs: MSG SCORE [MSGKO]
 # return 0
-function PRINTKO_GRADE
+function GRADEKO
 {
     local MSG=""
     local SCORE=0
@@ -288,7 +288,7 @@ function PRINTKO_GRADE
         SCORE="$2"
         MSGKO="$3"
     else
-        ECHO "Usage: PRINTKO_GRADE MSG SCORE [MSGKO]" && exit 0
+        ECHO "Usage: GRADEKO MSG SCORE [MSGKO]" && exit 0
     fi
     local MSGSCORE=""
     local LGRADE=0
@@ -298,7 +298,7 @@ function PRINTKO_GRADE
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
     PRINTKO "$MSG" "$MSGKO $MSGSCORE"
-    ECHO_TEACHER "Update Grade: $LGRADE%"
+    [ "$SCORE" != "0" ] && ECHO_TEACHER "Update Grade: $LGRADE%"
     return 0
 }
 
@@ -325,9 +325,9 @@ function EVAL
         ECHO "Usage: EVAL MSG SCORE [MSGOK MSGKO]" && exit 0
     fi
     if [ $RET -eq 0 ] ; then
-        PRINTOK_GRADE "$MSG" "$SCORE" "$MSGOK"
+        GRADEOK "$MSG" "$SCORE" "$MSGOK"
     else
-        PRINTKO_GRADE "$MSG" "$SCORE" "$MSGKO"
+        GRADEKO "$MSG" "$SCORE" "$MSGKO"
     fi
     return $RET
 }
