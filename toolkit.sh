@@ -79,6 +79,8 @@ function ECHOYELLOW
     fi
 }
 
+####################################################
+
 function ECHO
 {
     if [ "$MODE" = "RUN" ] ; then
@@ -186,6 +188,8 @@ function CAT
     return $RET
 }
 
+####################################################
+
 function CAT_TEACHER
 {
     RET=0
@@ -206,7 +210,7 @@ function CAT_TEACHER
 
 function TRACE
 {
-    if [ "$MODE" = "EVAL" ] ; then    
+    if [ "$MODE" = "EVAL" ] ; then
         echo "Teacher :=>>$ $@"
         echo "<|--"
         # setsid is used for safe exec (setpgid(0,0))
@@ -223,9 +227,11 @@ function TRACE
     return $RET
 }
 
+####################################################
+
 function TRACE_TEACHER
 {
-    if [ "$MODE" = "EVAL" ] ; then    
+    if [ "$MODE" = "EVAL" ] ; then
         echo "Teacher :=>>$ $@"
         # setsid is used for safe exec (setpgid(0,0))
         # bash -c "setsid -w $@" |& sed -e 's/^/Teacher :=>>/;'
@@ -244,6 +250,27 @@ function TRACE_TEACHER
 #                      EVAL                        #
 ####################################################
 
+# inputs: bash_return_status
+function STRSTATUS()
+{
+    local STATUS=$1
+    if (( $STATUS == 0 )) ; then
+        echo "return EXIT_SUCCESS"
+    elif (( $STATUS == 1 )) ; then
+        echo "return EXIT_FAILURE"
+    elif (( $STATUS == 124 )) ; then
+        echo "timeout"
+    elif (( $STATUS > 128 && $STATUS <= 192 )) ; then
+        NSIG=$((STATUS-128))
+        STRSIG=$(kill -l $NSIG)
+        echo "killed by signal $STRSIG"
+    else
+        echo "return $STATUS"
+    fi
+}
+
+####################################################
+
 # inputs: FORMULA
 function PYCOMPUTE
 {
@@ -251,6 +278,8 @@ function PYCOMPUTE
     python3 -c "print(\"%+.2f\" % ($FORMULA))"
     return $?
 }
+
+####################################################
 
 # inputs: MSG SCORE [MSGOK]
 # return 0
@@ -281,6 +310,8 @@ function GRADEOK
     return 0
 }
 
+####################################################
+
 # inputs: MSG SCORE [MSGKO]
 # return 0
 function GRADEKO
@@ -309,6 +340,8 @@ function GRADEKO
     [ "$SCORE" != "0" ] && ECHO_TEACHER "Update Grade: $LGRADE%"
     return 0
 }
+
+####################################################
 
 # inputs: MSG SCORE [MSGOK MSGKO]
 # global inputs: $GRADE $?
@@ -339,6 +372,8 @@ function EVAL
     fi
     return $RET
 }
+
+####################################################
 
 # inputs: [GRADE]
 function EXIT_GRADE
