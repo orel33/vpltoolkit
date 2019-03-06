@@ -343,7 +343,7 @@ function GRADEKO
 
 ####################################################
 
-# inputs: MSG SCORE [MSGOK MSGKO]
+# inputs: MSG BONUS MALUS [MSGOK MSGKO]
 # global inputs: $GRADE $?
 # return: $?
 function EVAL
@@ -351,24 +351,27 @@ function EVAL
 
     local RET=$?
     local MSG=""
-    local SCORE=0
+    local BONUS=0
+    local MALUS=0
     local MSGOK="success"
     local MSGKO="failure"
-    if [ $# -eq 2 ] ; then
+    if [ $# -eq 3 ] ; then
         MSG="$1"
-        SCORE="$2"
-    elif [ $# -eq 4 ] ; then
+        BONUS="$2"
+        MALUS="$3"
+    elif [ $# -eq 5 ] ; then
         MSG="$1"
-        SCORE="$2"
-        MSGOK="$3"
-        MSGKO="$4"
+        BONUS="$2"  # TODO: check positive
+        MALUS="$3"  # TODO: check negative
+        MSGOK="$4"
+        MSGKO="$5"
     else
-        ECHO "Usage: EVAL MSG SCORE [MSGOK MSGKO]" && exit 0
+        ECHO "Usage: EVAL MSG BONUS MALUS [MSGOK MSGKO]" && exit 0
     fi
     if [ $RET -eq 0 ] ; then
-        GRADEOK "$MSG" "$SCORE" "$MSGOK"
+        GRADEOK "$MSG" "$BONUS" "$MSGOK"
     else
-        GRADEKO "$MSG" "$SCORE" "$MSGKO"
+        GRADEKO "$MSG" "$MALUS" "$MSGKO"
     fi
     return $RET
 }
