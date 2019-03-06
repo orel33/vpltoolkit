@@ -383,7 +383,7 @@ function EXIT_GRADE
     GRADE=$(python3 -c "print(0 if $GRADE < 0 else round($GRADE))")
     GRADE=$(python3 -c "print(100 if $GRADE > 100 else round($GRADE))")
     if [ "$NOGRADE" != "1" ] ; then
-        ECHO "-GRADE" && ECHO "$GRADE%"
+        # ECHO "-GRADE" && ECHO "$GRADE%"
         if [ "$MODE" = "EVAL" ] ; then echo "Grade :=>> $GRADE" ; fi
     else
         ECHO_TEACHER "GRADE: $GRADE%"
