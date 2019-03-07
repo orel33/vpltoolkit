@@ -126,30 +126,23 @@ function INFO
     ECHOBLUE "👉 $MSG" # ➡
 }
 
-# inputs: MSG [MSGOK]
+# inputs: MSG
 # return 0
 function PRINTOK
 {
+    [ $# -ne 1 ] && ECHO "Usage: PRINTOK MSG" && exit 0
     local MSG="$1"
-    local MSGOK="success"
-    if [ $# -eq 2 ] ; then
-        MSGOK="$2"
-    fi
-    ECHOGREEN "✔️ $MSG: $MSGOK" # 🆗
+    ECHOGREEN "✔️ $MSG" # 🆗
     return 0
 }
 
-# inputs: MSG [MSGKO]
+# inputs: MSG
 # return 0
 function PRINTKO
 {
+    [ $# -ne 1 ] && ECHO "Usage: PRINTKO MSG" && exit 0
     local MSG="$1"
-    local MSGKO="failure"
-    if [ $# -eq 2 ] ; then
-        MSGKO="$2"
-    fi
-    # ECHORED "⚠️ $MSG: $MSGKO"
-    ECHORED "❌ $MSG: $MSGKO" # ❎ ⛔
+    ECHORED "❌ $MSG" # ❎ ⛔
     return 0
 }
 
@@ -283,11 +276,11 @@ function PYCOMPUTE
 
 # inputs: MSG SCORE [MSGOK]
 # return 0
-function GRADEOK
+function EVALOK
 {
     local MSG=""
     local SCORE=0
-    local MSGOK="success"
+    local MSGOK=""
     if [ $# -eq 2 ] ; then
         MSG="$1"
         SCORE="$2" # TODO: check score is >= 0
@@ -296,7 +289,7 @@ function GRADEOK
         SCORE="$2"
         MSGOK="$3"
     else
-        ECHO "Usage: GRADEOK MSG SCORE [MSGOK]" && exit 0
+        ECHO "Usage: EVALOK MSG SCORE [MSGOK]" && exit 0
     fi
     local MSGSCORE=""
     local LGRADE=0
@@ -305,8 +298,9 @@ function GRADEOK
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ "$NOGRADE" != "1" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
-    PRINTOK "$MSG" "$MSGOK $MSGSCORE"
-    [ "$SCORE" != "0" ] && ECHO_TEACHER "Update Grade: $LGRADE%"
+    [ -n "$MSGOK" ] && MSGKO="($MSGOK)"
+    PRINTOK "$MSG: success $MSGOK $MSGSCORE"
+    # [ "$SCORE" != "0" ] && ECHO_TEACHER "Update Grade: $LGRADE%"
     return 0
 }
 
@@ -314,11 +308,11 @@ function GRADEOK
 
 # inputs: MSG SCORE [MSGKO]
 # return 0
-function GRADEKO
+function EVALKO
 {
     local MSG=""
     local SCORE=0
-    local MSGKO="failure"
+    local MSGKO=""
     if [ $# -eq 2 ] ; then
         MSG="$1"
         SCORE="$2" # TODO: check score is <= 0
@@ -327,7 +321,7 @@ function GRADEKO
         SCORE="$2"
         MSGKO="$3"
     else
-        ECHO "Usage: GRADEKO MSG SCORE [MSGKO]" && exit 0
+        ECHO "Usage: EVALKO MSG SCORE [MSGKO]" && exit 0
     fi
     local MSGSCORE=""
     local LGRADE=0
@@ -336,8 +330,9 @@ function GRADEKO
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
-    PRINTKO "$MSG" "$MSGKO $MSGSCORE"
-    [ "$SCORE" != "0" ] && ECHO_TEACHER "Update Grade: $LGRADE%"
+    [ -n "$MSGKO" ] && MSGKO="($MSGKO)"
+    PRINTKO "$MSG: failure $MSGKO $MSGSCORE"
+    # [ "$SCORE" != "0" ] && ECHO_TEACHER "Update Grade: $LGRADE%"
     return 0
 }
 
@@ -348,13 +343,12 @@ function GRADEKO
 # return: $?
 function EVAL
 {
-
     local RET=$?
     local MSG=""
     local BONUS=0
     local MALUS=0
-    local MSGOK="success"
-    local MSGKO="failure"
+    local MSGOK=""
+    local MSGKO=""
     if [ $# -eq 3 ] ; then
         MSG="$1"
         BONUS="$2"
@@ -369,9 +363,11 @@ function EVAL
         ECHO "Usage: EVAL MSG BONUS MALUS [MSGOK MSGKO]" && exit 0
     fi
     if [ $RET -eq 0 ] ; then
-        GRADEOK "$MSG" "$BONUS" "$MSGOK"
+        [ -z "$MSGOK" ] && MSGOK=$(STRSTATUS $RET) # default MSGOK
+        EVALOK "$MSG" "$BONUS" "$MSGOK"
     else
-        GRADEKO "$MSG" "$MALUS" "$MSGKO"
+        [ -z "$MSGKO" ] && MSGKO=$(STRSTATUS $RET) # default MSGKO
+        EVALKO "$MSG" "$MALUS" "$MSGKO"
     fi
     return $RET
 }
