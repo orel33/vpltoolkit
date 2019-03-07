@@ -342,7 +342,7 @@ function EVALKO
 # return: $RET
 function EVAL
 {
-    local RET=$1
+    local RET="$1"
     local MSG=""
     local BONUS=0
     local MALUS=0
