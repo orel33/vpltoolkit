@@ -274,23 +274,27 @@ function PYCOMPUTE
 
 ####################################################
 
-# inputs: MSG SCORE [MSGOK]
-# return 0
+# inputs: RET MSG SCORE [MSGOK]
+# return 0 if OK (RET=0), else return 1
 function EVALOK
-{
+
+    local RET=0
     local MSG=""
     local SCORE=0
     local MSGOK=""
-    if [ $# -eq 2 ] ; then
-        MSG="$1"
-        SCORE="$2" # TODO: check score is >= 0
-    elif [ $# -eq 3 ] ; then
-        MSG="$1"
-        SCORE="$2"
-        MSGOK="$3"
+    if [ $# -eq 3 ] ; then
+        RET="$1"
+        MSG="$2"
+        SCORE="$3" # TODO: check score is >= 0
+    elif [ $# -eq 4 ] ; then
+        RET="$1"
+        MSG="$2"
+        SCORE="$3"
+        MSGOK="$4"
     else
-        ECHO "Usage: EVALOK MSG SCORE [MSGOK]" && exit 0
+        ECHO "Usage: EVALOK RET MSG SCORE [MSGOK]" && exit 0
     fi
+    [ $RET -ne 0 ] && return 1
     local MSGSCORE=""
     local LGRADE=0
     if [ "$SCORE" != "0" ] ; then
@@ -306,23 +310,27 @@ function EVALOK
 
 ####################################################
 
-# inputs: MSG SCORE [MSGKO]
-# return 0
+# inputs: RET MSG SCORE [MSGKO]
+# return 0 if KO (RET!=0), else return 1
 function EVALKO
 {
+    local RET=0
     local MSG=""
     local SCORE=0
     local MSGKO=""
-    if [ $# -eq 2 ] ; then
-        MSG="$1"
-        SCORE="$2" # TODO: check score is <= 0
-    elif [ $# -eq 3 ] ; then
-        MSG="$1"
-        SCORE="$2"
-        MSGKO="$3"
+    if [ $# -eq 3 ] ; then
+        RET="$1"
+        MSG="$2"
+        SCORE="$3" # TODO: check score is <= 0
+    elif [ $# -eq 4 ] ; then
+        RET="$1"
+        MSG="$2"
+        SCORE="$3"
+        MSGKO="$4"
     else
-        ECHO "Usage: EVALKO MSG SCORE [MSGKO]" && exit 0
+        ECHO "Usage: EVALKO RET MSG SCORE [MSGKO]" && exit 0
     fi
+    [ $RET -eq 0 ] && return 1
     local MSGSCORE=""
     local LGRADE=0
     if [ "$SCORE" != "0" ] ; then
@@ -330,6 +338,7 @@ function EVALKO
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
+    [ -z "$MSGKO" ] && MSGKO=$(STRSTATUS $RET) # default MSGKO
     [ -n "$MSGKO" ] && MSGKO="($MSGKO)"
     PRINTKO "$MSG: failure $MSGKO $MSGSCORE"
     # [ "$SCORE" != "0" ] && ECHO_TEACHER "Update Grade: $LGRADE%"
@@ -363,10 +372,10 @@ function EVAL
     fi
     if [ $RET -eq 0 ] ; then
         # [ -z "$MSGOK" ] && MSGOK=$(STRSTATUS $RET) # default MSGOK
-        EVALOK "$MSG" "$BONUS" "$MSGOK"
+        EVALOK "$RET" "$MSG" "$BONUS" "$MSGOK"
     else
-        [ -z "$MSGKO" ] && MSGKO=$(STRSTATUS $RET) # default MSGKO
-        EVALKO "$MSG" "$MALUS" "$MSGKO"
+        # [ -z "$MSGKO" ] && MSGKO=$(STRSTATUS $RET) # default MSGKO
+        EVALKO "$RET" "$MSG" "$MALUS" "$MSGKO"
     fi
     return $RET
 }
