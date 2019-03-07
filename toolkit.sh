@@ -338,29 +338,28 @@ function EVALKO
 
 ####################################################
 
-# inputs: MSG BONUS MALUS [MSGOK MSGKO]
-# global inputs: $GRADE $?
-# return: $?
+# inputs: RET MSG BONUS MALUS [MSGOK MSGKO]
+# return: $RET
 function EVAL
 {
-    local RET=$?
+    local RET=$1
     local MSG=""
     local BONUS=0
     local MALUS=0
     local MSGOK=""
     local MSGKO=""
-    if [ $# -eq 3 ] ; then
-        MSG="$1"
-        BONUS="$2"
-        MALUS="$3"
-    elif [ $# -eq 5 ] ; then
-        MSG="$1"
-        BONUS="$2"  # TODO: check positive
-        MALUS="$3"  # TODO: check negative
-        MSGOK="$4"
-        MSGKO="$5"
+    if [ $# -eq 4 ] ; then
+        MSG="$2"
+        BONUS="$3"
+        MALUS="$4"
+    elif [ $# -eq 6 ] ; then
+        MSG="$2"
+        BONUS="$3"  # TODO: check positive
+        MALUS="$4"  # TODO: check negative
+        MSGOK="$5"
+        MSGKO="$6"
     else
-        ECHO "Usage: EVAL MSG BONUS MALUS [MSGOK MSGKO]" && exit 0
+        ECHO "Usage: EVAL RET MSG BONUS MALUS [MSGOK MSGKO]" && exit 0
     fi
     if [ $RET -eq 0 ] ; then
         # [ -z "$MSGOK" ] && MSGOK=$(STRSTATUS $RET) # default MSGOK

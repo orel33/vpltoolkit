@@ -200,6 +200,10 @@ $ docker push orel33/mydebian:latest
 
 ## Changes
 
+### Version 4.0
+
+* complete rewrite of API in toolkit.sh
+
 ### Version 3.0
 
 * add a docker support and an optionnal DOCKER variable to set a docker image
