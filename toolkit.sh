@@ -298,7 +298,7 @@ function EVALOK
         GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ "$NOGRADE" != "1" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
-    [ -n "$MSGOK" ] && MSGKO="($MSGOK)"
+    [ -n "$MSGOK" ] && MSGOK="($MSGOK)"
     PRINTOK "$MSG: success $MSGOK $MSGSCORE"
     # [ "$SCORE" != "0" ] && ECHO_TEACHER "Update Grade: $LGRADE%"
     return 0
