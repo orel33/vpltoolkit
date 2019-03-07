@@ -37,7 +37,8 @@ $RUNDIR
   ├── env.sh              # environment variable for the VPL toolkit
   ├── run.sh              # entry point for RUN mode
   ├── eval.sh             # entry point for EVAL mode
-  ├── ...                 # all files provided by teacher...
+  ├── ...                 # ...
+  ├── ...                 # all files & directories provided by teacher
   ├── inputs              # all student input files ($VPL_SUBFILES)
   │   └── student.c
   |   └── ...
