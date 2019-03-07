@@ -165,6 +165,8 @@ function TITLE()
 #                        CAT                       #
 ####################################################
 
+# TODO: add HEAD() & TAIL() functions....
+
 function CAT()
 {
     if [ "$MODE" = "EVAL" ] ; then
