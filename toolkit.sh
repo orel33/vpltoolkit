@@ -6,26 +6,26 @@ LOG="teacher.log"
 #                      MISC                        #
 ####################################################
 
-function CHECKVERSION
+function CHECKVERSION()
 {
     local EXPECTED="$1"
     [ "$EXPECTED" != "$VERSION" ] && ECHO "⚠ Error: Toolkit version $EXPECTED expected (but version $VERSION found)!" && exit 0
 }
 
-function CHECK
+function CHECK()
 {
     for FILE in "$@" ; do
         [ ! -f $FILE ] && ECHO "⚠ File \"$FILE\" is missing!" && exit 0
     done
 }
 
-function CHECKINPUTS
+function CHECKINPUTS()
 {
     [ -z "$INPUTS" ] && echo "⚠ INPUTS variable is not defined!" && exit 0
     CHECK $INPUTS
 }
 
-function COPYINPUTS
+function COPYINPUTS()
 {
     [ -z "$INPUTS" ] && echo "⚠ INPUTS variable is not defined!" && exit 0
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
@@ -43,7 +43,7 @@ YELLOW='\033[33m'
 NC='\033[0m'    # no color
 
 
-function ECHOBLUE
+function ECHOBLUE()
 {
     if [ "$MODE" = "RUN" ] ; then
         echo -n -e "${BLUE}" && echo -n "$@" && echo -e "${NC}"
@@ -52,7 +52,7 @@ function ECHOBLUE
     fi
 }
 
-function ECHOGREEN
+function ECHOGREEN()
 {
     if [ "$MODE" = "RUN" ] ; then
         echo -n -e "${GREEN}" && echo -n "$@" && echo -e "${NC}"
@@ -61,7 +61,7 @@ function ECHOGREEN
     fi
 }
 
-function ECHORED
+function ECHORED()
 {
     if [ "$MODE" = "RUN" ] ; then
         echo -n -e "${RED}"  && echo -n "$@" && echo -e "${NC}"
@@ -70,7 +70,7 @@ function ECHORED
     fi
 }
 
-function ECHOYELLOW
+function ECHOYELLOW()
 {
     if [ "$MODE" = "RUN" ] ; then
         echo -n -e "${YELLOW}"  && echo -n "$@" && echo -e "${NC}"
@@ -81,7 +81,7 @@ function ECHOYELLOW
 
 ####################################################
 
-function ECHO
+function ECHO()
 {
     if [ "$MODE" = "RUN" ] ; then
         echo "$@"
@@ -90,7 +90,7 @@ function ECHO
     fi
 }
 
-function ECHO_TEACHER
+function ECHO_TEACHER()
 {
     if [ "$MODE" = "RUN" ] ; then
         echo "$@" &>> $RUNDIR/$LOG
@@ -104,7 +104,7 @@ function ECHO_TEACHER
 ####################################################
 
 # inputs: MSG
-function WARNING
+function WARNING()
 {
     local MSG="$1"
     ECHOYELLOW "⚠️ Warning: $MSG"
@@ -112,7 +112,7 @@ function WARNING
 }
 
 # inputs: MSG
-function ERROR
+function ERROR()
 {
     local MSG="$1"
     ECHORED "⛔️ Error: $MSG"
@@ -120,7 +120,7 @@ function ERROR
 }
 
 # inputs: MSG
-function INFO
+function INFO()
 {
     local MSG="$1"
     ECHOBLUE "👉 $MSG" # ➡
@@ -128,7 +128,7 @@ function INFO
 
 # inputs: MSG
 # return 0
-function PRINTOK
+function PRINTOK()
 {
     [ $# -ne 1 ] && ECHO "Usage: PRINTOK MSG" && exit 0
     local MSG="$1"
@@ -138,7 +138,7 @@ function PRINTOK
 
 # inputs: MSG
 # return 0
-function PRINTKO
+function PRINTKO()
 {
     [ $# -ne 1 ] && ECHO "Usage: PRINTKO MSG" && exit 0
     local MSG="$1"
@@ -150,7 +150,7 @@ function PRINTKO
 #                       TITLE                      #
 ####################################################
 
-function TITLE
+function TITLE()
 {
     if [ "$MODE" = "EVAL" ] ; then
         echo "Teacher :=>> ##############################"
@@ -165,7 +165,7 @@ function TITLE
 #                        CAT                       #
 ####################################################
 
-function CAT
+function CAT()
 {
     if [ "$MODE" = "EVAL" ] ; then
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
@@ -183,7 +183,7 @@ function CAT
 
 ####################################################
 
-function CAT_TEACHER
+function CAT_TEACHER()
 {
     RET=0
     if [ "$MODE" = "EVAL" ] ; then
@@ -201,7 +201,7 @@ function CAT_TEACHER
 #                       TRACE                      #
 ####################################################
 
-function TRACE
+function TRACE()
 {
     if [ "$MODE" = "EVAL" ] ; then
         echo "Teacher :=>>$ $@"
@@ -222,7 +222,7 @@ function TRACE
 
 ####################################################
 
-function TRACE_TEACHER
+function TRACE_TEACHER()
 {
     if [ "$MODE" = "EVAL" ] ; then
         echo "Teacher :=>>$ $@"
@@ -265,7 +265,7 @@ function STRSTATUS()
 ####################################################
 
 # inputs: FORMULA
-function PYCOMPUTE
+function PYCOMPUTE()
 {
     local FORMULA="$1"
     python3 -c "print(\"%+.2f\" % ($FORMULA))"
@@ -276,8 +276,8 @@ function PYCOMPUTE
 
 # inputs: RET MSG SCORE [MSGOK]
 # return 0 if OK (RET=0), else return 1
-function EVALOK
-
+function EVALOK()
+{
     local RET=0
     local MSG=""
     local SCORE=0
@@ -312,7 +312,7 @@ function EVALOK
 
 # inputs: RET MSG SCORE [MSGKO]
 # return 0 if KO (RET!=0), else return 1
-function EVALKO
+function EVALKO()
 {
     local RET=0
     local MSG=""
@@ -349,7 +349,7 @@ function EVALKO
 
 # inputs: RET MSG BONUS MALUS [MSGOK MSGKO]
 # return: $RET
-function EVAL
+function EVAL()
 {
     local RET="$1"
     local MSG=""
@@ -383,7 +383,7 @@ function EVAL
 ####################################################
 
 # inputs: [GRADE]
-function EXIT_GRADE
+function EXIT_GRADE()
 {
     [ -z "$GRADE" ] && GRADE=0
     [ $# -eq 1 ] && GRADE=$1
