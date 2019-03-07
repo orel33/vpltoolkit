@@ -210,7 +210,7 @@ function TRACE
         # bash -c "setsid -w $@" |& sed -e 's/^/>/;' # preformated output
         setsid -w bash -c "$@" |& sed -e 's/^/>/;' # preformated output
         RET=${PIPESTATUS[0]}  # return status of first piped command!
-        echo "--|>"
+        echo ; echo "--|>"
         echo "Teacher :=>> Status $RET"
     else
         # bash -c "setsid -w $@"
