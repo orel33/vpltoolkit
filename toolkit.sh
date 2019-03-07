@@ -363,7 +363,7 @@ function EVAL
         ECHO "Usage: EVAL MSG BONUS MALUS [MSGOK MSGKO]" && exit 0
     fi
     if [ $RET -eq 0 ] ; then
-        [ -z "$MSGOK" ] && MSGOK=$(STRSTATUS $RET) # default MSGOK
+        # [ -z "$MSGOK" ] && MSGOK=$(STRSTATUS $RET) # default MSGOK
         EVALOK "$MSG" "$BONUS" "$MSGOK"
     else
         [ -z "$MSGKO" ] && MSGKO=$(STRSTATUS $RET) # default MSGKO
