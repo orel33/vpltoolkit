@@ -45,7 +45,7 @@ if [ -n "$DOCKER" ] ; then
     DOCKERID=$(docker run -it -d -w $RUNDIR $DOCKER)
     echo "DOCKERID=$DOCKERID"
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR # &> /dev/null
-    docker exec -it $DOCKERID "pwd ; ls"
+    docker exec -it $DOCKERID bash -c "pwd ; ls"
     docker exec -it $DOCKERID "$SHELLCMD $CMD $ARGS"
     # docker stop -t 0  $DOCKERID
 ### regular run ###
