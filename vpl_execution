@@ -32,10 +32,12 @@ if [ -n "$DOCKER" ] ; then
     docker image inspect $DOCKER &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && exit 0
     DOCKERCMD="docker run -i -v $RUNDIR:$RUNDIR -w $RUNDIR -t $DOCKER"
+    echo $DOCKERCMD
 fi
 
 ### Let's rock
-cd $RUNDIR && $DOCKERCMD $SHELLCMD $CMD $ARGS
+cd $RUNDIR && $DOCKERCMD bash # debug
+# cd $RUNDIR && $DOCKERCMD $SHELLCMD $CMD $ARGS
 [ "$ONLINE" = "0" ] && echo "=> cd $RUNDIR && $DOCKERCMD bash"
 
 # EOF
