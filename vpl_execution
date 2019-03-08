@@ -3,7 +3,7 @@ rm -f $0
 
 if [ -f ./env.sh ] ; then
     source ./env.sh
-elif [ -f $HOME/env.sh ] ; then
+    elif [ -f $HOME/env.sh ] ; then
     source $HOME/env.sh
 else
     echo "⚠ File \"env.sh\" is missing!" && exit 0
@@ -12,7 +12,7 @@ fi
 [ -z "$MODE" ] && echo "⚠ Variable \"MODE\" is not defined!" && exit 0
 if [ "$MODE" = "RUN" ] ; then
     CMD="$RUNDIR/run.sh"
-elif [ "$MODE" = "EVAL" ] ; then
+    elif [ "$MODE" = "EVAL" ] ; then
     CMD="$RUNDIR/eval.sh"
 else
     echo "⚠ Invalid \"MODE\" selected!" && exit 0
@@ -25,21 +25,49 @@ fi
 SHELLCMD="bash"
 [ "$DEBUG" = "1" ] && SHELLCMD="bash -x"
 
-### docker support
-DOCKERCMD=""
+# function err_report()
+# {
+#      echo "Terminated"
+# }
+
+# trap 'err_report' 0
+
+# DOCKERCMD=""
+
+cd $RUNDIR
+echo "RUNDIR=$RUNDIR"
+
+### docker run ###
 if [ -n "$DOCKER" ] ; then
-     # check if docker image is already installed
+    # check if docker image is already installed
     docker image inspect $DOCKER &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && exit 0
-    DOCKERCMD="docker run -i -v $RUNDIR:$RUNDIR -w $RUNDIR -t $DOCKER"
-    echo $DOCKERCMD
+    DOCKERID=$(docker run -it -d -w $RUNDIR $DOCKER)
+    echo "DOCKERID=$DOCKERID"
+    docker cp $RUNDIR/. $DOCKERID:$RUNDIR # &> /dev/null
+    docker exec -it $DOCKERID "$SHELLCMD $CMD $ARGS"
+    # docker stop -t 0  $DOCKERID
+### regular run ###
+else
+    $SHELLCMD $CMD $ARGS
 fi
 
 ### Let's rock
 # echo "Run: $DOCKERCMD $SHELLCMD $CMD $ARGS"
 # bash
 # cd $RUNDIR && $DOCKERCMD bash
-cd $RUNDIR && $DOCKERCMD $SHELLCMD $CMD $ARGS
-[ "$ONLINE" = "0" ] && echo "=> cd $RUNDIR && $DOCKERCMD bash"
+
+# cd $RUNDIR && $DOCKERCMD $SHELLCMD $CMD $ARGS
+# [ "$ONLINE" = "0" ] && echo "=> cd $RUNDIR && $DOCKERCMD bash"
+
+# TRUC=\$(docker run --rm -w="`pwd`" --stop-timeout $TIMEOUT -d $DOCKER sleep $TIMEOUT)
+# docker cp . \$TRUC:`pwd` &> /dev/null
+# docker exec -it \$TRUC `pwd`/vpl_execution4docker 2> /dev/null
+# docker stop -t 0 \$TRUC &> /dev/
+
+# docker pull $DOCKER
+# DOCKERCMD="docker run -i -v $RUNDIR:$RUNDIR -w $RUNDIR -t $DOCKER"
+# echo $DOCKERCMD
+# DOCKERID=$(docker run --rm -w="`pwd`" --stop-timeout $TIMEOUT -d $DOCKER sleep $TIMEOUT)
 
 # EOF
