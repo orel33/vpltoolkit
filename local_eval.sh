@@ -7,7 +7,8 @@ INPUTDIR=$2 # for local test
 ARGS="${@:3}"
 TKGIT="https://github.com/orel33/vpltoolkit.git"
 TKBRANCH="master"
-DOCKER="gblin/vpljail"
+# DOCKER="gblin/vpljail"
+DOCKER="orel33/mydebian:latest"
 RUNDIR=$(mktemp -d)
 echo "RUNDIR=$RUNDIR"
 ( cd $RUNDIR && git clone $TKGIT -b $TKBRANCH &> /dev/null )
