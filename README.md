@@ -85,6 +85,8 @@ Let's consider the example [hello](https://github.com/orel33/vpltoolkit/tree/dem
 echo "hello world!"
 ```
 
+### Starting with VPL Toolkit
+
 To use the *VPL Toolkit* online, start to copy the following script into *vpl_run.sh* & *vpl_evaluate.sh* of VPL@Moodle. Note that on EVAL mode, the "hello world" message is only visible for teacher in execution window.
 
 ```bash
@@ -131,53 +133,39 @@ An advanced example is found in the *demo* branch of this repository: see [mycat
 #!/bin/bash
 
 ### initialization
-source env.sh
-source vpltoolkit/toolkit.sh
-[ ! "$RUNDIR" = "$PWD" ] && echo "⚠ RUNDIR is not set correctly!" && exit 0
+source env.sh || exit 0
+source vpltoolkit/toolkit.sh || exit 0
+CHECKVERSION "4.0"
 CHECKINPUTS
-cp inputs/mycat.c .
 GRADE=0
+
+### copy inputs
+cp inputs/mycat.c .
+
 
 ### compilation
 TITLE "COMPILATION"
 CFLAGS="-std=c99 -Wall"
 WFLAGS="-Wl,--wrap=system"
 TRACE "gcc $CFLAGS $WFLAGS mycat.c -o mycat |& tee warnings"
-[ $? -ne 0 ] && MALUS "Compilation" X "errors"
-[ -s warnings ] && MALUS "Compilation" 20 "warnings"
-[ -x mycat ] && BONUS "Linking" 30
+EVALKO $? "compilation" 0 "errors" && EXIT_GRADE 0
+[ -x mycat ] && EVALOK $? "compilation" 30 "success"
+[ -s warnings ] && EVALKO 1 "compilation" -10 "warnings"
 
 ### execution
 TITLE "EXECUTION"
-TRACE "echo \"abcdef\" > mycat.in"
-TRACE "cat mycat.in | ./mycat > mycat.out"
-[ $? -ne 0 ] && MALUS "Return" 10 "bad status"
-TRACE "diff -q mycat.in mycat.out"
-EVAL "Program output" 70 0 "valid" "invalid"
-EXIT
+TRACE_TEACHER "echo \"abcdef\" > mycat.in"
+TRACE_TEACHER "cat mycat.in | ./mycat > mycat.out"
+EVAL $? "run mycat" 10 0
+TRACE_TEACHER "diff -q mycat.in mycat.out"
+EVAL $? "test mycat" 60 0
+EXIT_GRADE
 ```
 
 Here is the *offline* test of this script with an input directory of the solution (grade 100% expected).
 
 ```bash
-$ git checkout demo
-$ ./local_eval.sh mycat mycat/test/solution
-Comment :=>>-COMPILATION
-Trace :=>>$ gcc -std=c99 -Wall -Wl,--wrap=system mycat.c -o mycat |& tee warnings
-Status :=>> 0
-Comment :=>>✓ Linking: success. [+30]
-Comment :=>>-EXECUTION
-Trace :=>>$ echo "abcdef" > mycat.in
-Status :=>> 0
-Trace :=>>$ cat mycat.in | ./mycat > mycat.out
-Status :=>> 0
-Trace :=>>$ diff -q mycat.in mycat.out
-Status :=>> 0
-Comment :=>>✓ Program output: valid [+70]
-Comment :=>>
-Comment :=>>-GRADE
-Comment :=>>100 / 100
-Grade :=>> 100
+(...)
 ```
 
 ## Docker Support
@@ -192,6 +180,12 @@ $ docker run -i -t orel33/mydebian /bin/bash
 # login (need to be registered)
 $ docker login
 # push image
+$ docker push orel33/mydebian:latest
+```
+
+To pull this docker image:
+
+```bash
 $ docker push orel33/mydebian:latest
 ```
 
@@ -221,14 +215,9 @@ $ docker push orel33/mydebian:latest
 
 ### To Do
 
-* add the possibility for local/offline run & eval to clone local repository instead of remote one
-* improve version management
-* add script to launch all local tests offline and compare them against an expected grade
-* use an optional execution file *env.sh* (provided by teacher at Moodle)
-* add other DOWNLOAD methods for wget and scp
+* add other DOWNLOAD methods for wget and scp, and the possibility to download several stuffs
 * update documentation in README.md (details on how to build an exercice: file hierarchy, tests, ...)
 * update hello example that should not work since version 2.0
-* add timeout in (R)TRACE/(R)EVAL/ ou use timeout command???
 
 ---
 aurelien.esnard@u-bordeaux.fr
