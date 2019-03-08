@@ -32,8 +32,6 @@ SHELLCMD="bash"
 
 # trap 'err_report' 0
 
-# DOCKERCMD=""
-
 cd $RUNDIR
 echo "RUNDIR=$RUNDIR"
 
@@ -46,15 +44,12 @@ if [ -n "$DOCKER" ] ; then
     echo "DOCKERID=$DOCKERID"
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR # &> /dev/null
     # docker exec -it $DOCKERID bash -c "pwd ; ls"
-    docker exec -it $DOCKERID bash -c "$CMD $ARGS"
+    docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
     echo "Docker $DOCKER terminated."
-    docker container stop $DOCKERID
+    docker container stop -t 1 $DOCKERID    # kill docker after 1 sec
     docker container rm $DOCKERID
-    [ $? -ne 0 ] && docker container kill $DOCKERID
     # docker container prune -f
-    docker system df
-    bash
-    # docker stop -t 0  $DOCKERID
+    # docker system df
 ### regular run ###
 else
     $SHELLCMD $CMD $ARGS
