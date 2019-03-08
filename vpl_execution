@@ -37,9 +37,9 @@ fi
 
 ### Let's rock
 # echo "Run: $SHELLCMD $CMD $ARGS"
-echo "cd $RUNDIR && $DOCKERCMD bash" # debug
-bash
-# cd $RUNDIR && $DOCKERCMD $SHELLCMD $CMD $ARGS
+# echo "cd $RUNDIR && $DOCKERCMD bash" # debug
+# bash
+cd $RUNDIR && $DOCKERCMD $SHELLCMD $CMD $ARGS
 [ "$ONLINE" = "0" ] && echo "=> cd $RUNDIR && $DOCKERCMD bash"
 
 # EOF
