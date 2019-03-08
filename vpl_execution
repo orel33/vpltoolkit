@@ -37,7 +37,8 @@ fi
 
 ### Let's rock
 echo "Run: $DOCKERCMD $SHELLCMD $CMD $ARGS"
-cd $RUNDIR && $DOCKERCMD bash
+bash
+# cd $RUNDIR && $DOCKERCMD bash
 
 # cd $RUNDIR && $DOCKERCMD $SHELLCMD $CMD $ARGS
 [ "$ONLINE" = "0" ] && echo "=> cd $RUNDIR && $DOCKERCMD bash"
