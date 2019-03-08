@@ -36,6 +36,7 @@ if [ -n "$DOCKER" ] ; then
 fi
 
 ### Let's rock
+echo "Run: $SHELLCMD $CMD $ARGS"
 cd $RUNDIR && $DOCKERCMD bash # debug
 # cd $RUNDIR && $DOCKERCMD $SHELLCMD $CMD $ARGS
 [ "$ONLINE" = "0" ] && echo "=> cd $RUNDIR && $DOCKERCMD bash"
