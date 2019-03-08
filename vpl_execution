@@ -45,7 +45,8 @@ if [ -n "$DOCKER" ] ; then
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR # &> /dev/null
     docker exec -it $DOCKERID bash
    #  docker exec -it $DOCKERID bash -c "pwd ; ls"
-    docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
+    # docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
+    bash
     echo "Docker $DOCKER terminated."
     docker container stop -t 1 $DOCKERID    # kill docker after 1 sec
     docker container rm $DOCKERID
