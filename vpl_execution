@@ -33,7 +33,7 @@ SHELLCMD="bash"
 # trap 'err_report' 0
 
 cd $RUNDIR
-echo "RUNDIR=$RUNDIR"
+# echo "RUNDIR=$RUNDIR"
 
 ### docker run ###
 if [ -n "$DOCKER" ] ; then
@@ -44,36 +44,17 @@ if [ -n "$DOCKER" ] ; then
     echo "DOCKERID=$DOCKERID"
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR # &> /dev/null
     docker cp $HOME/. $DOCKERID:/root # &> /dev/null
-    docker exec -it $DOCKERID bash
-   #  docker exec -it $DOCKERID bash -c "pwd ; ls"
-    # docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
-    bash
+    # docker exec -it $DOCKERID bash ; bash
+    docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
     echo "Docker $DOCKER terminated."
-    docker container stop -t 1 $DOCKERID    # kill docker after 1 sec
-    docker container rm $DOCKERID
+    # kill docker after 1 sec
+    docker container stop -t 1 $DOCKERID &> /dev/null   
+    docker container rm $DOCKERID &> /dev/null
     # docker container prune -f
     # docker system df
 ### regular run ###
 else
     $SHELLCMD $CMD $ARGS
 fi
-
-### Let's rock
-# echo "Run: $DOCKERCMD $SHELLCMD $CMD $ARGS"
-# bash
-# cd $RUNDIR && $DOCKERCMD bash
-
-# cd $RUNDIR && $DOCKERCMD $SHELLCMD $CMD $ARGS
-# [ "$ONLINE" = "0" ] && echo "=> cd $RUNDIR && $DOCKERCMD bash"
-
-# TRUC=\$(docker run --rm -w="`pwd`" --stop-timeout $TIMEOUT -d $DOCKER sleep $TIMEOUT)
-# docker cp . \$TRUC:`pwd` &> /dev/null
-# docker exec -it \$TRUC `pwd`/vpl_execution4docker 2> /dev/null
-# docker stop -t 0 \$TRUC &> /dev/
-
-# docker pull $DOCKER
-# DOCKERCMD="docker run -i -v $RUNDIR:$RUNDIR -w $RUNDIR -t $DOCKER"
-# echo $DOCKERCMD
-# DOCKERID=$(docker run --rm -w="`pwd`" --stop-timeout $TIMEOUT -d $DOCKER sleep $TIMEOUT)
 
 # EOF
