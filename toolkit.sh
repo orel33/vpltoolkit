@@ -104,6 +104,16 @@ function ECHO_TEACHER()
 ####################################################
 
 # inputs: MSG
+function PRE()
+{
+    if [ "$MODE" = "RUN" ] ; then
+        echo "$@"
+    else
+        echo "Comment :=>>>$@"
+    fi
+}
+
+# inputs: MSG
 function WARNING()
 {
     local MSG="$1"

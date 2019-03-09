@@ -186,7 +186,7 @@ $ docker push orel33/mydebian:latest
 To pull this docker image:
 
 ```bash
-$ docker push orel33/mydebian:latest
+$ docker pull orel33/mydebian:latest
 ```
 
 ## Documentation
