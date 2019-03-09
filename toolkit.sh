@@ -171,6 +171,16 @@ function TITLE()
     fi
 }
 
+function TITLE_TEACHER()
+{
+    if [ "$MODE" = "EVAL" ] ; then
+        echo "Teacher :=>> ##############################"
+        echo "Teacher :=>>-$@"
+        echo "Teacher :=>> ##############################"
+    fi
+}
+
+
 ####################################################
 #                        CAT                       #
 ####################################################
@@ -286,6 +296,24 @@ function PYCOMPUTE()
 
 ####################################################
 
+# inputs: GRADE|FORMULA
+function SET_GRADE()
+{
+    GRADE=$(PYCOMPUTE "$1")
+}
+
+####################################################
+
+# inputs: +/-SCORE|FORMULA
+function UPDATE_GRADE()
+{
+    local SCORE=$1
+    local LGRADE=$(PYCOMPUTE "$SCORE")
+    GRADE=$(PYCOMPUTE "$GRADE+$LGRADE")
+}
+
+####################################################
+
 # inputs: RET MSG SCORE [MSGOK]
 # return 0 if OK (RET=0), else return 1
 function EVALOK()
@@ -310,8 +338,10 @@ function EVALOK()
     local MSGSCORE=""
     local LGRADE=0
     if [ "$SCORE" != "0" ] ; then
-        LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be positive
-        GRADE=$(python3 -c "print($GRADE+$LGRADE)")
+        local LGRADE=$(PYCOMPUTE "$SCORE")
+        GRADE=$(PYCOMPUTE "$GRADE+$LGRADE")
+        # LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be positive
+        # GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ "$NOGRADE" != "1" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
     [ -n "$MSGOK" ] && MSGOK="($MSGOK)"
@@ -346,8 +376,10 @@ function EVALKO()
     local MSGSCORE=""
     local LGRADE=0
     if [ "$SCORE" != "0" ] ; then
-        LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be negative
-        GRADE=$(python3 -c "print($GRADE+$LGRADE)")
+        local LGRADE=$(PYCOMPUTE "$SCORE")
+        GRADE=$(PYCOMPUTE "$GRADE+$LGRADE")
+        # LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be negative
+        # GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
     [ -z "$MSGKO" ] && MSGKO=$(STRSTATUS $RET) # default MSGKO
@@ -391,6 +423,7 @@ function EVAL()
     fi
     return $RET
 }
+
 
 ####################################################
 
