@@ -4,7 +4,7 @@ VERSION="4.0"
 
 ### ENVIRONMENT ###
 
-function CHECKENV
+function CHECKENV()
 {
     # basic environment
     [ -z "$VERSION" ] && echo "⚠ VERSION variable is not defined!" && exit 0
@@ -18,7 +18,7 @@ function CHECKENV
     [ -z "$INPUTS" ] && INPUTS=""
 }
 
-function SAVEENV
+function SAVEENV()
 {
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     rm -f $RUNDIR/env.sh
@@ -33,7 +33,7 @@ function SAVEENV
     echo "INPUTS=$INPUTS" >> $RUNDIR/env.sh
 }
 
-function LOADENV
+function LOADENV()
 {
     if [ -f $RUNDIR/env.sh ] ; then
         source $RUNDIR/env.sh
@@ -46,28 +46,24 @@ function LOADENV
     fi
 }
 
-function PRINTENV
+function PRINTENV()
 {
-    if [ "$VERBOSE" = "1" ] ; then
-        echo
-        echo "VERSION=$VERSION"
-        echo "ONLINE=$ONLINE"
-        echo "MODE=$MODE"
-        echo "RUNDIR=$RUNDIR"
-        echo "DOCKER=$DOCKER"
-        echo "DEBUG=$DEBUG"
-        echo "VERBOSE=$VERBOSE"
-        echo "ARGS=$INPUTS"
-        echo "INPUTS=$INPUTS"
-        echo
-    fi
+    echo "* VERSION=$VERSION"
+    echo "* ONLINE=$ONLINE"
+    echo "* MODE=$MODE"
+    echo "* RUNDIR=$RUNDIR"
+    echo "* DOCKER=$DOCKER"
+    echo "* DEBUG=$DEBUG"
+    echo "* VERBOSE=$VERBOSE"
+    echo "* ARGS=$INPUTS"
+    echo "* INPUTS=$INPUTS"
 }
 
 ### DOWNLOAD ###
 
 # TODO: add WGET and SCP methods
 
-function DOWNLOAD
+function DOWNLOAD()
 {
     [ $# -ne 3 ] && echo "⚠ Usage: DOWNLOAD REPOSITORY BRANCH SUBDIR" && exit 0
     local REPOSITORY=$1
@@ -94,7 +90,7 @@ function DOWNLOAD
 
 ### EXECUTION ###
 
-function START_ONLINE
+function START_ONLINE()
 {
     [ ! $# -ge 0 ] && echo "⚠ Usage: START_ONLINE [...]" && exit 0
     ARGS=\"${@:1}\"
@@ -110,17 +106,17 @@ function START_ONLINE
     INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\"
     # INPUTS=$(echo -n \" && cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs && echo -n \")
     CHECKENV
-    PRINTENV
     SAVEENV
     cp $RUNDIR/env.sh $HOME
     cp $RUNDIR/vpltoolkit/toolkit.sh $HOME
     cp $RUNDIR/vpltoolkit/vpl_execution $HOME
-    if [ -z "$DOCKER" ] ; then DOCKERMSG="no docker" ; else DOCKERMSG="docker $DOCKER" ; fi
-    echo "Start VPL Toolkit in $SECONDS sec... ($MODE mode, online, $DOCKERMSG)"
+    # print in compilation window
+    echo "Start VPL Toolkit in $SECONDS sec..."
+    PRINTENV
     # => implicit run of vpl_execution in $HOME
 }
 
-function START_OFFLINE
+function START_OFFLINE()
 {
     [ ! $# -ge 1 ] && echo "⚠ Usage: START_OFFLINE INPUTDIR [...]" && exit 0
     INPUTDIR="$1"
@@ -137,10 +133,9 @@ function START_OFFLINE
     [ ! -z "$INPUTDIR" ] && find -L $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ {} +
     [ ! -z "$INPUTDIR" ] && INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\"
     CHECKENV
-    PRINTENV
     SAVEENV
-    if [ -z "$DOCKER" ] ; then DOCKERMSG="no docker" ; else DOCKERMSG="docker $DOCKER" ; fi
-    echo "Start VPL Toolkit in $SECONDS sec... ($MODE mode, offline, $DOCKERMSG)"
+    echo "Start VPL Toolkit in $SECONDS sec..."
+    PRINTENV
     cd $RUNDIR && $RUNDIR/vpltoolkit/vpl_execution
     # => explicit run of vpl_execution in $RUNDIR
 }
