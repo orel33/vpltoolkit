@@ -142,7 +142,6 @@ GRADE=0
 ### copy inputs
 cp inputs/mycat.c .
 
-
 ### compilation
 TITLE "COMPILATION"
 CFLAGS="-std=c99 -Wall"
@@ -180,7 +179,7 @@ $ docker run -i -t orel33/mydebian /bin/bash
 # login (need to be registered)
 $ docker login
 # push image
-$ docker push orel33/mydebian:latest
+$ docker push "orel33/mydebian:latest"
 ```
 
 To pull this docker image:
