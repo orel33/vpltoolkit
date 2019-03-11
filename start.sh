@@ -55,7 +55,7 @@ function PRINTENV()
     echo "* DOCKER=$DOCKER"
     echo "* DEBUG=$DEBUG"
     echo "* VERBOSE=$VERBOSE"
-    echo "* ARGS=$INPUTS"
+    echo "* ARGS=$ARGS"
     echo "* INPUTS=$INPUTS"
 }
 
