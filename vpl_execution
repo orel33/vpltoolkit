@@ -41,14 +41,12 @@ if [ -n "$DOCKER" ] ; then
     # check if docker image is already installed
     docker image inspect $DOCKER &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && exit 0
-    DOCKERID=$(docker run -it -d -w $RUNDIR $DOCKER)
+    DOCKEROPT="-v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker"
+    DOCKERID=$(docker run -it -d $DOCKEROPT -w $RUNDIR $DOCKER)
     echo "Run Docker $DOCKER ($DOCKERID)."
-    docker cp $RUNDIR/. $DOCKERID:$RUNDIR # &> /dev/null
-    docker cp $HOME/. $DOCKERID:/root # &> /dev/null
-    # docker exec -it $DOCKERID bash ; bash
+    docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
+    docker cp $HOME/. $DOCKERID:/root &> /dev/null
     docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
-    # echo "Docker $DOCKER terminated."
-    # kill docker after 1 sec
     docker container stop -t 1 $DOCKERID &> /dev/null
     docker container rm -f $DOCKERID &> /dev/null
     echo "Docker $DOCKER terminated ($DOCKERID)."
