@@ -202,7 +202,7 @@ function CAT()
         ECHO "Usage: CAT FILE [HEAD TAIL]" && exit 0
     fi
     
-    [ ! -f $FILE ] && return 1
+    [ ! -f $FILE ] && return 1 # error: file not found!
 
     if [ "$MODE" = "EVAL" ] ; then
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
