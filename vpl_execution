@@ -25,12 +25,13 @@ fi
 SHELLCMD="bash"
 [ "$DEBUG" = "1" ] && SHELLCMD="bash -x"
 
-# function err_report()
-# {
-#      echo "Terminated"
-# }
+function error()
+{
+     echo "Trap Error: cleaning docker"
+     docker container rm -f $DOCKERID # &> /dev/null
+}
 
-# trap 'err_report' 0
+trap 'error' ERR # EXIT
 
 cd $RUNDIR
 # echo "RUNDIR=$RUNDIR"
@@ -48,8 +49,9 @@ if [ -n "$DOCKER" ] ; then
     docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
     # echo "Docker $DOCKER terminated."
     # kill docker after 1 sec
-    docker container stop -t 1 $DOCKERID &> /dev/null   
-    docker container rm $DOCKERID &> /dev/null
+    docker container stop -t 1 $DOCKERID # &> /dev/null
+    docker container rm -f $DOCKERID # &> /dev/null
+    echo "Docker $DOCKER terminated ($DOCKERID)."
     # docker container prune -f
     # docker system df
 ### regular run ###
