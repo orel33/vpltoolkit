@@ -202,9 +202,6 @@ function CAT()
     else
         ECHO "Usage: CAT FILE [HEAD TAIL]" && exit 0
     fi
-    
-    echo "[DEBUG] CMD=$CMD"
-
 
     [ ! -f $FILE ] && return 1 # error: file not found!
 
