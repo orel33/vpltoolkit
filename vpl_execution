@@ -27,9 +27,7 @@ SHELLCMD="bash"
 
 function dockerclean()
 {
-    # echo "Trap Error: cleaning docker"
-    # docker container rm -f $DOCKERID # &> /dev/null
-    ( docker container stop -t 1 $DOCKERID &> /dev/null )
+    # ( docker container stop -t 1 $DOCKERID &> /dev/null )
     ( docker container rm -f $DOCKERID &> /dev/null )
     echo "Docker $DOCKER terminated ($DOCKERID)."
     # docker container prune -f
@@ -39,20 +37,26 @@ function dockerclean()
 cd $RUNDIR
 # echo "RUNDIR=$RUNDIR"
 
-### docker run ###
+
 if [ -n "$DOCKER" ] ; then
+    ### docker run ###
     trap 'dockerclean' EXIT
     # check if docker image is already installed
     docker image inspect $DOCKER &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && exit 0
-    DOCKEROPT="-v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker"
-    DOCKERID=$(docker run -it -d $DOCKEROPT -w $RUNDIR $DOCKER)
+    DOCKERTIMEOUT="30"
+    DOCKEROPT=" -it -d" # interactive, pseudo-tty, detached
+    DOCKEROPT="$DOCKEROPT -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker"
+    DOCKEROPT="$DOCKEROPT --rm --stop-signal=SIGTERM --stop-timeout=$DOCKERTIMEOUT"
+    DOCKEROPT="$DOCKEROPT -w $RUNDIR "
+    DOCKERID=$(docker run $DOCKEROPT $DOCKER)
     echo "Run Docker $DOCKER ($DOCKERID)."
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
     docker cp $HOME/. $DOCKERID:/root &> /dev/null
     docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
-    ### regular run ###
+    docker container stop -t 1 $DOCKERID &> /dev/null
 else
+    ### regular run ###
     $SHELLCMD $CMD $ARGS
 fi
 
