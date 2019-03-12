@@ -44,12 +44,13 @@ if [ -n "$DOCKER" ] ; then
     # check if docker image is already installed
     docker image inspect $DOCKER &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && exit 0
+    # DOCKERTIMEOUT="900" # 15mn
     DOCKERTIMEOUT="30"
-    DOCKEROPT=" -it -d" # interactive, pseudo-tty, detached
+    DOCKEROPT=""
     DOCKEROPT="$DOCKEROPT -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker"
-    DOCKEROPT="$DOCKEROPT --rm --stop-signal=SIGTERM --stop-timeout=$DOCKERTIMEOUT"
-    DOCKEROPT="$DOCKEROPT -w $RUNDIR "
-    DOCKERID=$(docker run $DOCKEROPT $DOCKER)
+    # DOCKEROPT="$DOCKEROPT --rm --stop-signal=SIGTERM --stop-timeout=$DOCKERTIMEOUT" # useless ???
+    DOCKEROPT="$DOCKEROPT -w $RUNDIR"
+    DOCKERID=$(docker run -d $DOCKEROPT $DOCKER sleep $DOCKERTIMEOUT)
     echo "Run Docker $DOCKER ($DOCKERID)."
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
     docker cp $HOME/. $DOCKERID:/root &> /dev/null
