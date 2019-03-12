@@ -171,6 +171,8 @@ function TITLE()
     fi
 }
 
+####################################################
+
 function TITLE_TEACHER()
 {
     if [ "$MODE" = "EVAL" ] ; then
@@ -179,7 +181,6 @@ function TITLE_TEACHER()
         echo "Teacher :=>> ##############################"
     fi
 }
-
 
 ####################################################
 #                        CAT                       #
@@ -309,14 +310,6 @@ function PYCOMPUTE()
     local FORMULA="$1"
     python3 -c "print(\"%+.2f\" % ($FORMULA))"
     return $?
-}
-
-####################################################
-
-# inputs: GRADE|FORMULA
-function SET_GRADE()
-{
-    GRADE=$(PYCOMPUTE "$1")
 }
 
 ####################################################
