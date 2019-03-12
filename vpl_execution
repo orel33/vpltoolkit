@@ -3,7 +3,7 @@ rm -f $0
 
 if [ -f ./env.sh ] ; then
     source ./env.sh
-    elif [ -f $HOME/env.sh ] ; then
+elif [ -f $HOME/env.sh ] ; then
     source $HOME/env.sh
 else
     echo "⚠ File \"env.sh\" is missing!" && exit 0
@@ -52,7 +52,7 @@ if [ -n "$DOCKER" ] ; then
     DOCKERID=$(docker run $DOCKEROPT $DOCKER sleep $DOCKERTIMEOUT)
     echo "Run Docker $DOCKER ($DOCKERID)."
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
-    # docker cp $HOME/. $DOCKERID:/root &> /dev/null
+    [ $ONLINE -eq 1 ] && docker cp $HOME/. $DOCKERID:/root &> /dev/null # assuming $HOME is /root
     docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
     docker container stop -t 0 $DOCKERID &> /dev/null
 else
