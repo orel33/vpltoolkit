@@ -25,19 +25,23 @@ fi
 SHELLCMD="bash"
 [ "$DEBUG" = "1" ] && SHELLCMD="bash -x"
 
-function error()
+function dockerclean()
 {
-     echo "Trap Error: cleaning docker"
-     docker container rm -f $DOCKERID # &> /dev/null
+    # echo "Trap Error: cleaning docker"
+    # docker container rm -f $DOCKERID # &> /dev/null
+    ( docker container stop -t 1 $DOCKERID &> /dev/null )
+    ( docker container rm -f $DOCKERID &> /dev/null )
+    echo "Docker $DOCKER terminated ($DOCKERID)."
+    # docker container prune -f
+    # docker system df
 }
-
-trap 'error' ERR # EXIT
 
 cd $RUNDIR
 # echo "RUNDIR=$RUNDIR"
 
 ### docker run ###
 if [ -n "$DOCKER" ] ; then
+    trap 'dockerclean' EXIT
     # check if docker image is already installed
     docker image inspect $DOCKER &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && exit 0
@@ -47,12 +51,7 @@ if [ -n "$DOCKER" ] ; then
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
     docker cp $HOME/. $DOCKERID:/root &> /dev/null
     docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
-    docker container stop -t 1 $DOCKERID &> /dev/null
-    docker container rm -f $DOCKERID &> /dev/null
-    echo "Docker $DOCKER terminated ($DOCKERID)."
-    # docker container prune -f
-    # docker system df
-### regular run ###
+    ### regular run ###
 else
     $SHELLCMD $CMD $ARGS
 fi
