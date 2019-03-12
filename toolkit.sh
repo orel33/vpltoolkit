@@ -189,16 +189,29 @@ function TITLE_TEACHER()
 
 function CAT()
 {
+    local FILE="$1"
+    if [ $# -eq 1 ] ; then
+        local HEAD=0
+        local TAIL=0
+        CMD="cat $FILE"
+    elif [ $# -eq 3 ] ; then
+        local HEAD="$2"
+        local TAIL="$3"
+        CMD="cat $FILE | (head -n $HEAD ; echo "..." ; tail -n $TAIL)"
+    else
+        ECHO "Usage: CAT FILE [HEAD TAIL]" && exit 0
+    fi
+    
     if [ "$MODE" = "EVAL" ] ; then
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
-        echo "Teacher :=>>$ cat $@"
+        echo "Teacher :=>>$ cat $FILE"
         echo "<|--"
-        cat $@ |& sed -e 's/^/>/;' # preformated output
-        RET=$?
+        $CMD |& sed -e 's/^/>/;' # preformated output
+        RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "--|>"
     else
-        cat $@
-        RET=$?
+        $CMD
+        RET=${PIPESTATUS[0]}  # return status of first piped command!
     fi
     return $RET
 }
@@ -207,7 +220,7 @@ function CAT()
 
 function CAT_TEACHER()
 {
-    RET=0
+    [ $# -ne 1 ] && ECHO "Usage: CAT_TEACHER FILE" && exit 0
     if [ "$MODE" = "EVAL" ] ; then
         echo "Teacher :=>>$ cat $@"
         bash -c "cat $@" |& sed -e 's/^/Teacher :=>>/;' # setsid is used for safe exec (setpgid(0,0))
@@ -271,11 +284,11 @@ function STRSTATUS()
     local STATUS=$1
     if (( $STATUS == 0 )) ; then
         echo "return EXIT_SUCCESS"
-    elif (( $STATUS == 1 )) ; then
+        elif (( $STATUS == 1 )) ; then
         echo "return EXIT_FAILURE"
-    elif (( $STATUS == 124 )) ; then
+        elif (( $STATUS == 124 )) ; then
         echo "timeout"
-    elif (( $STATUS > 128 && $STATUS <= 192 )) ; then
+        elif (( $STATUS > 128 && $STATUS <= 192 )) ; then
         NSIG=$((STATUS-128))
         STRSIG=$(kill -l $NSIG)
         echo "killed by signal $STRSIG"
@@ -326,7 +339,7 @@ function EVALOK()
         RET="$1"
         MSG="$2"
         SCORE="$3" # TODO: check score is >= 0
-    elif [ $# -eq 4 ] ; then
+        elif [ $# -eq 4 ] ; then
         RET="$1"
         MSG="$2"
         SCORE="$3"
@@ -364,7 +377,7 @@ function EVALKO()
         RET="$1"
         MSG="$2"
         SCORE="$3" # TODO: check score is <= 0
-    elif [ $# -eq 4 ] ; then
+        elif [ $# -eq 4 ] ; then
         RET="$1"
         MSG="$2"
         SCORE="$3"
@@ -405,7 +418,7 @@ function EVAL()
         MSG="$2"
         BONUS="$3"
         MALUS="$4"
-    elif [ $# -eq 6 ] ; then
+        elif [ $# -eq 6 ] ; then
         MSG="$2"
         BONUS="$3"  # TODO: check positive
         MALUS="$4"  # TODO: check negative
