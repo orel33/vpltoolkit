@@ -308,7 +308,7 @@ function TRACE_TEACHER()
     else
         # bash -c "setsid -w $@" &>> $RUNDIR/$LOG
         # setsid -w bash -c "$@" &>> $RUNDIR/$LOG
-        bash -c "$@" &>> $RUNDIR/$LOG
+        ( bash -c "$@" &>> $RUNDIR/$LOG && true )
         RET=$?
     fi
     return $RET
