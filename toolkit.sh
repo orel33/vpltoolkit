@@ -197,7 +197,7 @@ function CAT()
     elif [ $# -eq 3 ] ; then
         local HEAD="$2"
         local TAIL="$3"
-        CMD="cat $FILE | (head -n $HEAD ; echo "..." ; tail -n $TAIL)"
+        CMD="cat $FILE | (head -n $HEAD ; echo \"...\" ; tail -n $TAIL)"
     else
         ECHO "Usage: CAT FILE [HEAD TAIL]" && exit 0
     fi
