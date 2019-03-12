@@ -52,7 +52,7 @@ if [ -n "$DOCKER" ] ; then
     DOCKERID=$(docker run $DOCKEROPT $DOCKER sleep $DOCKERTIMEOUT)
     echo "Run Docker $DOCKER ($DOCKERID)."
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
-    docker cp $HOME/. $DOCKERID:/root &> /dev/null
+    # docker cp $HOME/. $DOCKERID:/root &> /dev/null
     docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
     docker container stop -t 1 $DOCKERID &> /dev/null
 else
