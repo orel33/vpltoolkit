@@ -285,7 +285,7 @@ function TRACE()
     else
         # bash -c "setsid -w $@"
         # setsid -w bash -c "$@"
-        bash -c "$@"
+        ( bash -c "$@" && true ) # A trick I found to avoid dirty bash messages after signal!
         RET=$?
     fi
     return $RET
