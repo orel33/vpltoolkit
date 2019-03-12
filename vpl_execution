@@ -42,15 +42,15 @@ if [ -n "$DOCKER" ] ; then
     docker image inspect $DOCKER &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && exit 0
     DOCKERID=$(docker run -it -d -w $RUNDIR $DOCKER)
-    # echo "DOCKERID=$DOCKERID"
+    echo "Run Docker $DOCKER ($DOCKERID)."
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR # &> /dev/null
     docker cp $HOME/. $DOCKERID:/root # &> /dev/null
     # docker exec -it $DOCKERID bash ; bash
     docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
     # echo "Docker $DOCKER terminated."
     # kill docker after 1 sec
-    docker container stop -t 1 $DOCKERID # &> /dev/null
-    docker container rm -f $DOCKERID # &> /dev/null
+    docker container stop -t 1 $DOCKERID &> /dev/null
+    docker container rm -f $DOCKERID &> /dev/null
     echo "Docker $DOCKER terminated ($DOCKERID)."
     # docker container prune -f
     # docker system df
