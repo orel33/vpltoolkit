@@ -130,6 +130,14 @@ function ERROR()
 }
 
 # inputs: MSG
+function CRASH()
+{
+    local MSG="$1"
+    ECHORED "⛔️ Internal Error: $MSG"
+    return 0
+}
+
+# inputs: MSG
 function INFO()
 {
     local MSG="$1"
@@ -203,7 +211,7 @@ function CAT()
         ECHO "Usage: CAT FILE [HEAD TAIL]" && exit 0
     fi
 
-    [ ! -f $FILE ] && return 1 # error: file not found!
+    [ ! -f $FILE ] && CRASH "CAT (file not found)" && exit 0
 
     if [ "$MODE" = "EVAL" ] ; then
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
@@ -308,8 +316,9 @@ function TRACE_TEACHER()
 function PYCOMPUTE()
 {
     local FORMULA="$1"
-    python3 -c "print(\"%+.2f\" % ($FORMULA))"
-    return $?
+    python3 -c "print(\"%+.2f\" % ($FORMULA))" 2> error
+    [ $? -ne 0 ] && CRASH "PYCOMPUTE (invalid formula)" && cat error && exit 0
+    return 0
 }
 
 ####################################################
