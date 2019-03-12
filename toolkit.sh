@@ -185,8 +185,8 @@ function TITLE_TEACHER()
 #                        CAT                       #
 ####################################################
 
-# TODO: add HEAD() & TAIL() functions....
-
+# inputs: FILE [HEAD TAIL]
+# return cat status
 function CAT()
 {
     local FILE="$1"
@@ -208,11 +208,11 @@ function CAT()
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
         echo "Teacher :=>>$ cat $FILE"
         echo "<|--"
-        $CMD |& sed -e 's/^/>/;' # preformated output
+        eval "$CMD" |& sed -e 's/^/>/;' # preformated output
         RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "--|>"
     else
-        $CMD
+        eval "$CMD"
         RET=${PIPESTATUS[0]}  # return status of first piped command!
     fi
     return $RET
@@ -238,6 +238,27 @@ function CAT_TEACHER()
 #                       TRACE                      #
 ####################################################
 
+# inputs: bash_return_status
+function STRSTATUS()
+{
+    local STATUS=$1
+    if (( $STATUS == 0 )) ; then
+        echo "EXIT_SUCCESS"
+        elif (( $STATUS == 1 )) ; then
+        echo "EXIT_FAILURE"
+        elif (( $STATUS == 124 )) ; then
+        echo "timeout"
+        elif (( $STATUS > 128 && $STATUS <= 192 )) ; then
+        NSIG=$((STATUS-128))
+        STRSIG=$(kill -l $NSIG)
+        echo "killed by signal $STRSIG"
+    else
+        echo "return $STATUS"
+    fi
+}
+
+####################################################
+
 function TRACE()
 {
     if [ "$MODE" = "EVAL" ] ; then
@@ -248,7 +269,8 @@ function TRACE()
         setsid -w bash -c "$@" |& sed -e 's/^/>/;' # preformated output
         RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo ; echo "--|>"
-        echo "Teacher :=>> Status $RET"
+        local STATUS=$(STRSTATUS $RET)
+        echo "Teacher :=>> Status $RET ($STATUS)"
     else
         # bash -c "setsid -w $@"
         setsid -w bash -c "$@"
@@ -267,7 +289,8 @@ function TRACE_TEACHER()
         # bash -c "setsid -w $@" |& sed -e 's/^/Teacher :=>>/;'
         setsid -w bash -c "$@" |& sed -e 's/^/Teacher :=>>/;' # preformated output
         RET=${PIPESTATUS[0]}  # return status of first piped command!
-        echo "Teacher :=>> Status $RET"
+        local STATUS=$(STRSTATUS $RET)
+        echo "Teacher :=>> Status $RET ($STATUS)"
     else
         # bash -c "setsid -w $@" &>> $RUNDIR/$LOG
         setsid -w bash -c "$@" &>> $RUNDIR/$LOG
@@ -278,27 +301,6 @@ function TRACE_TEACHER()
 
 ####################################################
 #                      EVAL                        #
-####################################################
-
-# inputs: bash_return_status
-function STRSTATUS()
-{
-    local STATUS=$1
-    if (( $STATUS == 0 )) ; then
-        echo "return EXIT_SUCCESS"
-        elif (( $STATUS == 1 )) ; then
-        echo "return EXIT_FAILURE"
-        elif (( $STATUS == 124 )) ; then
-        echo "timeout"
-        elif (( $STATUS > 128 && $STATUS <= 192 )) ; then
-        NSIG=$((STATUS-128))
-        STRSIG=$(kill -l $NSIG)
-        echo "killed by signal $STRSIG"
-    else
-        echo "return $STATUS"
-    fi
-}
-
 ####################################################
 
 # inputs: FORMULA
