@@ -52,6 +52,7 @@ if [ -n "$DOCKER" ] ; then
     DOCKERID=$(docker run $DOCKEROPT $DOCKER sleep $DOCKERTIMEOUT)
     echo "Run Docker $DOCKER ($DOCKERID)."
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
+    # TODO: copy only desired files... vpl_*.sh, env.sh, ... ???
     [ $ONLINE -eq 1 ] && docker cp $HOME/. $DOCKERID:/root &> /dev/null # assuming $HOME is /root
     docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
     docker container stop -t 0 $DOCKERID &> /dev/null

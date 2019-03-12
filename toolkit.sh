@@ -192,18 +192,21 @@ function CAT()
 {
     local FILE="$1"
     if [ $# -eq 1 ] ; then
-        local HEAD=0
-        local TAIL=0
+        HEAD=0
+        TAIL=0
         CMD="cat $FILE"
     elif [ $# -eq 3 ] ; then
-        local HEAD="$2"
-        local TAIL="$3"
+        HEAD="$2"
+        TAIL="$3"
         # CMD="cat $FILE | (head -n $HEAD ; echo \"...\" ; tail -n $TAIL)"
         CMD="cat $FILE | (head -n $HEAD ; tail -n $TAIL)"
     else
         ECHO "Usage: CAT FILE [HEAD TAIL]" && exit 0
     fi
     
+    echo "[DEBUG] CMD=$CMD"
+
+
     [ ! -f $FILE ] && return 1 # error: file not found!
 
     if [ "$MODE" = "EVAL" ] ; then
