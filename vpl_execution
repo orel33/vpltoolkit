@@ -57,7 +57,9 @@ if [ -n "$DOCKER" ] ; then
     docker container stop -t 1 $DOCKERID &> /dev/null
 else
     ### regular run ###
+    echo "Run..."
     $SHELLCMD $CMD $ARGS
+    echo "Terminated."
 fi
 
 # EOF
