@@ -284,7 +284,8 @@ function TRACE()
         echo "Teacher :=>> Status $RET ($STATUS)"
     else
         # bash -c "setsid -w $@"
-        setsid -w bash -c "$@"
+        # setsid -w bash -c "$@"
+        bash -c "$@"
         RET=$?
     fi
     return $RET
@@ -306,7 +307,8 @@ function TRACE_TEACHER()
         echo "Teacher :=>> Status $RET ($STATUS)"
     else
         # bash -c "setsid -w $@" &>> $RUNDIR/$LOG
-        setsid -w bash -c "$@" &>> $RUNDIR/$LOG
+        # setsid -w bash -c "$@" &>> $RUNDIR/$LOG
+        bash -c "$@" &>> $RUNDIR/$LOG
         RET=$?
     fi
     return $RET
