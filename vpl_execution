@@ -54,7 +54,7 @@ if [ -n "$DOCKER" ] ; then
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
     # docker cp $HOME/. $DOCKERID:/root &> /dev/null
     docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
-    docker container stop -t 1 $DOCKERID &> /dev/null
+    docker container stop -t 0 $DOCKERID &> /dev/null
 else
     ### regular run ###
     echo "Run..."
