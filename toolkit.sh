@@ -202,6 +202,8 @@ function CAT()
         ECHO "Usage: CAT FILE [HEAD TAIL]" && exit 0
     fi
     
+    [ ! -f $FILE ] && return 1
+
     if [ "$MODE" = "EVAL" ] ; then
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
         echo "Teacher :=>>$ cat $FILE"
