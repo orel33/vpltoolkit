@@ -252,11 +252,11 @@ function EXEC()
 {
     # run redirection in a subshell for safety
     (
-        exec 3>&2
+        exec 30>&2
         exec 2> /dev/null
-        bash -c "$@" 2>&3
+        ( bash -c "$@" ) 2>&30 # TODO: only work for a simple command without subshells...
         RET=$?
-        exec 2>&3
+        exec 2>&30
         exit $RET
     )
     return $?
@@ -300,9 +300,10 @@ function TRACE()
         local STATUS=$(STRSTATUS $RET)
         echo "Teacher :=>> Status $RET ($STATUS)"
     else
-        bash -c "setsid -w $@"
+        # bash -c "setsid -w $@"
         # setsid -w bash -c "$@"
         # EXEC $@
+        bash -c "$@"
         RET=$?
     fi
     return $RET
@@ -323,8 +324,9 @@ function TRACE_TEACHER()
         local STATUS=$(STRSTATUS $RET)
         echo "Teacher :=>> Status $RET ($STATUS)"
     else
-        bash -c "setsid -w $@" &>> $RUNDIR/$LOG
+        # bash -c "setsid -w $@" &>> $RUNDIR/$LOG
         # setsid -w bash -c "$@" &>> $RUNDIR/$LOG
+        bash -c "$@" &>> $RUNDIR/$LOG
         RET=$?
     fi
     return $RET
