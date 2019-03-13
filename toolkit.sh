@@ -203,16 +203,16 @@ function CAT()
         HEAD=0
         TAIL=0
         CMD="cat $FILE"
-    elif [ $# -eq 3 ] ; then
+        elif [ $# -eq 3 ] ; then
         HEAD="$2"
         TAIL="$3"
         CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE"
     else
         ECHO "Usage: CAT FILE [HEAD TAIL]" && exit 0
     fi
-
+    
     [ ! -f $FILE ] && CRASH "CAT (file not found)" && exit 0
-
+    
     if [ "$MODE" = "EVAL" ] ; then
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
         echo "Teacher :=>>$ cat $FILE"
@@ -245,6 +245,23 @@ function CAT_TEACHER()
 
 ####################################################
 #                       TRACE                      #
+####################################################
+
+# inputs: CMD [...]
+function EXEC()
+{
+    # run redirection in a subshell for safety
+    (
+        exec 3>&2
+        exec 2> /dev/null
+        bash -c "$@" 2>&3
+        RET=$?
+        exec 2>&3
+        exit $RET
+    )
+    return $?
+}
+
 ####################################################
 
 # inputs: bash_return_status
@@ -283,9 +300,9 @@ function TRACE()
         local STATUS=$(STRSTATUS $RET)
         echo "Teacher :=>> Status $RET ($STATUS)"
     else
-        # bash -c "setsid -w $@"
+        bash -c "setsid -w $@"
         # setsid -w bash -c "$@"
-        ( bash -c "$@" && true ) # A trick I found to avoid dirty bash messages after signal!
+        # EXEC $@
         RET=$?
     fi
     return $RET
@@ -306,9 +323,8 @@ function TRACE_TEACHER()
         local STATUS=$(STRSTATUS $RET)
         echo "Teacher :=>> Status $RET ($STATUS)"
     else
-        # bash -c "setsid -w $@" &>> $RUNDIR/$LOG
+        bash -c "setsid -w $@" &>> $RUNDIR/$LOG
         # setsid -w bash -c "$@" &>> $RUNDIR/$LOG
-        ( bash -c "$@" &>> $RUNDIR/$LOG && true )
         RET=$?
     fi
     return $RET
