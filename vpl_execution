@@ -47,7 +47,7 @@ if [ -n "$DOCKER" ] ; then
     DOCKERTIMEOUT="900" # 15mn
     DOCKEROPT=""
     DOCKEROPT="$DOCKEROPT -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker"
-    DOCKEROPT="$DOCKEROPT --device=/dev/kvm:/dev/kvm"
+    # DOCKEROPT="$DOCKEROPT --device=/dev/kvm:/dev/kvm"
     # DOCKEROPT="$DOCKEROPT --rm --stop-signal=SIGTERM --stop-timeout=$DOCKERTIMEOUT" # useless ???
     DOCKEROPT="$DOCKEROPT -d --rm -w $RUNDIR" # detached, auto-remove
     DOCKERID=$(docker run $DOCKEROPT $DOCKER sleep $DOCKERTIMEOUT)
