@@ -481,7 +481,7 @@ function EXIT_GRADE()
         # ECHO "-GRADE" && ECHO "$GRADE%"
         if [ "$MODE" = "EVAL" ] ; then echo "Grade :=>> $GRADE" ; fi
     else
-        ECHO_TEACHER "GRADE: $GRADE%"
+        ECHO "Grade: $GRADE%"
     fi
     # if [ "$MODE" = "RUN" ] ; then echo "👉 Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
     exit 0
