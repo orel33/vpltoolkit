@@ -42,8 +42,8 @@ if [ -n "$DOCKER" ] ; then
     ### docker run ###
     trap 'dockerclean' EXIT
     # check if docker image is already installed
-    docker image inspect $DOCKER # &> /dev/null
-    [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && exit 0
+    docker image inspect $DOCKER &> output
+    [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && cat output && exit 0
     DOCKERTIMEOUT="900" # 15mn
     DOCKEROPT=""
     DOCKEROPT="$DOCKEROPT -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker"
