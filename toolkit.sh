@@ -206,7 +206,7 @@ function CAT()
         elif [ $# -eq 3 ] ; then
         HEAD="$2"
         TAIL="$3"
-        CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE"
+        CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE | sed '\$a\'"
     else
         ECHO "Usage: CAT FILE [HEAD TAIL]" && exit 0
     fi
