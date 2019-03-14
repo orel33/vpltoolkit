@@ -29,7 +29,7 @@ function dockerclean()
 {
     # ( docker container stop -t 1 $DOCKERID &> /dev/null )
     ( docker container rm -f $DOCKERID &> /dev/null )
-    echo "Docker $DOCKER terminated ($DOCKERID)."
+    echo "Docker $DOCKER terminated."
     # docker container prune -f
     # docker system df
 }
@@ -51,7 +51,7 @@ if [ -n "$DOCKER" ] ; then
     # DOCKEROPT="$DOCKEROPT --rm --stop-signal=SIGTERM --stop-timeout=$DOCKERTIMEOUT" # useless ???
     DOCKEROPT="$DOCKEROPT -d --rm -w $RUNDIR" # detached, auto-remove
     DOCKERID=$(docker run $DOCKEROPT $DOCKER sleep $DOCKERTIMEOUT)
-    echo "Run Docker $DOCKER ($DOCKERID)."
+    echo "Run Docker $DOCKER."
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
     # TODO: copy only desired files... vpl_*.sh, env.sh, ... ???
     [ $ONLINE -eq 1 ] && docker cp $HOME/. $DOCKERID:/root &> /dev/null # assuming $HOME is /root
