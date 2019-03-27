@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build --tag="qemu:debian:latest" .
+docker build -t "orel33/mydebian:latest" . && docker push "orel33/mydebian:latest"

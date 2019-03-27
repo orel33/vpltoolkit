@@ -207,6 +207,7 @@ function CAT()
         HEAD="$2"
         TAIL="$3"
         CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE | sed '\$a\'"
+        # the command sed '$a\' append a trailing \n only if needed
     else
         ECHO "Usage: CAT FILE [HEAD TAIL]" && exit 0
     fi
@@ -254,7 +255,9 @@ function EXEC()
     (
         exec 30>&2
         exec 2> /dev/null
-        ( bash -c "$@" ) 2>&30 # TODO: only work for a simple command without subshells...
+        # FIXME: only work for a simple command without subshells...
+        # TODO: use disown command to detach command in order to avoid dirty error messages printed by bash
+        ( bash -c "$@" ) 2>&30
         RET=$?
         exec 2>&30
         exit $RET
@@ -481,7 +484,7 @@ function EXIT_GRADE()
         # ECHO "-GRADE" && ECHO "$GRADE%"
         if [ "$MODE" = "EVAL" ] ; then echo "Grade :=>> $GRADE" ; fi
     else
-        ECHO "Grade: $GRADE%"
+        ECHO_TEACHER "GRADE: $GRADE%"
     fi
     # if [ "$MODE" = "RUN" ] ; then echo "👉 Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
     exit 0
