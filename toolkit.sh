@@ -251,12 +251,14 @@ function CAT_TEACHER()
 # inputs: CMD [...]
 function EXEC()
 {
+    # FIXME: only work for a simple command without subshells...
+    # TODO: use disown command to detach command in order to avoid dirty error messages printed by bash
+    # TODO: use safe EXEC() in TRACE()
+
     # run redirection in a subshell for safety
     (
         exec 30>&2
         exec 2> /dev/null
-        # FIXME: only work for a simple command without subshells...
-        # TODO: use disown command to detach command in order to avoid dirty error messages printed by bash
         ( bash -c "$@" ) 2>&30
         RET=$?
         exec 2>&30
