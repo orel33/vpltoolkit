@@ -63,13 +63,13 @@ function PRINTENV()
 
 # TODO: add WGET and SCP methods
 
-### DOWNLOAD
+### DOWNLOAD EXTRA REPOSITORY
 function DOWNLOADEXT()
 {
     [ $# -ne 4 ] && echo "⚠ Usage: DOWNLOADEXT REPOSITORY BRANCH SUBDIR TARGETDIR" && exit 0
     local REPOSITORY="$1"
     local BRANCH="$2"
-    local SUBDIR="$3"
+    local SUBDIR="$3"       # TODO: SUBDIR could be optional, download all...
     local TARGETDIR="$4"
 
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
@@ -80,9 +80,7 @@ function DOWNLOADEXT()
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
     [ -z "$BRANCH" ] && echo "⚠ BRANCH variable is not defined!" && exit 0
     [ -z "$SUBDIR" ] && echo "⚠ SUBDIR variable is not defined!" && exit 0
-    git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download/$TARGETDIR &> clone.log # /dev/null
-    # OK=$?
-    # [ $ONLINE -eq 0 ] && cat clone.log
+    git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download/$TARGETDIR &> /dev/null
     [ ! $? -eq 0 ] && echo "⚠ GIT clone repository failure (branch \"$BRANCH\")!" && exit 0
     ( cd $RUNDIR/download/$TARGETDIR && git -c http.sslVerify=false checkout HEAD -- $SUBDIR &> /dev/null )
     [ ! $? -eq 0 ] && echo "⚠ GIT checkout \"$SUBDIR\" failure!" && exit 0
@@ -92,7 +90,7 @@ function DOWNLOADEXT()
     [ "$VERBOSE" = "1" ] && echo "Download \"$SUBDIR\" in $TIME ms"
 }
 
-### DOWNLOAD MAIN REPOSITORY and COPY FILES in RUNDIR
+### DOWNLOAD MAIN REPOSITORY (and COPY FILES in RUNDIR)
 function DOWNLOAD()
 {
     [ $# -ne 3 ] && echo "⚠ Usage: DOWNLOAD REPOSITORY BRANCH SUBDIR" && exit 0
@@ -101,6 +99,7 @@ function DOWNLOAD()
     local SUBDIR="$3"
     local TARGETDIR="main"
     DOWNLOADEXT "$REPOSITORY" "$BRANCH" "$SUBDIR" "$TARGETDIR"
+    # copy run.sh and/or eval.sh scripts
     cp -rf $RUNDIR/download/$TARGETDIR/$SUBDIR/* $RUNDIR/
 }
 
