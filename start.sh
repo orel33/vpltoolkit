@@ -89,15 +89,47 @@ function DOWNLOAD2()
 ### DOWNLOAD and COPY FILES in RUNDIR
 function DOWNLOAD()
 {
-    [ $# -ne 3 ] && echo "⚠ Usage: DOWNLOAD REPOSITORY BRANCH SUBDIR" && exit 0
-    local REPOSITORY=$1
-    local BRANCH=$2
-    local SUBDIR=$3
-    DOWNLOAD2 $REPOSITORY $BRANCH $SUBDIR
-    # copy 
-    cp -rf $RUNDIR/download/$SUBDIR/* $RUNDIR/
-    # TODO: check run.sh or eval.sh
+    if [ $# -eq 3 ] ; then
+        local REPOSITORY=$1
+        local BRANCH=$2
+        local SUBDIR=$3
+        local TARGETDIR=$RUNDIR
+    elif [ $# -eq 4 ] ; then
+        local REPOSITORY=$1
+        local BRANCH=$2
+        local SUBDIR=$3
+        local TARGETDIR=$4
+    else
+        echo "⚠ Usage: DOWNLOAD REPOSITORY BRANCH SUBDIR [TARGETDIR]" && exit 0
+    fi
 
+    # local REPOSITORY=$1
+    # local BRANCH=$2
+    # local SUBDIR=$3
+    # DOWNLOAD2 $REPOSITORY $BRANCH $SUBDIR
+    # [ $# -ne 3 ] && echo "⚠ Usage: DOWNLOAD2 REPOSITORY BRANCH SUBDIR" && exit 0
+    # local REPOSITORY=$1
+    # local BRANCH=$2
+    # local SUBDIR=$3
+
+    [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
+    START=$(date +%s.%N)
+    # mkdir -p $RUNDIR/download
+    mkdir -p $TARGETDIR
+    [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
+    [ -z "$BRANCH" ] && echo "⚠ BRANCH variable is not defined!" && exit 0
+    [ -z "$SUBDIR" ] && echo "⚠ SUBDIR variable is not defined!" && exit 0
+    # git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download &> /dev/null
+    git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $TARGETDIR &> /dev/null
+    [ ! $? -eq 0 ] && echo "⚠ GIT clone repository failure (branch \"$BRANCH\")!" && exit 0
+    ( cd $RUNDIR/download && git -c http.sslVerify=false checkout HEAD -- $SUBDIR &> /dev/null )
+    [ ! $? -eq 0 ] && echo "⚠ GIT checkout \"$SUBDIR\" failure!" && exit 0
+    [ ! -d $RUNDIR/download/$SUBDIR ] && ECHO "⚠ SUBDIR \"$SUBDIR\" is missing!" && exit 0
+    END=$(date +%s.%N)
+    TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
+    [ "$VERBOSE" = "1" ] && echo "Download \"$SUBDIR\" in $TIME ms"
+
+    # cp -rf $RUNDIR/download/$SUBDIR/* $RUNDIR/
 }
 
 ### EXECUTION ###
