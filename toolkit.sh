@@ -9,7 +9,13 @@ LOG="teacher.log"
 function CHECKVERSION()
 {
     local EXPECTED="$1"
-    [ "$EXPECTED" != "$VERSION" ] && ECHO "⚠ Error: Toolkit version $EXPECTED expected (but version $VERSION found)!" && exit 0
+    [ "$EXPECTED" != "$VERSION" ] && ECHO "⚠ Error: Toolkit version $EXPECTED expected (but version \"$VERSION\" found)!" && exit 0
+}
+
+function CHECKDOCKER()
+{
+    local EXPECTED="$1"
+    [ "$EXPECTED" != "$DOCKER" ] && ECHO "⚠ Error: Toolkit docker $EXPECTED expected (but docker \"$DOCKER\" found)!" && exit 0
 }
 
 function CHECK()

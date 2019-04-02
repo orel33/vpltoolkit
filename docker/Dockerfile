@@ -22,5 +22,5 @@ RUN apt-get install -y python3 python3-pip python3-numpy python3-scapy python3-p
 RUN apt-get install -y python python-scapy python-pygame python-numpy python-sklearn python-pytest python-pyx
 RUN apt-get install -y libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-gfx-dev libsdl2-ttf-dev libsdl2-net-dev
 # networking
-RUN apt-get install -y socat rlwrap wget curl tcpdump 
+RUN apt-get install -y net-tools socat rlwrap wget curl tcpdump 
 
