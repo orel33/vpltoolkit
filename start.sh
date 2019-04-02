@@ -84,6 +84,7 @@ function DOWNLOAD2()
     END=$(date +%s.%N)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
     [ "$VERBOSE" = "1" ] && echo "Download \"$SUBDIR\" in $TIME ms"
+    rm -rf $RUNDIR/download/.git
 }
 
 ### DOWNLOAD and COPY FILES in RUNDIR
