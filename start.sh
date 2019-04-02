@@ -66,7 +66,7 @@ function PRINTENV()
 ### DOWNLOAD
 function DOWNLOADEXT()
 {
-    [ $# -eq 4 ] && echo "⚠ Usage: DOWNLOADEXT REPOSITORY BRANCH SUBDIR TARGETDIR" && exit 0
+    [ $# -ne 4 ] && echo "⚠ Usage: DOWNLOADEXT REPOSITORY BRANCH SUBDIR TARGETDIR" && exit 0
     local REPOSITORY="$1"
     local BRANCH="$2"
     local SUBDIR="$3"
