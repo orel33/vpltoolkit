@@ -63,21 +63,7 @@ function PRINTENV()
 
 # TODO: add WGET and SCP methods
 
-### DOWNLOAD and COPY FILES in RUNDIR
-function DOWNLOAD()
-{
-    [ $# -ne 3 ] && echo "⚠ Usage: DOWNLOAD REPOSITORY BRANCH SUBDIR" && exit 0
-    local REPOSITORY=$1
-    local BRANCH=$2
-    local SUBDIR=$3
-    DOWNLOAD2 $REPOSITORY $BRANCH $SUBDIR
-    # copy 
-    cp -rf $RUNDIR/download/$SUBDIR/* $RUNDIR/
-    # TODO: check run.sh or eval.sh
-
-}
-
-### DOWNLOAD
+### JUST DOWNLOAD
 function DOWNLOAD2()
 {
     [ $# -ne 3 ] && echo "⚠ Usage: DOWNLOAD2 REPOSITORY BRANCH SUBDIR" && exit 0
@@ -98,6 +84,20 @@ function DOWNLOAD2()
     END=$(date +%s.%N)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
     [ "$VERBOSE" = "1" ] && echo "Download \"$SUBDIR\" in $TIME ms"
+}
+
+### DOWNLOAD and COPY FILES in RUNDIR
+function DOWNLOAD()
+{
+    [ $# -ne 3 ] && echo "⚠ Usage: DOWNLOAD REPOSITORY BRANCH SUBDIR" && exit 0
+    local REPOSITORY=$1
+    local BRANCH=$2
+    local SUBDIR=$3
+    DOWNLOAD2 $REPOSITORY $BRANCH $SUBDIR
+    # copy 
+    cp -rf $RUNDIR/download/$SUBDIR/* $RUNDIR/
+    # TODO: check run.sh or eval.sh
+
 }
 
 ### EXECUTION ###
