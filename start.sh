@@ -63,41 +63,44 @@ function PRINTENV()
 
 # TODO: add WGET and SCP methods
 
-### JUST DOWNLOAD
-function DOWNLOAD2()
+### DOWNLOAD
+function DOWNLOADEXT()
 {
-    [ $# -ne 3 ] && echo "⚠ Usage: DOWNLOAD2 REPOSITORY BRANCH SUBDIR" && exit 0
+    [ $# -eq 4 ] && echo "⚠ Usage: DOWNLOADEXT REPOSITORY BRANCH SUBDIR TARGETDIR" && exit 0
     local REPOSITORY="$1"
     local BRANCH="$2"
     local SUBDIR="$3"
+    local TARGETDIR="$4"
+
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
-    START=$(date +%s.%N)
     mkdir -p $RUNDIR/download
+
+    START=$(date +%s.%N)
+    mkdir -p $RUNDIR/download/$TARGETDIR
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
     [ -z "$BRANCH" ] && echo "⚠ BRANCH variable is not defined!" && exit 0
     [ -z "$SUBDIR" ] && echo "⚠ SUBDIR variable is not defined!" && exit 0
-    git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download &> clone.log # /dev/null
+    git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download/$TARGETDIR &> clone.log # /dev/null
     OK=$?
     [ $ONLINE -eq 0 ] && cat clone.log
     [ ! $OK -eq 0 ] && echo "⚠ GIT clone repository failure (branch \"$BRANCH\")!" && exit 0
-    ( cd $RUNDIR/download && git -c http.sslVerify=false checkout HEAD -- $SUBDIR &> /dev/null )
+    ( cd $RUNDIR/download/$TARGETDIR && git -c http.sslVerify=false checkout HEAD -- $SUBDIR &> /dev/null )
     [ ! $? -eq 0 ] && echo "⚠ GIT checkout \"$SUBDIR\" failure!" && exit 0
-    [ ! -d $RUNDIR/download/$SUBDIR ] && ECHO "⚠ SUBDIR \"$SUBDIR\" is missing!" && exit 0
+    [ ! -d $RUNDIR/download/$TARGETDIR/$SUBDIR ] && ECHO "⚠ SUBDIR \"$SUBDIR\" is missing!" && exit 0
     END=$(date +%s.%N)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
     [ "$VERBOSE" = "1" ] && echo "Download \"$SUBDIR\" in $TIME ms"
-    rm -rf $RUNDIR/download/.git
 }
 
-### DOWNLOAD and COPY FILES in RUNDIR
+### DOWNLOAD MAIN REPOSITORY and COPY FILES in RUNDIR
 function DOWNLOAD()
 {
     [ $# -ne 3 ] && echo "⚠ Usage: DOWNLOAD REPOSITORY BRANCH SUBDIR" && exit 0
     local REPOSITORY="$1"
     local BRANCH="$2"
     local SUBDIR="$3"
-    DOWNLOAD2 "$REPOSITORY" "$BRANCH" "$SUBDIR"
-    cp -rf $RUNDIR/download/$SUBDIR/* $RUNDIR/
+    DOWNLOADEXT "$REPOSITORY" "$BRANCH" "$SUBDIR" "main"
+    cp -rf $RUNDIR/download/$SUBDIR/main/* $RUNDIR/
 }
 
 ### EXECUTION ###
