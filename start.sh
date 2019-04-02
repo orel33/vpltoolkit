@@ -93,7 +93,7 @@ function DOWNLOAD()
     local REPOSITORY=$1
     local BRANCH=$2
     local SUBDIR=$3
-    DOWNLOAD "$REPOSITORY" "$BRANCH" "$SUBDIR"
+    DOWNLOAD2 "$REPOSITORY" "$BRANCH" "$SUBDIR"
     cp -rf $RUNDIR/download/$SUBDIR/* $RUNDIR/
 }
 
