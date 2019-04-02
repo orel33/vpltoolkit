@@ -99,8 +99,9 @@ function DOWNLOAD()
     local REPOSITORY="$1"
     local BRANCH="$2"
     local SUBDIR="$3"
-    DOWNLOADEXT "$REPOSITORY" "$BRANCH" "$SUBDIR" "main"
-    cp -rf $RUNDIR/download/$SUBDIR/main/* $RUNDIR/
+    local TARGETDIR="main"
+    DOWNLOADEXT "$REPOSITORY" "$BRANCH" "$SUBDIR" "$TARGETDIR"
+    cp -rf $RUNDIR/download/$TARGETDIR/$SUBDIR/* $RUNDIR/
 }
 
 ### EXECUTION ###
