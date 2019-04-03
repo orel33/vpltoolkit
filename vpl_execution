@@ -47,6 +47,7 @@ if [ -n "$DOCKER" ] ; then
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && cat output && exit 0
     DOCKERTIMEOUT="900" # 15mn
     DOCKEROPT=""
+    DOCKEROPT="$DOCKEROPT -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix"
     DOCKEROPT="$DOCKEROPT -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker"
     DOCKEROPT="$DOCKEROPT --device=/dev/kvm:/dev/kvm"
     # DOCKEROPT="$DOCKEROPT -v /dev/kvm:/dev/kvm" # failure on moodle, ok at home!?
