@@ -130,7 +130,6 @@ function START_ONLINE()
     cp $RUNDIR/vpltoolkit/vpl_execution $HOME
     # graphic session
     [ $GRAPHIC -eq 1 ] && mv $HOME/vpl_execution $HOME/vpl_wexecution
-    [ $GRAPHIC -eq 1 ] && xterm -e bash
     # print in compilation window
     echo "Start VPL Toolkit in $SECONDS sec..."
     PRINTENV
