@@ -255,6 +255,7 @@ function CAT_TEACHER()
 ####################################################
 
 # inputs: CMD [...]
+# return command status
 function EXEC()
 {
     # FIXME: only work for a simple command without subshells...
@@ -296,6 +297,8 @@ function STRSTATUS()
 
 ####################################################
 
+# inputs: CMD [...]
+# return command status
 function TRACE()
 {
     if [ "$MODE" = "EVAL" ] ; then
@@ -322,6 +325,8 @@ function TRACE()
 
 ####################################################
 
+# inputs: CMD [...]
+# return command status
 function TRACE_TEACHER()
 {
     if [ "$MODE" = "EVAL" ] ; then
