@@ -12,7 +12,7 @@ fi
 [ -z "$MODE" ] && echo "⚠ Variable \"MODE\" is not defined!" && exit 0
 if [ "$MODE" = "RUN" ] ; then
     CMD="$RUNDIR/run.sh"
-    elif [ "$MODE" = "EVAL" ] ; then
+elif [ "$MODE" = "EVAL" ] ; then
     CMD="$RUNDIR/eval.sh"
 else
     echo "⚠ Invalid \"MODE\" selected!" && exit 0
@@ -48,7 +48,8 @@ if [ -n "$DOCKER" ] ; then
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && cat output && exit 0
     DOCKERTIMEOUT="900" # 15mn
     # DOCKEROPT="--privileged"
-    [ $GRAPHIC -eq 1 ] && DOCKEROPT="$DOCKEROPT -e DISPLAY=unix$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix"
+    [ $GRAPHIC -eq 1 ] && DOCKEROPT="$DOCKEROPT -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:rw"
+    [ $GRAPHIC -eq 1 ] && DOCKEROPT="$DOCKEROPT --device=/dev/dri:/dev/dri" # direct rendering
     DOCKEROPT="$DOCKEROPT -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker"
     DOCKEROPT="$DOCKEROPT --device=/dev/kvm:/dev/kvm"
     # DOCKEROPT="$DOCKEROPT -v /dev/kvm:/dev/kvm" # failure on moodle, ok at home!?
