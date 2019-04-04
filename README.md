@@ -1,5 +1,7 @@
 # VPL Toolkit
 
+**FIXME: This README must be updated, because since release 4.0, the toolkit API and the startup strategy has evolved!**
+
 ## Introduction
 
 *VPL Toolkit* is a light toolkit to help *teachers* to program [VPL](http://vpl.dis.ulpgc.es/) activity in [Moodle](https://moodle.org/) for their *students*.
@@ -204,6 +206,8 @@ $ docker push orel33/mydebian:latest
 ### Version 4.0
 
 * complete rewrite of API in toolkit.sh
+* improve docker support
+* add GRAPHIC option
 
 ### Version 3.0
 
