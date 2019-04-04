@@ -1,6 +1,6 @@
 # VPL Toolkit
 
-**FIXME: This README must be updated, because since release 4.0, the toolkit API and the startup strategy has evolved!**
+*FIXME: This README must be updated, because since release 4.0, the toolkit API and the startup strategy has evolved!*
 
 ## Introduction
 
