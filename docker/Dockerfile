@@ -34,6 +34,9 @@ RUN apt-get install -y libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-g
 RUN apt-get install -y tk8.5 tk8.5-dev graphviz
 RUN apt-get install -y python3-pygame python-pygame python-pyx
 
+# vnc support
+RUN apt-get install -y tightvncserver fluxbox lxterminal lxsession x11vnc gvncviewer
+
 # clean
 RUN apt-get -y autoremove
 
