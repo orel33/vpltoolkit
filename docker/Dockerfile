@@ -12,6 +12,7 @@ RUN apt-get install -y apt-utils apt-file
 RUN apt-get install -y emacs-nox vim nano
 
 # misc
+RUN apt-get install -y bash bash-completion
 RUN apt-get install -y locales-all tmux screen expect unzip git
 
 # programming
@@ -21,7 +22,7 @@ RUN apt-get install -y cmake cmake-curses-gui cmake-data cmake-doc
 RUN apt-get install -y flex bison
 RUN apt-get install -y libncurses-dev
 RUN apt-get install -y tcl8.5 tcl8.5-dev
-RUN apt-get install -y python3 python3-pip python3-numpy 
+RUN apt-get install -y python3 python3-pip python3-numpy
 RUN apt-get install -y python python-pip python-numpy  python-pytest
 
 # networking
@@ -34,8 +35,10 @@ RUN apt-get install -y libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-g
 RUN apt-get install -y tk8.5 tk8.5-dev graphviz
 RUN apt-get install -y python3-pygame python-pygame python-pyx
 
-# vnc support
-RUN apt-get install -y tightvncserver fluxbox lxterminal lxsession x11vnc gvncviewer
+# X11 & VNC
+RUN apt-get install -y tightvncserver xtightvncviewer fluxbox lxterminal lxsession
+RUN apt-get install -y xfonts-base xfonts-75dpi xfonts-100dpi
+RUN apt-get install -y xserver-xorg x11-xserver-utils
 
 # clean
 RUN apt-get -y autoremove
