@@ -39,6 +39,7 @@ cd $RUNDIR
 # echo "RUNDIR=$RUNDIR"
 
 [ $GRAPHIC -eq 1 ] && xhost +
+[ $GRAPHIC -eq 1 ] && export VNCPORT=${DISPLAY:1}
 
 if [ -n "$DOCKER" ] ; then
     ### docker run ###
