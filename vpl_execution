@@ -72,7 +72,11 @@ if [ -n "$DOCKER" ] ; then
 else
     ### regular run ###
     echo "Run..."
-    $SHELLCMD $CMD $ARGS
+    if [ $GRAPHIC -eq 0 ] ; then
+        $SHELLCMD $CMD $ARGS
+    else
+        xterm -hold -e $SHELLCMD $CMD $ARGS
+    fi
     echo "Terminated."
 fi
 
