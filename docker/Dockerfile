@@ -37,7 +37,8 @@ RUN apt-get install -y python3-pygame python-pygame python-pyx
 
 # X11 & VNC
 RUN apt-get install -y tightvncserver xtightvncviewer fluxbox lxterminal lxsession
-RUN apt-get install -y xfonts-base xfonts-75dpi xfonts-100dpi
+RUN apt-get install -y xfonts-base xfonts-75dpi xfonts-100dpi xfonts-scalable xfonts-cyrillic
+RUN apt-get install -y xvfb x11vnc
 RUN apt-get install -y xserver-xorg x11-xserver-utils
 
 # clean
