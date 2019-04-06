@@ -38,11 +38,16 @@ function dockerclean()
 cd $RUNDIR
 # echo "RUNDIR=$RUNDIR"
 
-[ $GRAPHIC -eq 1 ] && xhost +
-[ $GRAPHIC -eq 1 ] && export VNCPORT=${DISPLAY:1}
+### graphic mode ###
+if [ $GRAPHIC -eq 1 ] ; then 
+    xhost +
+    export VNCPORT=${DISPLAY:1}
+    # kill vncserver and replace it...
+    bash -c bash -c "vncserver -kill $DISPLAY ; vncserver $DISPLAY -rfbport $VNCPORT"
+fi
 
+### docker run ###
 if [ -n "$DOCKER" ] ; then
-    ### docker run ###
     trap 'dockerclean' EXIT
     # check if docker image is already installed
     docker image inspect $DOCKER &> output
@@ -68,10 +73,10 @@ if [ -n "$DOCKER" ] ; then
     else 
         xterm -hold -e docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
     fi
-
     docker container stop -t 0 $DOCKERID &> /dev/null
+
+### regular run ###
 else
-    ### regular run ###
     echo "Run..."
     if [ $GRAPHIC -eq 0 ] ; then
         $SHELLCMD $CMD $ARGS
