@@ -43,8 +43,8 @@ if [ $GRAPHIC -eq 1 ] ; then
     xhost +
     export VNCPORT=${DISPLAY:1}
     # kill vncserver and replace it...
-    bash -c "bash -c \"vncserver -kill $DISPLAY ; vncserver $DISPLAY -rfbport $VNCPORT\""
-fi
+    nohup bash -c "vncserver -kill $DISPLAY ; vncserver $DISPLAY -rfbport $VNCPORT"
+fi  
 
 ### docker run ###
 if [ -n "$DOCKER" ] ; then
