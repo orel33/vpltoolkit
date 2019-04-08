@@ -60,6 +60,19 @@ TODO: add image...
 
 Now, you can see in the VNC Viewer two terminals coming from two differents Docker containers! It also works for a Docker launched inside another Docker...
 
+### No Window Manager!
+
+How to run X application withou window manager, that is NOWM mode ? A solution is directly based on xinit/startx... The following solution uses a virtual framebuffer (xvfb) on display :99 and then make it accessible via a VNC server listening on port 5900...
+
+```bash
+$ xvfb-run --server-args=":99.0 -screen 0 800x600x24 -ac +extension RANDR" xterm &
+$ x11vnc -forever -usepw -shared -rfbport 5900 -display :99.0
+$ vncviewer localhost:5900
+```
+
+TODO: add image...
+
+
 ### To be continued...
 
 ---

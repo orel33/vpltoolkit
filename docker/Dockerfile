@@ -41,6 +41,9 @@ RUN apt-get install -y xfonts-base xfonts-75dpi xfonts-100dpi xfonts-scalable xf
 RUN apt-get install -y xvfb x11vnc
 RUN apt-get install -y xserver-xorg x11-xserver-utils
 
+# remove hardware-accelerated Mesa libraries and install the software-only render
+# RUN apt-get install -y libgl1-mesa-swx11 
+
 # clean
 RUN apt-get -y autoremove
 
