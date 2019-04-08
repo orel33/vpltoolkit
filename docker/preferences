@@ -1,0 +1,29 @@
+
+### my preferences ###
+
+# first, always prefer testing on stable (higher score)
+# then use unstable only as backup, if no testing/stable package exists...
+
+# 1) to install the package with highest pinning score
+# apt-get install <package>
+
+# 2) to install the unstable version of the package, and try to meet any dependencies normally from testing & stable... this may not work!
+# apt-get install <package>/unstable
+
+# 3) install the unstable version of the package, and try to meet any dependencies from unstable... this may produce better results!
+# apt-get -t unstable install <package>
+
+# preference for testing
+Package: *
+Pin: release a=testing
+Pin-Priority: 700
+
+# preference for stable
+Package: *
+Pin: release a=stable
+Pin-Priority: 600
+
+# preference for unstable 
+Package: *
+Pin: release a=unstable
+Pin-Priority: 100

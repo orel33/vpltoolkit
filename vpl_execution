@@ -42,8 +42,7 @@ cd $RUNDIR
 if [ $GRAPHIC -eq 1 ] ; then 
     xhost +
     export VNCPORT=${DISPLAY:1}
-    # FIXME: try to kill vncserver and replace it...
-    # nohup bash -c "vncserver -kill $DISPLAY ; vncserver $DISPLAY -rfbport $VNCPORT"
+    nohup lxsession &> /dev/null &
 fi  
 
 ### docker run ###
@@ -71,7 +70,7 @@ if [ -n "$DOCKER" ] ; then
     if [ $GRAPHIC -eq 0 ] ; then
         docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
     else 
-        xterm -hold -e docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
+        xterm -T main -hold -e docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
     fi
     docker container stop -t 0 $DOCKERID &> /dev/null
 

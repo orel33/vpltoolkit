@@ -70,6 +70,15 @@ $ x11vnc -forever -usepw -shared -rfbport 5900 -display :99.0
 $ vncviewer localhost:5900
 ```
 
+It also works with glxinfo/glxgears!
+
+```bash
+$ xvfb-run --server-args=":99.0 -screen 0 800x600x24 -ac +extension RANDR" glxinfo | head
+name of display: :99
+display: :99  screen: 0
+direct rendering: Yes
+```
+
 TODO: add image...
 
 

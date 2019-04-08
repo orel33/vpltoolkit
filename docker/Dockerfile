@@ -3,10 +3,12 @@ MAINTAINER Aurelien Esnard <aurelien.esnard@u-bordeaux.fr>
 WORKDIR /home/docker
 ARG DEBIAN_FRONTEND=noninteractive
 
-# upgrade in debian testing
+# upgrade in debian testing (with unstable as )
 COPY sources.list /etc/apt/
+COPY preferences /etc/apt/preferences.d/
 RUN apt-get update
 RUN apt-get install -y apt-utils apt-file
+# RUN apt-get install -y apt-show-versions
 
 # editing
 RUN apt-get install -y emacs-nox vim nano
