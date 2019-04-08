@@ -42,6 +42,7 @@ cd $RUNDIR
 if [ $GRAPHIC -eq 1 ] ; then 
     xhost +
     export VNCPORT=${DISPLAY:1}
+    # start a lightweight X session manager
     nohup lxsession &> /dev/null &
 fi  
 
