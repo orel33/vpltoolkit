@@ -41,18 +41,17 @@ cd $RUNDIR
 ### graphic mode ###
 if [ $GRAPHIC -eq 1 ] ; then 
     xhost +
-    export VNCPORT=${DISPLAY:1}
-    # start a lightweight X session manager
-    nohup lxsession &> /dev/null &
+    export VNCPORT=${DISPLAY:1} # remove ':' from $DISPLAY
 fi  
 
 ### docker run ###
 if [ -n "$DOCKER" ] ; then
     trap 'dockerclean' EXIT
+
+    [ -z "$DOCKERTIMEOUT" ] && echo "⚠ Variable \"DOCKERTIMEOUT\" is not defined!" && exit 0
     # check if docker image is already installed
     docker image inspect $DOCKER &> output
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && cat output && exit 0
-    DOCKERTIMEOUT="900" # 15mn
     # DOCKEROPT="--privileged"
     DOCKEROPT="$DOCKEROPT -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix"
     DOCKEROPT="$DOCKEROPT --device=/dev/dri:/dev/dri" # direct rendering

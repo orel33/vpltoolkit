@@ -13,6 +13,7 @@ function CHECKENV()
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ -z "$GRAPHIC" ] && GRAPHIC=0
     [ -z "$DOCKER" ] && DOCKER=""
+    [ -z "$DOCKERTIMEOUT" ] && DOCKERTIMEOUT="900"
     [ -z "$DEBUG" ] && DEBUG=0
     [ -z "$VERBOSE" ] && VERBOSE=0
     [ -z "$ARGS" ] && ARGS=""
@@ -29,6 +30,7 @@ function SAVEENV()
     echo "RUNDIR=$RUNDIR" >> $RUNDIR/env.sh
     echo "GRAPHIC=$GRAPHIC" >> $RUNDIR/env.sh
     echo "DOCKER=$DOCKER" >> $RUNDIR/env.sh
+    echo "DOCKERTIMEOUT=$DOCKERTIMEOUT" >> $RUNDIR/env.sh
     echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
     echo "VERBOSE=$VERBOSE" >> $RUNDIR/env.sh
     echo "ARGS=$ARGS" >> $RUNDIR/env.sh
@@ -55,6 +57,7 @@ function PRINTENV()
     echo "* MODE=$MODE"
     echo "* RUNDIR=$RUNDIR"
     echo "* DOCKER=$DOCKER"
+    echo "* DOCKERTIMEOUT=$DOCKERTIMEOUT"
     echo "* GRAPHIC=$GRAPHIC"
     echo "* DEBUG=$DEBUG"
     echo "* VERBOSE=$VERBOSE"

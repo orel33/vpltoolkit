@@ -217,6 +217,8 @@ $ docker pull orel33/mydebian:latest
 * add other DOWNLOAD methods for wget and scp, and the possibility to download several stuffs
 * update documentation in README.md (details on how to build an exercice: file hierarchy, tests, ...)
 * update hello example that should not work since version 2.0
+* add unit tests of tookit.sh
+* add possibility to enrich env.sh with user-defined variables
 
 ---
 aurelien.esnard@u-bordeaux.fr
