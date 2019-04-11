@@ -129,6 +129,7 @@ function START_ONLINE()
     # INPUTS=$(echo -n \" && cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs && echo -n \")
     CHECKENV
     SAVEENV
+    rm -rf $RUNDIR/vpltoolkit/.git/ &> /dev/null # for security issue
     cp $RUNDIR/env.sh $HOME
     cp $RUNDIR/vpltoolkit/toolkit.sh $HOME
     cp $RUNDIR/vpltoolkit/vpl_execution $HOME
@@ -159,6 +160,7 @@ function START_OFFLINE()
     [ ! -z "$INPUTDIR" ] && INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\"
     CHECKENV
     SAVEENV
+    rm -rf $RUNDIR/vpltoolkit/.git/ &> /dev/null # for security issue
     echo "Start VPL Toolkit in $SECONDS sec..."
     PRINTENV
     cd $RUNDIR && $RUNDIR/vpltoolkit/vpl_execution
