@@ -379,6 +379,7 @@ function MONITOR()
     RET=$?
     ceol=$(tput el)                 # tput requires package "ncurses-bin"
     echo -ne "\r${ceol}" # clear line
+    echo "$MSG: done!"
     return $RET
 }
 
