@@ -363,23 +363,28 @@ function TRACE_TEACHER()
 #                   MONITOR                        #
 ####################################################
 
-# monitor a background process with a progress bar (or spinner)
+# monitor a background process with a progress bar (spinner)
 # inputs: PID MSG
+# return command status
 function MONITOR()
 {
     PID=$1
     MSG=$2
-    while kill -0 $PID 2> /dev/null; do
-        for s in / - \\ \| ; do
-            echo -ne "\r$MSG $s"
-            sleep 0.1
+    if [ "$MODE" = "RUN" ] ; then
+        while kill -0 $PID 2> /dev/null; do
+            for s in / - \\ \| ; do
+                echo -ne "\r$MSG $s"
+                sleep 0.1
+            done
         done
-    done
+    fi
     wait $PID &> /dev/null
     RET=$?
-    ceol=$(tput el)                 # tput requires package "ncurses-bin"
-    echo -ne "\r${ceol}" # clear line
-    # echo "$MSG: done!"
+    if [ "$MODE" = "RUN" ] ; then
+        ceol=$(tput el)      # tput requires package "ncurses-bin"
+        echo -ne "\r${ceol}" # clear line
+    fi
+    ECHO "$MSG"
     return $RET
 }
 
