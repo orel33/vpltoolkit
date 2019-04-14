@@ -363,6 +363,8 @@ function TRACE_TEACHER()
 #                   MONITOR                        #
 ####################################################
 
+# https://stackoverflow.com/questions/238073/how-to-add-a-progress-bar-to-a-shell-script
+
 # monitor a background process with a progress bar (spinner)
 # inputs: PID MSG
 # return command status
