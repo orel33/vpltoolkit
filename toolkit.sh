@@ -262,6 +262,9 @@ function CAT_TEACHER()
 #                       TRACE                      #
 ####################################################
 
+# silent execution
+# ( bash -c "sleep 5 ; exit 124" & wait $! ; exit $? ) &> /dev/null ; echo $?
+
 # inputs: BASH_CMD_STRING
 # return command status
 function EXEC()
@@ -364,19 +367,20 @@ function TRACE_TEACHER()
 # inputs: PID MSG
 function MONITOR()
 {
-    # bash -c "$@" &> /dev/null &
-    PID=$!
+    PID=$1
+    MSG=$2
     while kill -0 $PID 2> /dev/null; do
         for s in / - \\ \| ; do
             echo -ne "\r$MSG $s"
             sleep 0.1
         done
     done
-    
-    ceol=$(tput el)
-    echo -e "\r${ceol}Done!"
+    wait $PID &> /dev/null
+    RET=$?
+    ceol=$(tput el)                 # tput requires package "ncurses-bin"
+    echo -ne "\r${ceol}" # clear line
+    return $RET
 }
-
 
 ####################################################
 #                      EVAL                        #
