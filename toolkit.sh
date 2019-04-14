@@ -42,11 +42,19 @@ function COPYINPUTS()
 #                       ECHO                       #
 ####################################################
 
+# TODO: use tput
 BLUE='\033[34m'
 GREEN='\033[32m'
 RED='\033[31m'
 YELLOW='\033[33m'
 NC='\033[0m'    # no color
+
+# BLACK=$(tput setaf 0)   # black
+# RED=$(tput setaf 1)     # red
+# GREEN=$(tput setaf 2)   # green
+# BLUE=$(tput setaf 4)    # blue
+# YELLOW=$(tput setaf 3)  # yellow
+# NC=$(tput sgr0)         # no color
 
 
 function ECHOBLUE()
@@ -254,14 +262,14 @@ function CAT_TEACHER()
 #                       TRACE                      #
 ####################################################
 
-# inputs: CMD [...]
+# inputs: BASH_CMD_STRING
 # return command status
 function EXEC()
 {
     # FIXME: only work for a simple command without subshells...
     # TODO: use disown command to detach command in order to avoid dirty error messages printed by bash
     # TODO: use safe EXEC() in TRACE()
-
+    
     # run redirection in a subshell for safety
     (
         exec 30>&2
@@ -297,7 +305,7 @@ function STRSTATUS()
 
 ####################################################
 
-# inputs: CMD [...]
+# inputs: BASH_CMD_STRING
 # return command status
 function TRACE()
 {
@@ -325,7 +333,7 @@ function TRACE()
 
 ####################################################
 
-# inputs: CMD [...]
+# inputs: BASH_CMD_STRING
 # return command status
 function TRACE_TEACHER()
 {
@@ -336,17 +344,39 @@ function TRACE_TEACHER()
         # bash -c "setsid -w $@" |& sed -e 's/^/Teacher :=>>/;'
         # setsid -w bash -c "$@" |& sed -e 's/^/Teacher :=>>/;' # preformated output
         bash -c "$@" |& sed -e 's/^/Teacher :=>>/;' # preformated output
-        RET=${PIPESTATUS[0]}  # return status of first piped command!
+        local RET=${PIPESTATUS[0]}  # return status of first piped command!
         local STATUS=$(STRSTATUS $RET)
         echo "Teacher :=>> Status $RET ($STATUS)"
     else
         # bash -c "setsid -w $@" &>> $RUNDIR/$LOG
         # setsid -w bash -c "$@" &>> $RUNDIR/$LOG
         bash -c "$@" &>> $RUNDIR/$LOG
-        RET=$?
+        local RET=$?
     fi
     return $RET
 }
+
+####################################################
+#                   MONITOR                        #
+####################################################
+
+# monitor a background process with a progress bar (or spinner)
+# inputs: PID MSG
+function MONITOR()
+{
+    # bash -c "$@" &> /dev/null &
+    PID=$!
+    while kill -0 $PID 2> /dev/null; do
+        for s in / - \\ \| ; do
+            echo -ne "\r$MSG $s"
+            sleep 0.1
+        done
+    done
+    
+    ceol=$(tput el)
+    echo -e "\r${ceol}Done!"
+}
+
 
 ####################################################
 #                      EVAL                        #
