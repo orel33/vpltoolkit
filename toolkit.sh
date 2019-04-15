@@ -372,10 +372,12 @@ function WAIT()
 {
     PID=$1
     MSG=$2
+    local SPINNER='/-\|'
     if [ "$MODE" = "RUN" ] ; then
         while kill -0 $PID 2> /dev/null; do
-            for s in / - \\ \| ; do
-                echo -ne "\r$MSG $s"
+            # for s in / - \\ \| ; do
+            for i in $(seq 0 3) ; do
+                echo -ne "\r$MSG ${SPINNER:$i:1}"
                 sleep 0.1
             done
         done
