@@ -2,6 +2,7 @@ FROM debian:latest
 MAINTAINER Aurelien Esnard <aurelien.esnard@u-bordeaux.fr>
 WORKDIR /home/docker
 ARG DEBIAN_FRONTEND=noninteractive
+# ENV LANG en_EN.utf8 
 
 # upgrade in debian testing (with unstable as )
 COPY sources.list /etc/apt/
@@ -30,6 +31,7 @@ RUN apt-get install -y python python-pip python-numpy  python-pytest
 # networking
 RUN apt-get install -y net-tools socat rlwrap wget curl tcpdump
 RUN apt-get install -y python3-scapy python-scapy
+RUN apt-get install -y netcat-openbsd
 
 # graphics app
 RUN apt-get install -y xterm x11-apps mesa-utils libgl1-mesa-dev libgl1-mesa-glx
@@ -42,11 +44,14 @@ RUN apt-get install -y tightvncserver xtightvncviewer fluxbox lxterminal lxsessi
 RUN apt-get install -y xfonts-base xfonts-75dpi xfonts-100dpi xfonts-scalable xfonts-cyrillic
 RUN apt-get install -y xvfb x11vnc
 RUN apt-get install -y xserver-xorg x11-xserver-utils
+RUN apt-get install -y tigervnc-standalone-server  tigervnc-common
 
 # remove hardware-accelerated Mesa libraries and install the software-only render
 # RUN apt-get install -y libgl1-mesa-swx11 
 
 # clean
 RUN apt-get -y autoremove
+
+# WORKDIR /root
 
 # EOF
