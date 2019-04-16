@@ -1,5 +1,7 @@
 # VPL Toolkit
 
+*FIXME: This README must be updated, because since release 4.0, the toolkit API and the startup strategy has evolved!*
+
 ## Introduction
 
 *VPL Toolkit* is a light toolkit to help *teachers* to program [VPL](http://vpl.dis.ulpgc.es/) activity in [Moodle](https://moodle.org/) for their *students*.
@@ -42,6 +44,10 @@ $RUNDIR
   ├── inputs              # all student input files ($VPL_SUBFILES)
   │   └── student.c
   |   └── ...
+  ├── download            # download main project and extra dependencies here
+  │   └── main/...     
+  │   └── dep1/...     
+  │   └── dep2/...
   └── vpltoolkit          # VPL toolkit
       └── start.sh        # startup script
       └── toolkit.sh      # useful bash routines
@@ -197,6 +203,8 @@ $ docker pull orel33/mydebian:latest
 ### Version 4.0
 
 * complete rewrite of API in toolkit.sh
+* improve docker support
+* add GRAPHIC option
 
 ### Version 3.0
 
