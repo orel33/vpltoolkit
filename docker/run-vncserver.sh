@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DOCKER="orel33/mydebian:latest"
+
 VNCPORT="5999"
 
 # https://www.digitalocean.com/community/tutorials/how-to-share-data-between-docker-containers
@@ -12,7 +14,7 @@ DOCKEROPT="$DOCKEROPT -v x11-unix-volume:/tmp/.X11-unix"        # share data vol
 DOCKEROPT="$DOCKEROPT -p $VNCPORT:$VNCPORT" # -p 5900:5900 -p 5901:5901
 DOCKEROPT="$DOCKEROPT -e USER=root -e HOME=/root -e VNCPORT=$VNCPORT"
 DOCKEROPT="$DOCKEROPT -v $PWD/vncserver.sh:/vncserver.sh"
-docker run -it --rm -w /root $DOCKEROPT orel33/mydebian /vncserver.sh
+docker run -it --rm -w /root $DOCKEROPT $DOCKER /vncserver.sh
 
 # vncviewer localhost:5999
 
