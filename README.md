@@ -14,22 +14,22 @@ Features:
 
 ## Execution Model of VPL
 
-What happens when a student clicks on the *Run button* of your VPL Editor in Moodle (or in *Test Activity*, if you are teacher)? First, it will launch the *vpl_run.sh* script, that you must provide in the VPL Interface > Execution Files. Typically, this script must provide in any way a new shell script called *vpl_execution*, that will be implicitly launched after *vpl_run.sh* is completed. At this stage, *vpl_execution* calls a teacher-defined script *run.sh*...
+What happens when a student clicks on the *Run button* of your VPL Editor in Moodle (or in *Test Activity*, if you are teacher)? First, it will launch the *vpl_run.sh* script, that you must provide in the VPL Interface > Execution Files. Typically, this script must provide in any way a new shell script called *vpl_execution* (or *vpl_wexecution* for graphic session), that will be implicitly launched after *vpl_run.sh* is completed. At this stage, *vpl_execution* calls a teacher-defined script *run.sh*. By default, VPL start *run.sh* in text mode. However, it is alse possible to start a graphic session through a VNC connection by setting the variable *GRAPHIC=1* in *vpl_run.sh*.
 
 Here is an overview of this process for the three different modes: *RUN*, *DEBUG* and *EVAL*.
 
 ```text
-click RUN button --> vpl_run.sh ----------+                      +--> run.sh
-click DEBUG button --> vpl_debug.sh ------+---> vpl_execution ---+--> debug.sh
-click EVAL button --> vpl_evaluate.sh ----+                      +--> eval.sh
+click RUN button -----> vpl_run.sh --------+                         +---> run.sh
+click DEBUG button ---> vpl_debug.sh ------+---> vpl_(w)execution ---+---> debug.sh
+click EVAL button ----> vpl_evaluate.sh ---+                         +---> eval.sh
 ```
 
 To develop a new VPL activity, it is often convenient to launch it offline without the Moodle frontend, using *local* scripts, as follow:
 
 ```text
-local_run.sh ----------+                      +--> run.sh
-local_debug.sh---------+---> vpl_execution ---+--> debug.sh
-local_eval.sh ---------+                      +--> eval.sh
+local_run.sh ----------+                         +---> run.sh
+local_debug.sh --------+---> vpl_(w)execution ---+---> debug.sh
+local_eval.sh ---------+                         +---> eval.sh
 ```
 
 The *run.sh* (resp. *eval.sh*) script is starting from the $RUNDIR directory, organized as follow:
@@ -52,7 +52,7 @@ $RUNDIR
   └── vpltoolkit          # VPL toolkit
       └── start.sh        # startup script
       └── toolkit.sh      # useful bash routines
-      └── vpl_execution
+      └── vpl_execution   # VPL execution script
       └── ...
 ```
 
