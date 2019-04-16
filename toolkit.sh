@@ -58,7 +58,8 @@ NC='\033[0m'    # no color
 
 # clear line
 CEOL=$(tput el)       # tput requires package "ncurses-bin"
-CL="\r${CEOL}"
+# CL="\r${CEOL}"
+CL=""
 
 
 function ECHOBLUE()
@@ -387,6 +388,8 @@ function WAIT()
 {
     PID=$1
     MSG=$2
+    local CEOL=$(tput el)       # tput requires package "ncurses-bin"
+    local CL="\r${CEOL}"        # clear line
     local SPINNER='/-\|'
     if [ "$MODE" = "RUN" -o "$MODE" = "DEBUG" ] ; then
         while kill -0 $PID 2> /dev/null; do
