@@ -150,7 +150,12 @@ function WARNING()
 function ERROR()
 {
     local MSG="$1"
-    ECHORED "⛔️ Error: $MSG"
+    local ERRORMSG="⛔️ Error: $MSG"
+    if [ "$MODE" = "EVAL" ] ; then
+        echo "\rComment :=>>$ERRORMSG"
+    else
+        echo -n -e "\r${RED}"  && echo -n "$ERRORMSG" && echo -e "${NC}"
+    fi
     return 0
 }
 
