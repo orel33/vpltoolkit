@@ -14,22 +14,22 @@ Features:
 
 ## Execution Model of VPL
 
-What happens when a student clicks on the *Run/Eval button* of your VPL Editor in Moodle (or in *Test Activity*, if you are teacher)?
+What happens when a student clicks on the *Run button* of your VPL Editor in Moodle (or in *Test Activity*, if you are teacher)? First, it will launch the *vpl_run.sh* script, that you must provide in the VPL Interface > Execution Files. Typically, this script must provide in any way a new shell script called *vpl_execution*, that will be implicitly launched after *vpl_run.sh* is completed. At this stage, *vpl_execution* calls a teacher-defined script *run.sh*...
 
-First, it will launch the *vpl_run.sh* (resp *vpl_evaluate.sh*) script, that you must provide in the VPL Interface > Execution Files. Typically, this script must provide in any way a new shell script called *vpl_execution*, that will be implicitly launched after *vpl_run.sh* (resp *vpl_evaluate.sh*) is completed. At this stage, *vpl_execution* calls a teacher-defined script *run.sh* (resp. *eval.sh*) depending on the execution mode, either RUN or EVAL. Here is an overview of the 
+Here is an overview of this process for the three different modes: *RUN*, *DEBUG* and *EVAL*.
 
 ```text
-click RUN button --> vpl_run.sh ----------+                    +--> run.sh
-                                          |--> vpl_execution --|
-click EVAL button --> vpl_evaluate.sh ----+                    +--> eval.sh
+click RUN button --> vpl_run.sh ----------+                      +--> run.sh
+click DEBUG button --> vpl_debug.sh ------+---> vpl_execution ---+--> debug.sh
+click EVAL button --> vpl_evaluate.sh ----+                      +--> eval.sh
 ```
 
 To develop a new VPL activity, it is often convenient to launch it offline without the Moodle frontend, using *local* scripts, as follow:
 
 ```text
-local_run.sh ----------+                    +--> run.sh
-                       |--> vpl_execution --|
-local_eval.sh ---------+                    +--> eval.sh
+local_run.sh ----------+                      +--> run.sh
+local_debug.sh---------+---> vpl_execution ---+--> debug.sh
+local_eval.sh ---------+                      +--> eval.sh
 ```
 
 The *run.sh* (resp. *eval.sh*) script is starting from the $RUNDIR directory, organized as follow:
@@ -38,6 +38,7 @@ The *run.sh* (resp. *eval.sh*) script is starting from the $RUNDIR directory, or
 $RUNDIR
   ├── env.sh              # environment variable for the VPL toolkit
   ├── run.sh              # entry point for RUN mode
+  ├── debug.sh            # entry point for DEBUG mode
   ├── eval.sh             # entry point for EVAL mode
   ├── ...                 # ...
   ├── ...                 # all files & directories provided by teacher
@@ -45,8 +46,8 @@ $RUNDIR
   │   └── student.c
   |   └── ...
   ├── download            # download main project and extra dependencies here
-  │   └── main/...     
-  │   └── dep1/...     
+  │   └── main/...
+  │   └── dep1/...
   │   └── dep2/...
   └── vpltoolkit          # VPL toolkit
       └── start.sh        # startup script
@@ -205,6 +206,7 @@ $ docker pull orel33/mydebian:latest
 * complete rewrite of API in toolkit.sh
 * improve docker support
 * add GRAPHIC option
+* add DEBUG mode
 
 ### Version 3.0
 
@@ -222,11 +224,11 @@ $ docker pull orel33/mydebian:latest
 
 ### To Do
 
-* add other DOWNLOAD methods for wget and scp, and the possibility to download several stuffs
 * update documentation in README.md (details on how to build an exercice: file hierarchy, tests, ...)
 * update hello example that should not work since version 2.0
 * add unit tests of tookit.sh
 * add possibility to enrich env.sh with user-defined variables
+* add other DOWNLOAD methods for wget and scp, and the possibility to download several stuffs
 
 ---
 aurelien.esnard@u-bordeaux.fr

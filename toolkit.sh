@@ -59,37 +59,37 @@ NC='\033[0m'    # no color
 
 function ECHOBLUE()
 {
-    if [ "$MODE" = "RUN" ] ; then
-        echo -n -e "${BLUE}" && echo -n "$@" && echo -e "${NC}"
-    else
+    if [ "$MODE" = "EVAL" ] ; then
         echo "Comment :=>>$@"
+    else
+        echo -n -e "${BLUE}" && echo -n "$@" && echo -e "${NC}"
     fi
 }
 
 function ECHOGREEN()
 {
-    if [ "$MODE" = "RUN" ] ; then
-        echo -n -e "${GREEN}" && echo -n "$@" && echo -e "${NC}"
-    else
+    if [ "$MODE" = "EVAL" ] ; then
         echo "Comment :=>>$@"
+    else
+        echo -n -e "${GREEN}" && echo -n "$@" && echo -e "${NC}"
     fi
 }
 
 function ECHORED()
 {
-    if [ "$MODE" = "RUN" ] ; then
-        echo -n -e "${RED}"  && echo -n "$@" && echo -e "${NC}"
-    else
+    if [ "$MODE" = "EVAL" ] ; then
         echo "Comment :=>>$@"
+    else
+        echo -n -e "${RED}"  && echo -n "$@" && echo -e "${NC}"
     fi
 }
 
 function ECHOYELLOW()
 {
-    if [ "$MODE" = "RUN" ] ; then
-        echo -n -e "${YELLOW}"  && echo -n "$@" && echo -e "${NC}"
-    else
+    if [ "$MODE" = "EVAL" ] ; then
         echo "Comment :=>>$@"
+    else
+        echo -n -e "${YELLOW}"  && echo -n "$@" && echo -e "${NC}"
     fi
 }
 
@@ -97,29 +97,29 @@ function ECHOYELLOW()
 
 function ECHO()
 {
-    if [ "$MODE" = "RUN" ] ; then
-        echo "$@"
-    else
+    if [ "$MODE" = "EVAL" ] ; then
         echo "Comment :=>>$@"
+    else
+        echo "$@"
     fi
 }
 
 function ECHO_TEACHER()
 {
-    if [ "$MODE" = "RUN" ] ; then
-        echo "$@" &>> $RUNDIR/$LOG
-    else
+    if [ "$MODE" = "EVAL" ] ; then
         echo "Teacher :=>>$@"
+    else
+        echo "$@" &>> $RUNDIR/$LOG
     fi
 }
 
 function ECHO_DEBUG()
 {
     if [ "$DEBUG" = "1" ] ; then
-        if [ "$MODE" = "RUN" ] ; then
-            echo "[DEBUG] $@"
-        else
+        if [ "$MODE" = "EVAL" ] ; then
             echo "Debug :=>>$@"
+        else
+            echo "[debug] $@"
         fi
     fi
 }
@@ -131,10 +131,10 @@ function ECHO_DEBUG()
 # inputs: MSG
 function PRE()
 {
-    if [ "$MODE" = "RUN" ] ; then
-        echo "$@"
-    else
+    if [ "$MODE" = "EVAL" ] ; then
         echo "Comment :=>>>$@"
+    else
+        echo "$@"
     fi
 }
 
@@ -185,7 +185,7 @@ function PRINTKO()
 {
     [ $# -ne 1 ] && ECHO "Usage: PRINTKO MSG" && exit 0
     local MSG="$1"
-    ECHORED "❌ $MSG" # ❎ ⛔
+    ECHORED "❌ $MSG" # ❎
     return 0
 }
 
@@ -228,7 +228,7 @@ function CAT()
         HEAD=0
         TAIL=0
         CMD="cat $FILE"
-        elif [ $# -eq 3 ] ; then
+    elif [ $# -eq 3 ] ; then
         HEAD="$2"
         TAIL="$3"
         CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE | sed '\$a\'"
@@ -304,11 +304,11 @@ function STRSTATUS()
     local STATUS=$1
     if (( $STATUS == 0 )) ; then
         echo "EXIT_SUCCESS"
-        elif (( $STATUS == 1 )) ; then
+    elif (( $STATUS == 1 )) ; then
         echo "EXIT_FAILURE"
-        elif (( $STATUS == 124 )) ; then
+    elif (( $STATUS == 124 )) ; then
         echo "timeout"
-        elif (( $STATUS > 128 && $STATUS <= 192 )) ; then
+    elif (( $STATUS > 128 && $STATUS <= 192 )) ; then
         NSIG=$((STATUS-128))
         STRSIG=$(kill -l $NSIG)
         echo "killed by signal $STRSIG"
@@ -384,7 +384,7 @@ function WAIT()
     PID=$1
     MSG=$2
     local SPINNER='/-\|'
-    if [ "$MODE" = "RUN" ] ; then
+    if [ "$MODE" = "RUN" -o "$MODE" = "DEBUG" ] ; then
         while kill -0 $PID 2> /dev/null; do
             for i in $(seq 0 3) ; do
                 echo -ne "\r$MSG ${SPINNER:$i:1}"
@@ -394,9 +394,9 @@ function WAIT()
     fi
     wait $PID &> /dev/null
     RET=$?
-    if [ "$MODE" = "RUN" ] ; then
-        ceol=$(tput el)      # tput requires package "ncurses-bin"
-        echo -ne "\r${ceol}" # clear line
+    if [ "$MODE" = "RUN" -o "$MODE" = "DEBUG" ] ; then
+        local CEOL=$(tput el)       # tput requires package "ncurses-bin"
+        echo -ne "\r${CEOL}"        # clear line
     fi
     ECHO_TEACHER "$MSG"
     return $RET
@@ -477,7 +477,7 @@ function EVALKO()
         RET="$1"
         MSG="$2"
         SCORE="$3" # TODO: check score is <= 0
-        elif [ $# -eq 4 ] ; then
+    elif [ $# -eq 4 ] ; then
         RET="$1"
         MSG="$2"
         SCORE="$3"
@@ -518,7 +518,7 @@ function EVAL()
         MSG="$2"
         BONUS="$3"
         MALUS="$4"
-        elif [ $# -eq 6 ] ; then
+    elif [ $# -eq 6 ] ; then
         MSG="$2"
         BONUS="$3"  # TODO: check positive
         MALUS="$4"  # TODO: check negative
@@ -528,10 +528,8 @@ function EVAL()
         ECHO "Usage: EVAL RET MSG BONUS MALUS [MSGOK MSGKO]" && exit 0
     fi
     if [ $RET -eq 0 ] ; then
-        # [ -z "$MSGOK" ] && MSGOK=$(STRSTATUS $RET) # default MSGOK
         EVALOK "$RET" "$MSG" "$BONUS" "$MSGOK"
     else
-        # [ -z "$MSGKO" ] && MSGKO=$(STRSTATUS $RET) # default MSGKO
         EVALKO "$RET" "$MSG" "$MALUS" "$MSGKO"
     fi
     return $RET
@@ -553,7 +551,6 @@ function EXIT_GRADE()
     else
         ECHO_TEACHER "GRADE: $GRADE%"
     fi
-    # if [ "$MODE" = "RUN" ] ; then echo "👉 Use Ctrl+Shift+⇧ / Ctrl+Shift+⇩ to scroll up / down..." ; fi
     exit 0
 }
 

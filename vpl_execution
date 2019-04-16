@@ -1,5 +1,5 @@
 #!/bin/bash
-rm -f $0
+# rm -f $0
 
 if [ -f ./env.sh ] ; then
     source ./env.sh
@@ -12,6 +12,8 @@ fi
 [ -z "$MODE" ] && echo "⚠ Variable \"MODE\" is not defined!" && exit 0
 if [ "$MODE" = "RUN" ] ; then
     CMD="$RUNDIR/run.sh"
+elif [ "$MODE" = "DEBUG" ] ; then
+    CMD="$RUNDIR/debug.sh"
 elif [ "$MODE" = "EVAL" ] ; then
     CMD="$RUNDIR/eval.sh"
 else

@@ -120,6 +120,7 @@ function START_ONLINE()
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
     ONLINE=1
     [ $(basename $0) == "vpl_run.sh" ] && MODE="RUN"
+    [ $(basename $0) == "vpl_debug.sh" ] && MODE="DEBUG"
     [ $(basename $0) == "vpl_evaluate.sh" ] && MODE="EVAL"
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     source $HOME/vpl_environment.sh
@@ -152,6 +153,7 @@ function START_OFFLINE()
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
     ONLINE=0
     [ $(basename $0) == "local_run.sh" ] && MODE="RUN"
+    [ $(basename $0) == "vpl_debug.sh" ] && MODE="DEBUG"
     [ $(basename $0) == "local_eval.sh" ] && MODE="EVAL"
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     mkdir -p $RUNDIR/inputs
