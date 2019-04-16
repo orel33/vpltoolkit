@@ -56,11 +56,15 @@ NC='\033[0m'    # no color
 # YELLOW=$(tput setaf 3)  # yellow
 # NC=$(tput sgr0)         # no color
 
+# clear line
+CEOL=$(tput el)       # tput requires package "ncurses-bin"
+CL='\r${CEOL}'
+
 
 function ECHOBLUE()
 {
     if [ "$MODE" = "EVAL" ] ; then
-        echo -e "\rComment :=>>$@"
+        echo -e "${CL}Comment :=>>$@"
     else
         echo -n -e "${BLUE}" && echo -n "$@" && echo -e "${NC}"
     fi
@@ -69,7 +73,7 @@ function ECHOBLUE()
 function ECHOGREEN()
 {
     if [ "$MODE" = "EVAL" ] ; then
-        echo -e "\rComment :=>>$@"
+        echo -e "${CL}Comment :=>>$@"
     else
         echo -n -e "${GREEN}" && echo -n "$@" && echo -e "${NC}"
     fi
@@ -78,7 +82,7 @@ function ECHOGREEN()
 function ECHORED()
 {
     if [ "$MODE" = "EVAL" ] ; then
-        echo -e "\rComment :=>>$@"
+        echo -e "${CL}Comment :=>>$@"
     else
         echo -n -e "${RED}"  && echo -n "$@" && echo -e "${NC}"
     fi
@@ -87,7 +91,7 @@ function ECHORED()
 function ECHOYELLOW()
 {
     if [ "$MODE" = "EVAL" ] ; then
-        echo -e "\rComment :=>>$@"
+        echo -e "${CL}Comment :=>>$@"
     else
         echo -n -e "${YELLOW}"  && echo -n "$@" && echo -e "${NC}"
     fi
@@ -98,7 +102,7 @@ function ECHOYELLOW()
 function ECHO()
 {
     if [ "$MODE" = "EVAL" ] ; then
-        echo -e "\rComment :=>>$@"
+        echo -e "${CL}Comment :=>>$@"
     else
         echo "$@"
     fi
@@ -107,7 +111,7 @@ function ECHO()
 function ECHO_TEACHER()
 {
     if [ "$MODE" = "EVAL" ] ; then
-        echo -e "\rTeacher :=>>$@"
+        echo -e "${CL}Teacher :=>>$@"
     else
         echo "$@" &>> $RUNDIR/$LOG
     fi
@@ -117,7 +121,7 @@ function ECHO_DEBUG()
 {
     if [ "$DEBUG" = "1" ] ; then
         if [ "$MODE" = "EVAL" ] ; then
-            echo -e "\rDebug :=>>$@"
+            echo -e "${CL}Debug :=>>$@"
         else
             echo "[debug] $@"
         fi
@@ -132,7 +136,7 @@ function ECHO_DEBUG()
 function PRE()
 {
     if [ "$MODE" = "EVAL" ] ; then
-        echo -e "\rComment :=>>>$@"
+        echo -e "${CL}Comment :=>>>$@"
     else
         echo "$@"
     fi
@@ -196,9 +200,9 @@ function PRINTKO()
 function TITLE()
 {
     if [ "$MODE" = "EVAL" ] ; then
-        echo -e "\rTeacher :=>> ##############################"
-        echo -e "\rComment :=>>-$@"
-        echo -e "\rTeacher :=>> ##############################"
+        echo -e "${CL}Teacher :=>> ##############################"
+        echo -e "${CL}Comment :=>>-$@"
+        echo -e "${CL}Teacher :=>> ##############################"
     else
         ECHOBLUE "######### $@ ##########"
     fi
@@ -209,9 +213,9 @@ function TITLE()
 function TITLE_TEACHER()
 {
     if [ "$MODE" = "EVAL" ] ; then
-        echo -e "\rTeacher :=>> ##############################"
-        echo -e "\rTeacher :=>>-$@"
-        echo -e "\rTeacher :=>> ##############################"
+        echo -e "${CL}Teacher :=>> ##############################"
+        echo -e "${CL}Teacher :=>>-$@"
+        echo -e "${CL}Teacher :=>> ##############################"
     fi
 }
 
@@ -241,7 +245,7 @@ function CAT()
     
     if [ "$MODE" = "EVAL" ] ; then
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
-        echo -e "\rTeacher :=>>\$ cat $FILE"
+        echo -e "${CL}Teacher :=>>\$ cat $FILE"
         echo "<|--"
         eval "$CMD" |& sed -e 's/^/>/;' # preformated output
         RET=${PIPESTATUS[0]}  # return status of first piped command!
@@ -259,7 +263,7 @@ function CAT_TEACHER()
 {
     [ $# -ne 1 ] && ECHO "Usage: CAT_TEACHER FILE" && exit 0
     if [ "$MODE" = "EVAL" ] ; then
-        echo -e "\rTeacher :=>>\$ cat $@"
+        echo -e "${CL}Teacher :=>>\$ cat $@"
         bash -c "cat $@" |& sed -e 's/^/Teacher :=>>/;' # setsid is used for safe exec (setpgid(0,0))
         RET=${PIPESTATUS[0]}  # return status of first piped command!
     else
@@ -324,7 +328,7 @@ function STRSTATUS()
 function TRACE()
 {
     if [ "$MODE" = "EVAL" ] ; then
-        echo -e "\rTeacher :=>>\$ $@"
+        echo -e "${CL}Teacher :=>>\$ $@"
         echo "<|--"
         # setsid is used for safe exec (setpgid(0,0))
         # TODO: setsid returns different status as bash!
@@ -334,7 +338,7 @@ function TRACE()
         RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo ; echo "--|>"
         local STATUS=$(STRSTATUS $RET)
-        echo -e "\rTeacher :=>> Status $RET ($STATUS)"
+        echo -e "${CL}Teacher :=>> Status $RET ($STATUS)"
     else
         # bash -c "setsid -w $@"
         # setsid -w bash -c "$@"
@@ -352,7 +356,7 @@ function TRACE()
 function TRACE_TEACHER()
 {
     if [ "$MODE" = "EVAL" ] ; then
-        echo -e "\rTeacher :=>>\$ $@"
+        echo -e "${CL}Teacher :=>>\$ $@"
         # setsid is used for safe exec (setpgid(0,0))
         # TODO: setsid returns different status as bash!
         # bash -c "setsid -w $@" |& sed -e 's/^/Teacher :=>>/;'
@@ -360,7 +364,7 @@ function TRACE_TEACHER()
         bash -c "$@" |& sed -e 's/^/Teacher :=>>/;' # preformated output
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
         local STATUS=$(STRSTATUS $RET)
-        echo -e "\rTeacher :=>> Status $RET ($STATUS)"
+        echo -e "${CL}Teacher :=>> Status $RET ($STATUS)"
     else
         # bash -c "setsid -w $@" &>> $RUNDIR/$LOG
         # setsid -w bash -c "$@" &>> $RUNDIR/$LOG
@@ -387,7 +391,7 @@ function WAIT()
     if [ "$MODE" = "RUN" -o "$MODE" = "DEBUG" ] ; then
         while kill -0 $PID 2> /dev/null; do
             for i in $(seq 0 3) ; do
-                echo -ne "\r$MSG ${SPINNER:$i:1}"
+                echo -ne "${CL}$MSG ${SPINNER:$i:1}"
                 sleep 0.1
             done
         done
@@ -395,8 +399,7 @@ function WAIT()
     wait $PID &> /dev/null
     RET=$?
     if [ "$MODE" = "RUN" -o "$MODE" = "DEBUG" ] ; then
-        local CEOL=$(tput el)       # tput requires package "ncurses-bin"
-        echo -ne "\r${CEOL}"        # clear line
+        echo -ne "${CL}"        # clear line
     fi
     ECHO_TEACHER "$MSG"
     return $RET
@@ -547,7 +550,7 @@ function EXIT_GRADE()
     GRADE=$(python3 -c "print(100 if $GRADE > 100 else round($GRADE))")
     if [ "$NOGRADE" != "1" ] ; then
         # ECHO "-GRADE" && ECHO "$GRADE%"
-        if [ "$MODE" = "EVAL" ] ; then echo "Grade :=>> $GRADE" ; fi
+        if [ "$MODE" = "EVAL" ] ; then echo -e "${CL}Grade :=>> $GRADE" ; fi
     else
         ECHO_TEACHER "GRADE: $GRADE%"
     fi
