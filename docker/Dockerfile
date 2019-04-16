@@ -14,10 +14,6 @@ RUN apt-get install -y apt-utils apt-file
 # editing
 RUN apt-get install -y emacs-nox vim nano
 
-# misc
-RUN apt-get install -y bash bash-completion
-RUN apt-get install -y locales-all tmux screen expect unzip git
-
 # programming
 RUN apt-get install -y gcc g++ gcc-multilib g++-multilib libc6 libc6-dev libc6-dbg
 RUN apt-get install -y util-linux manpages gdb valgrind
@@ -48,6 +44,11 @@ RUN apt-get install -y tigervnc-standalone-server  tigervnc-common
 
 # remove hardware-accelerated Mesa libraries and install the software-only render
 # RUN apt-get install -y libgl1-mesa-swx11 
+
+# misc
+RUN apt-get install -y bash bash-completion
+RUN apt-get install -y locales-all tmux screen expect unzip git
+RUN apt-get install -y moreutils
 
 # clean
 RUN apt-get -y autoremove

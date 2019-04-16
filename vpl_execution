@@ -23,7 +23,7 @@ fi
 
 ### shell command
 SHELLCMD="bash"
-[ "$DEBUG" = "1" ] && SHELLCMD="bash -x"
+# [ "$DEBUG" = "1" ] && SHELLCMD="bash -x"
 # [ $GRAPHIC -eq 1 ] && SHELLCMD="xterm -hold -e $SHELLCMD"
 
 function dockerclean()

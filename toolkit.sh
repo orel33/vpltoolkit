@@ -113,6 +113,17 @@ function ECHO_TEACHER()
     fi
 }
 
+function ECHO_DEBUG()
+{
+    if [ "$DEBUG" = "1" ] ; then
+        if [ "$MODE" = "RUN" ] ; then
+            echo "[DEBUG] $@"
+        else
+            echo "Debug :=>>$@"
+        fi
+    fi
+}
+
 ####################################################
 #                STANDARD PRINT                    #
 ####################################################
