@@ -58,7 +58,7 @@ NC='\033[0m'    # no color
 
 # clear line
 CEOL=$(tput el)       # tput requires package "ncurses-bin"
-CL='\r${CEOL}'
+CL="\r${CEOL}"
 
 
 function ECHOBLUE()
