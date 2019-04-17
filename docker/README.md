@@ -1,8 +1,18 @@
 # README.md
 
-The Dockerfile is a Debian Testing system with all packages I need for VPL Toolkit.
+My Docker image [orel33/mydebian](https://hub.docker.com/r/orel33/mydebian) is a Debian Testing system 
+with all packages I need for programming, network and different activities in VPL Toolkit.
 
 ## Docker Demo
+
+### Build image
+
+```bash
+host$ docker build -t "orel33/mydebian:latest" .
+host$ docker push "orel33/mydebian:latest"
+```
+
+Use option "--no-cache".
 
 ### Run a simple Docker
 

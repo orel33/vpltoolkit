@@ -21,8 +21,8 @@ RUN apt-get install -y cmake cmake-curses-gui cmake-data cmake-doc
 RUN apt-get install -y flex bison
 RUN apt-get install -y libncurses-dev
 RUN apt-get install -y tcl8.5 tcl8.5-dev
-RUN apt-get install -y python3 python3-pip python3-numpy
-RUN apt-get install -y python python-pip python-numpy  python-pytest
+RUN apt-get install -y python3 python3-pip python3-numpy python3-flask python3-termcolor 
+RUN apt-get install -y python python-pip python-numpy  python-pytest python-flask python-termcolor
 
 # networking
 RUN apt-get install -y net-tools socat rlwrap wget curl tcpdump
@@ -33,7 +33,7 @@ RUN apt-get install -y netcat-openbsd
 RUN apt-get install -y xterm x11-apps mesa-utils libgl1-mesa-dev libgl1-mesa-glx
 RUN apt-get install -y libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-gfx-dev libsdl2-ttf-dev libsdl2-net-dev
 RUN apt-get install -y tk8.5 tk8.5-dev graphviz
-RUN apt-get install -y python3-pygame python-pygame python-pyx
+RUN apt-get install -y python3-pygame python-pygame python-pyxsudo
 
 # X11 & VNC
 RUN apt-get install -y tightvncserver xtightvncviewer fluxbox lxterminal lxsession
