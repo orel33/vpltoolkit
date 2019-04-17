@@ -33,7 +33,7 @@ RUN apt-get install -y netcat-openbsd
 RUN apt-get install -y xterm x11-apps mesa-utils libgl1-mesa-dev libgl1-mesa-glx
 RUN apt-get install -y libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-gfx-dev libsdl2-ttf-dev libsdl2-net-dev
 RUN apt-get install -y tk8.5 tk8.5-dev graphviz
-RUN apt-get install -y python3-pygame python-pygame python-pyxsudo
+RUN apt-get install -y python3-pygame python-pygame python-pyx
 
 # X11 & VNC
 RUN apt-get install -y tightvncserver xtightvncviewer fluxbox lxterminal lxsession
