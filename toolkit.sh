@@ -510,7 +510,7 @@ function EVALKO()
 
 ####################################################
 
-# inputs: RET MSG BONUS MALUS [MSGOK MSGKO]
+# inputs: RET MSG [BONUS MALUS [MSGOK MSGKO]]
 # return: $RET
 function EVAL()
 {
@@ -520,7 +520,9 @@ function EVAL()
     local MALUS=0
     local MSGOK=""
     local MSGKO=""
-    if [ $# -eq 4 ] ; then
+    if [ $# -eq 2 ] ; then
+        MSG="$2"
+    elif [ $# -eq 4 ] ; then
         MSG="$2"
         BONUS="$3"
         MALUS="$4"
@@ -531,7 +533,7 @@ function EVAL()
         MSGOK="$5"
         MSGKO="$6"
     else
-        ECHO "Usage: EVAL RET MSG BONUS MALUS [MSGOK MSGKO]" && exit 0
+        ECHO "Usage: EVAL RET MSG [BONUS MALUS [MSGOK MSGKO]]" && exit 0
     fi
     if [ $RET -eq 0 ] ; then
         EVALOK "$RET" "$MSG" "$BONUS" "$MSGOK"
