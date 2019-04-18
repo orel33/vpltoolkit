@@ -560,4 +560,44 @@ function EXIT_GRADE()
     exit 0
 }
 
+####################################################
+#                 EXPORT API                       #
+####################################################
+
+export -f CHECKVERSION
+export -f CHECKDOCKER
+export -f CHECK
+export -f CHECKINPUTS
+export -f COPYINPUTS
+export -f ECHOBLUE
+export -f ECHOGREEN
+export -f ECHORED
+export -f ECHOYELLOW
+export -f ECHO
+export -f ECHO_TEACHER
+export -f ECHO_DEBUG
+export -f PRE
+export -f WARNING
+export -f ERROR
+export -f CRASH
+export -f INFO
+export -f PRINTOK
+export -f PRINTKO
+export -f TITLE
+export -f TITLE_TEACHER
+export -f CAT
+export -f CAT_TEACHER
+export -f EXEC
+export -f STRSTATUS
+export -f TRACE
+export -f TRACE_TEACHER
+export -f WAIT
+export -f PYCOMPUTE
+export -f UPDATE_GRADE
+export -f EVALOK
+export -f EVALKO
+export -f EVAL
+export -f EXIT_GRADE
+
+
 # EOF
