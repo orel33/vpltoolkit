@@ -129,9 +129,11 @@ function START_ONLINE()
     for var in ${!VPL_SUBFILE@} ; do
         # $var => variable name  and ${!var} => variable value
         [ "$var" = "VPL_SUBFILES" ] && continue
-        file="${!var}"
-        # echo "copy input file \"$file\" in inputs/"
-        cp "$file" $RUNDIR/inputs
+        local file="${!var}"
+        local thefile="$file"
+        [ -f "$file.b64"] && thefile="$file.b64" # binary file
+        cp -f "$thefile" $RUNDIR/inputs &> /dev/null
+        [ ! $? -eq 0] && echo "⚠ cannot copy input file \"$file\" in inputs directory!"
         # TODO: check no empty file
         # grep -q ' ' <<< "$file" && echo "⚠ input file \"$file\" with spaces not allowed!" # && exit 0
     done
