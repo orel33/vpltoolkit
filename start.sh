@@ -158,7 +158,7 @@ function START_OFFLINE()
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     mkdir -p $RUNDIR/inputs
     INPUTS=\"\"
-    [ ! -z "$INPUTDIR" ] && find -L $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ {} +
+    [ ! -z "$INPUTDIR" ] && find -L $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ "{}" +
     [ ! -z "$INPUTDIR" ] && INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\"
     CHECKENV
     SAVEENV
