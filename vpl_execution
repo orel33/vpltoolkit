@@ -57,6 +57,8 @@ if [ -n "$DOCKER" ] ; then
     # DOCKEROPT="--privileged"
     # DOCKEROPT="$DOCKEROPT -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix"
     XSOCK="/tmp/.X11-unix/X${DISPLAY:1}"
+    [ $GRAPHIC -eq 1 ] && echo "DISPLAY=$DISPLAY"
+    [ $GRAPHIC -eq 1 ] && echo "XSOCK=$XSOCK"
     DOCKEROPT="$DOCKEROPT -e DISPLAY=$DISPLAY -v $XSOCK:$XSOCK"
     DOCKEROPT="$DOCKEROPT --device=/dev/dri:/dev/dri" # direct rendering
     DOCKEROPT="$DOCKEROPT -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker"
