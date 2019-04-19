@@ -130,9 +130,12 @@ function START_ONLINE()
         # $var => variable name  and ${!var} => variable value
         [ "$var" = "VPL_SUBFILES" ] && continue
         local file="${!var}"
-        local thefile="$file"
-        [ -f "$file.b64"] && thefile="$file.b64" # binary file
-        cp -f "$thefile" $RUNDIR/inputs &> /dev/null
+        if [ -f "$file.b64" ] ; then 
+            base64 -d "$file.b64" > $file 2> /dev/null
+            [ ! $? -eq 0] && echo "⚠ cannot decode file \"$file.b64\"!"
+        fi
+        [ ! -f "$file" ] && echo "⚠ input file \"$file\" not found!" && continue
+        cp -f "$file" $RUNDIR/inputs &> /dev/null
         [ ! $? -eq 0] && echo "⚠ cannot copy input file \"$file\" in inputs directory!"
         # TODO: check no empty file
         # grep -q ' ' <<< "$file" && echo "⚠ input file \"$file\" with spaces not allowed!" # && exit 0
