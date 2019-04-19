@@ -21,7 +21,7 @@ function CHECKDOCKER()
 function CHECK()
 {
     for FILE in "$@" ; do
-        [ ! -f $FILE ] && ECHO "⚠ File \"$FILE\" is missing!" && exit 0
+        [ ! -f "$FILE" ] && ECHO "⚠ File \"$FILE\" is missing!" && exit 0
     done
 }
 
