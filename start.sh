@@ -130,7 +130,7 @@ function START_ONLINE()
         # $var => variable name  and ${!var} => variable value
         [ "$var" = "VPL_SUBFILES" ] && continue
         file="${!var}"
-        echo "copy input file \"$file\" in inputs/"
+        # echo "copy input file \"$file\" in inputs/"
         cp "$file" $RUNDIR/inputs
         # TODO: check no empty file
         # grep -q ' ' <<< "$file" && echo "⚠ input file \"$file\" with spaces not allowed!" # && exit 0
