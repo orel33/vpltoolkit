@@ -29,6 +29,7 @@ function CHECKINPUTS()
 {
     [ -z "$INPUTS" ] && echo "⚠ INPUTS variable is not defined!" && exit 0
     # CHECK "$INPUTS"   # FIXME: how to handle file with empty spaces!
+    CHECK $INPUTS   # FIXME: how to handle file with empty spaces!
 }
 
 function COPYINPUTS()
@@ -36,7 +37,7 @@ function COPYINPUTS()
     [ -z "$INPUTS" ] && echo "⚠ INPUTS variable is not defined!" && exit 0
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     # cp -f "$INPUTS" $RUNDIR/ # FIXME: how to handle file with empty spaces!
-    cp -f $INPUTS $RUNDIR/ 
+    cp -f $INPUTS $RUNDIR/
 }
 
 ####################################################
