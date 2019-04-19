@@ -56,7 +56,7 @@ if [ -n "$DOCKER" ] ; then
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && cat output && exit 0
     # DOCKEROPT="--privileged"
     # DOCKEROPT="$DOCKEROPT -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix"
-    XSOCK="/tmp/.X11-unix/X${$DISPLAY:1}"
+    XSOCK="/tmp/.X11-unix/X${DISPLAY:1}"
     DOCKEROPT="$DOCKEROPT -e DISPLAY=$DISPLAY -v $XSOCK:$XSOCK"
     DOCKEROPT="$DOCKEROPT --device=/dev/dri:/dev/dri" # direct rendering
     DOCKEROPT="$DOCKEROPT -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker"
