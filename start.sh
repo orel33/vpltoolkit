@@ -128,9 +128,11 @@ function START_ONLINE()
     # [ ! -z "$VPL_SUBFILES" ] && ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs ) # FIXME: here bug if file contains spaces
     for var in ${!VPL_SUBFILE@} ; do
         # $var => variable name  and ${!var} => variable value
-        cp "${!var}" $RUNDIR/inputs
+        file="${!var}"
+        cp "$file" $RUNDIR/inputs
+        # TODO: check no empty file
+        grep -q ' ' <<< "$file" && echo "⚠ input file \"$file\" with space not allowed!" && exit 0
     done
-    # TODO: check no empty file
     INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\" # FIXME: here bug if file contains spaces
     # INPUTS="$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f -exec echo \"{}\" \;)"
     # echo INPUTS="$INPUTS"
