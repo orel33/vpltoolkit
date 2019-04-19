@@ -69,6 +69,7 @@ if [ -n "$DOCKER" ] ; then
     DOCKEROPT="$DOCKEROPT -d --rm -w $RUNDIR" # detached, auto-remove
     DOCKERID=$(docker run $DOCKEROPT $DOCKER sleep $DOCKERTIMEOUT)
     echo "Run Docker $DOCKER."
+    # copy all rundir inside docker...
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
     # TODO: copy only desired files... vpl_*.sh, env.sh, ... ???
     [ $ONLINE -eq 1 ] && docker cp $HOME/. $DOCKERID:/root &> /dev/null # assuming $HOME is /root

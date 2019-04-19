@@ -128,6 +128,7 @@ function START_ONLINE()
     # [ ! -z "$VPL_SUBFILES" ] && ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs ) # FIXME: here bug if file contains spaces
     for var in ${!VPL_SUBFILE@} ; do
         # $var => variable name  and ${!var} => variable value
+        [ "$var" = "VPL_SUBFILES" ] && continue
         file="${!var}"
         echo "copy input file \"$file\" in inputs/"
         cp "$file" $RUNDIR/inputs
