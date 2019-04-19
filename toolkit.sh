@@ -20,6 +20,7 @@ function CHECKDOCKER()
 
 function CHECK()
 {
+    # TODO: check if it supports filenames with spaces
     for FILE in "$@" ; do
         [ ! -f "$FILE" ] && ECHO "⚠ File \"$FILE\" is missing!" && exit 0
     done
@@ -27,17 +28,20 @@ function CHECK()
 
 function CHECKINPUTS()
 {
-    [ -z "$INPUTS" ] && echo "⚠ INPUTS variable is not defined!" && exit 0
+    ERROR "CHECKINPUTS: deprecated function" && exit 0
+    # [ -z "$INPUTS" ] && echo "⚠ INPUTS variable is not defined!" && exit 0
     # CHECK "$INPUTS"   # FIXME: how to handle file with empty spaces!
     CHECK $INPUTS   # FIXME: how to handle file with empty spaces!
 }
 
 function COPYINPUTS()
 {
-    [ -z "$INPUTS" ] && echo "⚠ INPUTS variable is not defined!" && exit 0
+    # ERROR "COPYINPUTS: deprecated function" && exit 0
+    # [ -z "$INPUTS" ] && echo "⚠ INPUTS variable is not defined!" && exit 0
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     # cp -f "$INPUTS" $RUNDIR/ # FIXME: how to handle file with empty spaces!
-    cp -f $INPUTS $RUNDIR/
+    # cp -f $INPUTS $RUNDIR/
+    cp -f $RUNDIR/inputs/* $RUNDIR/
 }
 
 ####################################################

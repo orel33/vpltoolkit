@@ -133,9 +133,10 @@ function START_ONLINE()
         echo "copy input file \"$file\" in inputs/"
         cp "$file" $RUNDIR/inputs
         # TODO: check no empty file
-        # grep -q ' ' <<< "$file" && echo "⚠ input file \"$file\" with space not allowed!" && exit 0
+        # grep -q ' ' <<< "$file" && echo "⚠ input file \"$file\" with spaces not allowed!" # && exit 0
     done
-    INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\" # FIXME: here bug if file contains spaces
+    INPUTS="$RUNDIR/inputs/"
+    # INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\" # FIXME: here bug if file contains spaces
     # INPUTS="$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f -exec echo \"{}\" \;)"
     # echo INPUTS="$INPUTS"
 
@@ -169,9 +170,10 @@ function START_OFFLINE()
     [ $(basename $0) == "local_eval.sh" ] && MODE="EVAL"
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     mkdir -p $RUNDIR/inputs
-    INPUTS=\"\"
-    [ ! -z "$INPUTDIR" ] && find -L $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ "{}" +  # TODO: bug? with +... use \;
-    [ ! -z "$INPUTDIR" ] && INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\"
+    cp $INPUTDIR/* $RUNDIR/inputs/
+    INPUTS="$RUNDIR/inputs/"
+    # [ ! -z "$INPUTDIR" ] && find -L $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ "{}" +  # TODO: bug? with +... use \;
+    # [ ! -z "$INPUTDIR" ] && INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\"
     CHECKENV
     SAVEENV
     rm -rf $RUNDIR/vpltoolkit/.git/ &> /dev/null # for security issue
