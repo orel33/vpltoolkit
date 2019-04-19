@@ -130,6 +130,7 @@ function START_ONLINE()
         # $var => variable name  and ${!var} => variable value
         cp "${!var}" $RUNDIR/inputs
     done
+    # TODO: check no empty file
     INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\" # FIXME: here bug if file contains spaces
     # INPUTS="$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f -exec echo \"{}\" \;)"
     # echo INPUTS="$INPUTS"
@@ -165,7 +166,7 @@ function START_OFFLINE()
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     mkdir -p $RUNDIR/inputs
     INPUTS=\"\"
-    [ ! -z "$INPUTDIR" ] && find -L $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ "{}" +
+    [ ! -z "$INPUTDIR" ] && find -L $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ "{}" +  # TODO: bug? with +... use \;
     [ ! -z "$INPUTDIR" ] && INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\"
     CHECKENV
     SAVEENV
