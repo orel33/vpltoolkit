@@ -130,9 +130,9 @@ function START_ONLINE()
         # $var => variable name  and ${!var} => variable value
         cp "${!var}" $RUNDIR/inputs
     done
-    # INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\"
-    INPUTS="$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f -exec echo \"{}\" \;)"
-    echo INPUTS="$INPUTS"
+    INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\" # FIXME: here bug if file contains spaces
+    # INPUTS="$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f -exec echo \"{}\" \;)"
+    # echo INPUTS="$INPUTS"
 
     # INPUTS=$(echo -n \" && cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs && echo -n \")
     CHECKENV
