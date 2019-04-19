@@ -41,10 +41,10 @@ cd $RUNDIR
 # echo "RUNDIR=$RUNDIR"
 
 ### graphic mode ###
-if [ $GRAPHIC -eq 1 ] ; then 
-    xhost +                     # FIXME: really useful?
-    # export VNCPORT=${DISPLAY:1} # remove ':' from $DISPLAY
-fi  
+# if [ $GRAPHIC -eq 1 ] ; then 
+#     xhost +                     # FIXME: really useful?
+#     # export VNCPORT=${DISPLAY:1} # remove ':' from $DISPLAY
+# fi  
 
 ### docker run ###
 if [ -n "$DOCKER" ] ; then
