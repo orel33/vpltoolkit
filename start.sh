@@ -127,12 +127,13 @@ function START_ONLINE()
     mkdir -p $RUNDIR/inputs
     # [ ! -z "$VPL_SUBFILES" ] && ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs ) # FIXME: here bug if file contains spaces
     for var in ${!VPL_SUBFILE@} ; do
-        # $var => variable name 
-        # ${!var} => variable value
+        # $var => variable name  and ${!var} => variable value
         cp "${!var}" $RUNDIR/inputs
     done
+    # INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\"
+    INPUTS="$(find -L test -maxdepth 1 -type f -exec echo \"{}\" \;)"
+    echo INPUTS="$INPUTS"
 
-    INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\"
     # INPUTS=$(echo -n \" && cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs && echo -n \")
     CHECKENV
     SAVEENV
