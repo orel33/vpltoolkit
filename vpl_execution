@@ -3,7 +3,7 @@
 
 if [ -f ./env.sh ] ; then
     source ./env.sh
-elif [ -f $HOME/env.sh ] ; then
+    elif [ -f $HOME/env.sh ] ; then
     source $HOME/env.sh
 else
     echo "⚠ File \"env.sh\" is missing!" && exit 0
@@ -12,9 +12,9 @@ fi
 [ -z "$MODE" ] && echo "⚠ Variable \"MODE\" is not defined!" && exit 0
 if [ "$MODE" = "RUN" ] ; then
     CMD="$RUNDIR/run.sh"
-elif [ "$MODE" = "DEBUG" ] ; then
+    elif [ "$MODE" = "DEBUG" ] ; then
     CMD="$RUNDIR/debug.sh"
-elif [ "$MODE" = "EVAL" ] ; then
+    elif [ "$MODE" = "EVAL" ] ; then
     CMD="$RUNDIR/eval.sh"
 else
     echo "⚠ Invalid \"MODE\" selected!" && exit 0
@@ -41,15 +41,15 @@ cd $RUNDIR
 # echo "RUNDIR=$RUNDIR"
 
 ### graphic mode ###
-# if [ $GRAPHIC -eq 1 ] ; then 
-#     xhost +                     # FIXME: really useful?
-#     # export VNCPORT=${DISPLAY:1} # remove ':' from $DISPLAY
-# fi  
+if [ $GRAPHIC -eq 1 ] ; then
+    xhost +                     # FIXME: try to be no so permissive!
+    # export VNCPORT=${DISPLAY:1} # remove ':' from $DISPLAY
+fi
 
 ### docker run ###
 if [ -n "$DOCKER" ] ; then
     trap 'dockerclean' EXIT
-
+    
     [ -z "$DOCKERTIMEOUT" ] && echo "⚠ Variable \"DOCKERTIMEOUT\" is not defined!" && exit 0
     # check if docker image is already installed
     docker image inspect $DOCKER &> output
@@ -75,12 +75,12 @@ if [ -n "$DOCKER" ] ; then
     
     if [ $GRAPHIC -eq 0 ] ; then
         docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
-    else 
+    else
         xterm -T main -hold -e docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
     fi
     docker container stop -t 0 $DOCKERID &> /dev/null
-
-### regular run ###
+    
+    ### regular run ###
 else
     echo "Run..."
     if [ $GRAPHIC -eq 0 ] ; then
