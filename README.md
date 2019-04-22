@@ -1,7 +1,5 @@
 # VPL Toolkit
 
-*FIXME: This README must be updated, because since release 4.0, the toolkit API and the startup strategy has evolved!*
-
 ## Introduction
 
 *VPL Toolkit* is a light toolkit to help *teachers* to program [VPL](http://vpl.dis.ulpgc.es/) activity in [Moodle](https://moodle.org/) for their *students*.
@@ -94,13 +92,32 @@ echo "hello world!"
 
 ### Starting with VPL Toolkit
 
-To use the *VPL Toolkit* online, start to copy the following script into *vpl_run.sh* & *vpl_evaluate.sh* of VPL@Moodle. Note that on EVAL mode, the "hello world" message is only visible for teacher in execution window.
+To use the *VPL Toolkit* with Moodle online, you need to save this script as *vpl_run.sh* (resp. *vpl_evaluate.sh* or *vpl_debug.sh*).
 
 ```bash
 #!/bin/bash
 rm -f $0 # for security issue
 RUNDIR=$(mktemp -d)
-( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" &> /dev/null )
+DOCKER="orel33/mydebian:latest" # a docker registered on docker hub
+( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" -b "4.0" &> /dev/null )
+[ ! $? -eq 0 ] && echo "⚠ Fail to download VPL Toolkit!" && exit 0
+source $RUNDIR/vpltoolkit/start.sh
+GITUSER="toto"
+GITPW="secret"
+GITREPOSITORY="services.emi.u-bordeaux.fr/projet/git/myrepository"
+GITBRANCH="master"
+DOWNLOAD "https://$GITUSER:$GITPW@$GITREPOSITORY" "$GITBRANCH" "$GITDIR"
+START_ONLINE "arg0" "arg1"
+```
+
+For instance:
+
+```bash
+#!/bin/bash
+rm -f $0 # for security issue
+RUNDIR=$(mktemp -d)
+DOCKER="orel33/mydebian:latest"
+( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" -b "4.0" &> /dev/null )
 source $RUNDIR/vpltoolkit/start.sh
 DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "demo" "hello"
 START_ONLINE
@@ -111,7 +128,8 @@ To launch this example *offline*, you need to write a script named *local_run.sh
 ```bash
 #!/bin/bash
 RUNDIR=$(mktemp -d)
-( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" &> /dev/null )
+DOCKER="orel33/mydebian:latest"
+( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" -b "4.0" &> /dev/null )
 source $RUNDIR/vpltoolkit/start.sh
 DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "demo" "hello"
 START_OFFLINE
