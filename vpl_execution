@@ -49,7 +49,6 @@ fi
 ### docker run ###
 if [ -n "$DOCKER" ] ; then
     trap 'dockerclean' EXIT
-    
     [ -z "$DOCKERTIMEOUT" ] && echo "⚠ Variable \"DOCKERTIMEOUT\" is not defined!" && exit 0
     # check if docker image is already installed
     docker image inspect $DOCKER &> output
@@ -72,16 +71,17 @@ if [ -n "$DOCKER" ] ; then
     # copy all rundir inside docker...
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
     # TODO: copy only desired files... vpl_*.sh, env.sh, ... ???
+    # FIXME: use docker as USER not root!
     [ $ONLINE -eq 1 ] && docker cp $HOME/. $DOCKERID:/root &> /dev/null # assuming $HOME is /root
-    
     if [ $GRAPHIC -eq 0 ] ; then
         docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
     else
+        pkill -9 fluxbox
         xterm -T main -hold -e docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
     fi
     docker container stop -t 0 $DOCKERID &> /dev/null
     
-    ### regular run ###
+    ### regular run (no docker) ###
 else
     echo "Run..."
     if [ $GRAPHIC -eq 0 ] ; then
