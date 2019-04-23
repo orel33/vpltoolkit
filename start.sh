@@ -139,14 +139,11 @@ function START_ONLINE()
         [ ! -f "$file" ] && echo "⚠ input file \"$file\" not found!" && continue
         cp -f "$file" $RUNDIR/inputs &> /dev/null
         [ ! $? -eq 0 ] && echo "⚠ cannot copy input file \"$file\" in inputs directory!"
-        # TODO: check no empty file
-        # grep -q ' ' <<< "$file" && echo "⚠ input file \"$file\" with spaces not allowed!" # && exit 0
     done
     INPUTS="$RUNDIR/inputs/"
     # INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\" # FIXME: here bug if file contains spaces
     # INPUTS="$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f -exec echo \"{}\" \;)"
     # echo INPUTS="$INPUTS"
-
     # INPUTS=$(echo -n \" && cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs && echo -n \")
     CHECKENV
     SAVEENV
@@ -177,7 +174,7 @@ function START_OFFLINE()
     [ $(basename $0) == "local_eval.sh" ] && MODE="EVAL"
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
     mkdir -p $RUNDIR/inputs
-    cp $INPUTDIR/* $RUNDIR/inputs/
+    cp $INPUTDIR/* $RUNDIR/inputs/ &> /dev/null     # FIXME: error if no inputs
     INPUTS="$RUNDIR/inputs/"
     # [ ! -z "$INPUTDIR" ] && find -L $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ "{}" +  # TODO: bug? with +... use \;
     # [ ! -z "$INPUTDIR" ] && INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\"
