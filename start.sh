@@ -86,6 +86,7 @@ function DOWNLOADEXT()
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
     [ -z "$BRANCH" ] && echo "⚠ BRANCH variable is not defined!" && exit 0
     [ -z "$SUBDIR" ] && echo "⚠ SUBDIR variable is not defined!" && exit 0
+    # FIXME: add timeout???
     git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download/$TARGETDIR &> /dev/null
     [ ! $? -eq 0 ] && echo "⚠ GIT clone repository failure (branch \"$BRANCH\")!" && exit 0
     ( cd $RUNDIR/download/$TARGETDIR && git -c http.sslVerify=false checkout HEAD -- $SUBDIR &> /dev/null )
@@ -104,9 +105,9 @@ function DOWNLOAD()
     local REPOSITORY="$1"
     local BRANCH="$2"
     local SUBDIR="$3"
-    local TARGETDIR="main"
+    local TARGETDIR="main"  # FIXME: reallu useful?
     DOWNLOADEXT "$REPOSITORY" "$BRANCH" "$SUBDIR" "$TARGETDIR"
-    # copy run.sh and/or eval.sh scripts
+    # copy run.sh and/or eval.sh scripts (FIXME: can we improve this?)
     cp -rf $RUNDIR/download/$TARGETDIR/$SUBDIR/* $RUNDIR/
 }
 
