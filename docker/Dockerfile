@@ -21,8 +21,9 @@ RUN apt-get install -y cmake cmake-curses-gui cmake-data cmake-doc
 RUN apt-get install -y flex bison
 RUN apt-get install -y libncurses-dev
 RUN apt-get install -y tcl8.5 tcl8.5-dev
-RUN apt-get install -y python3 python3-pip python3-numpy python3-flask python3-termcolor 
-RUN apt-get install -y python python-pip python-numpy  python-pytest python-flask python-termcolor
+RUN apt-get install -y python3 python3-pip python3-numpy  python3-termcolor
+RUN apt-get install -y python python-pip python-numpy python-pytest python-termcolor
+RUN apt-get install -y radon
 
 # networking
 RUN apt-get install -y net-tools socat rlwrap wget curl tcpdump
@@ -36,14 +37,23 @@ RUN apt-get install -y tk8.5 tk8.5-dev graphviz
 RUN apt-get install -y python3-pygame python-pygame python-pyx
 
 # X11 & VNC
-RUN apt-get install -y tightvncserver xtightvncviewer fluxbox lxterminal lxsession
+RUN apt-get install -y xserver-xorg x11-xserver-utils
 RUN apt-get install -y xfonts-base xfonts-75dpi xfonts-100dpi xfonts-scalable xfonts-cyrillic
 RUN apt-get install -y xvfb x11vnc
-RUN apt-get install -y xserver-xorg x11-xserver-utils
-RUN apt-get install -y tigervnc-standalone-server  tigervnc-common
+RUN apt-get install -y tightvncserver xtightvncviewer
+RUN apt-get install -y tigervnc-standalone-server tigervnc-common
+
+# Window Manager
+RUN apt-get install -y fluxbox lxterminal lxsession 
+RUN apt-get install -y xmonad xmobar
+RUN apt-get install -y i3
 
 # remove hardware-accelerated Mesa libraries and install the software-only render
 # RUN apt-get install -y libgl1-mesa-swx11 
+
+# BD Web
+RUN apt-get install -y python-psycopg2 python3-psycopg2 python3-flask python-flask
+RUN apt-get install -y firefox
 
 # misc
 RUN apt-get install -y bash bash-completion
