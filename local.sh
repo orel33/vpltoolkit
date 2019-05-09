@@ -3,8 +3,11 @@
 # default parameters
 TIMEOUT=10
 RUNDIR=$(mktemp -d)
+
 LOCALDIR=""
 REPOSITORY=""
+URL=""
+
 SUBDIR=""
 INPUTDIR=""
 VERBOSE="0"
@@ -14,17 +17,18 @@ DOCKER="orel33/mydebian:latest"
 DOCKERTIMEOUT="infinity" # default 900s
 VPLTOOLKIT="https://github.com/orel33/vpltoolkit.git"
 VERSION="master"    # VPL Toolkit branch
-# RUNSUBDIR="$RUNDIR/$EXDIR"
+DOWNLOAD=0
 
 ### USAGE ###
 
 USAGE() {
-    echo "Usage: $0 [download] [options] <...>"
-    echo "Download :"
+    echo "Usage: $0 <download> [options] <...>"
+    echo "Start VPL Toolkit on localhost."
+    echo "<download>"
     echo "    -l <localdir>: copy teacher files from local directory into <rundir>"
     echo "    -r <repository>: download teacher files from remote git repository"
-    # echo "    -w <url>: download teacher files from remote web site"  # TODO: todo!
-    echo "Options:"
+    echo "    -w <url>: download teacher files from remote web site (not yet available)"
+    echo "[options]:"
     echo "    -m <mode>: set execution mode to RUN, DEBUG or EVAL (default $MODE)"
     echo "    -g : enable graphic mode (default no)"
     echo "    -d <docker> : set docker image to be used (default $DOCKER)"
@@ -33,6 +37,7 @@ USAGE() {
     echo "    -i <inputdir>: student input directory"
     echo "    -v: enable verbose (default no)"
     echo "    -h: help"
+    echo "<...>: extra arguments passed to START routine in VPL Toolkit"
     exit 0
 }
 
@@ -56,10 +61,16 @@ GETARGS() {
                 VERSION="$OPTARG"
             ;;
             l)
+                ((DOWNLOAD++))
                 LOCALDIR="$OPTARG"
             ;;
             r)
+                ((DOWNLOAD++))
                 REPOSITORY="$OPTARG"
+            ;;
+            w)
+                ((DOWNLOAD++))
+                URL="$OPTARG"
             ;;
             s)
                 SUBDIR="$OPTARG"
@@ -79,10 +90,9 @@ GETARGS() {
         esac
     done
 
+    [ $DOWNLOAD -eq 0 ] && echo "⚠ Error: no download method selected!" >&2 && USAGE
+    [ $DOWNLOAD -gt 1 ] && echo "⚠ Error: select only one download method!" >&2 && USAGE
     shift $((OPTIND-1))
-
-
-
     ARGS="$@"
 }
 
@@ -98,6 +108,7 @@ if [ $VERBOSE -eq 1 ] ; then
     echo "RUNDIR=$RUNDIR"
     echo "LOCALDIR=$LOCALDIR"
     echo "REPOSITORY=$REPOSITORY"
+    echo "URL=$URL"
     echo "SUBDIR=$SUBDIR"
     echo "INPUTDIR=$INPUTDIR"
     echo "ARGS=$ARGS"
@@ -134,6 +145,10 @@ if [ -n "$REPOSITORY" ] ; then
     BRANCH="master"
     DOWNLOAD "$REPOSITORY" "$BRANCH" "$SUBDIR"
 fi
+
+### WEB ###
+
+# TODO: wget from URL
 
 ### START ###
 
