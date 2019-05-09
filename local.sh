@@ -9,7 +9,7 @@ SUBDIR=""
 INPUTDIR=""
 VERBOSE="0"
 GRAPHIC=0
-MODE=""
+MODE="RUN"
 DOCKER="orel33/mydebian:latest"
 DOCKERTIMEOUT="infinity" # default 900s
 VPLTOOLKIT="https://github.com/orel33/vpltoolkit.git"
@@ -19,16 +19,19 @@ VERSION="master"    # VPL Toolkit branch
 ### USAGE ###
 
 USAGE() {
-    echo "Usage: $0 [options] <...>"
-    echo "    -m <mode>: force execution mode to RUN, DEBUG or EVAL"
+    echo "Usage: $0 [download] [options] <...>"
+    echo "Download :"
+    echo "    -l <localdir>: copy teacher files from local directory into <rundir>"
+    echo "    -r <repository>: download teacher files from remote git repository"
+    # echo "    -w <url>: download teacher files from remote web site"
+    echo "Options:"
+    echo "    -m <mode>: set execution mode to RUN, DEBUG or EVAL (default $MODE)"
     echo "    -g : enable graphic mode (default no)"
     echo "    -d <docker> : set docker image to be used (default $DOCKER)"
     echo "    -n <version> : set the branch/version of VPL Toolkit to use (default $VERSION)"
-    echo "    -l <localdir>: copy files from local directory into <rundir>"
-    echo "    -r <repository>: download run files from remote git repository"
     echo "    -s <subdir>: copy files from repository/subdir into <rundir>"
     echo "    -i <inputdir>: student input directory"
-    echo "    -v: verbose"
+    echo "    -v: enable verbose (default no)"
     echo "    -h: help"
     exit 0
 }
@@ -78,6 +81,8 @@ GETARGS() {
 
     shift $((OPTIND-1))
 
+
+
     ARGS="$@"
 }
 
@@ -105,29 +110,33 @@ fi
 LOG="$RUNDIR/start.log"
 
 if [ -n $DOCKER ] ; then 
-    ( timeout $TIMEOUT docker pull $DOCKER ) &> $LOG
+    ( timeout $TIMEOUT docker pull $DOCKER ) &>> $LOG
     [ $? -ne 0 ] && echo "⚠ Error: Docker fails to pull image \"$DOCKER\"!" >&2 && exit 1
 fi
 
 ### DOWNLOAD VPL TOOLKIT ###
 
-( cd $RUNDIR && timeout $TIMEOUT git clone "$VPLTOOLKIT" --depth 1 -b "$VERSION" --single-branch ) &> $LOG
+( cd $RUNDIR && timeout $TIMEOUT git clone "$VPLTOOLKIT" --depth 1 -b "$VERSION" --single-branch ) &>> $LOG
 [ $? -ne 0 ] && echo "⚠ Error: Git fails to clone \"$VPLTOOLKIT\"!"  >&2 && exit 1
-source $RUNDIR/vpltoolkit/start.sh
 
 ### LOCALDIR ###
 
 if [ -n "$LOCALDIR" ] ; then
     [ ! -d $LOCALDIR ] && echo "⚠ Error: invalid path \"$LOCALDIR\"!"  >&2 && exit 1
+    # TODO: how to use SUBDIR here?
     cp -rf $LOCALDIR/* $RUNDIR/
 fi
 
 ### REPOSITORY ###
 
 if [ -n "$REPOSITORY" ] ; then
-    DOWNLOAD "$REPOSITORY" "master" "$SUBDIR"
+    BRANCH="master"
+    DOWNLOAD "$REPOSITORY" "$BRANCH" "$SUBDIR"
 fi
 
+### START ###
+
+source $RUNDIR/vpltoolkit/start.sh
 START_OFFLINE "$INPUTDIR" $ARGS
 
 # EOF

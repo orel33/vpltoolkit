@@ -3,6 +3,7 @@
 # rm -f $0
 
 VERSION="4.0"
+LOG="$RUNDIR/start.log"
 
 ### ENVIRONMENT ###
 
@@ -72,45 +73,80 @@ function PRINTENV()
 # TODO: add WGET and SCP methods
 
 ### DOWNLOAD EXTRA REPOSITORY
-function DOWNLOADEXT()
-{
-    [ $# -ne 4 ] && echo "⚠ Usage: DOWNLOADEXT REPOSITORY BRANCH SUBDIR TARGETDIR" && exit 0
-    local REPOSITORY="$1"
-    local BRANCH="$2"
-    local SUBDIR="$3"       # TODO: SUBDIR could be optional, download all...
-    local TARGETDIR="$4"
+# function DOWNLOADEXT()
+# {
+#     [ $# -ne 4 ] && echo "⚠ Usage: DOWNLOADEXT REPOSITORY BRANCH SUBDIR TARGETDIR" && exit 0
+#     local REPOSITORY="$1"
+#     local BRANCH="$2"
+#     local SUBDIR="$3"       # TODO: SUBDIR could be optional, download all...
+#     local TARGETDIR="$4"
 
-    [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
-    mkdir -p $RUNDIR/download
+#     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
+#     mkdir -p $RUNDIR/download
 
-    START=$(date +%s.%N)
-    mkdir -p $RUNDIR/download/$TARGETDIR
-    [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
-    [ -z "$BRANCH" ] && echo "⚠ BRANCH variable is not defined!" && exit 0
-    [ -z "$SUBDIR" ] && echo "⚠ SUBDIR variable is not defined!" && exit 0
-    # FIXME: add timeout???
-    git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download/$TARGETDIR &> /dev/null
-    [ ! $? -eq 0 ] && echo "⚠ GIT clone repository failure (branch \"$BRANCH\")!" && exit 0
-    ( cd $RUNDIR/download/$TARGETDIR && git -c http.sslVerify=false checkout HEAD -- $SUBDIR &> /dev/null )
-    [ ! $? -eq 0 ] && echo "⚠ GIT checkout \"$SUBDIR\" failure!" && exit 0
-    [ ! -d $RUNDIR/download/$TARGETDIR/$SUBDIR ] && ECHO "⚠ SUBDIR \"$SUBDIR\" is missing!" && exit 0
-    rm -rf $RUNDIR/download/$TARGETDIR/.git/ &> /dev/null # for security issue
-    END=$(date +%s.%N)
-    TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
-    [ "$VERBOSE" = "1" ] && echo "Download \"$SUBDIR\" in $TIME ms"
-}
+#     START=$(date +%s.%N)
+#     mkdir -p $RUNDIR/download/$TARGETDIR
+#     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
+#     [ -z "$BRANCH" ] && echo "⚠ BRANCH variable is not defined!" && exit 0
+#     [ -z "$SUBDIR" ] && echo "⚠ SUBDIR variable is not defined!" && exit 0
+#     # FIXME: add timeout???
+#     git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download/$TARGETDIR &> /dev/null
+#     [ ! $? -eq 0 ] && echo "⚠ GIT clone repository failure (branch \"$BRANCH\")!" && exit 0
+#     ( cd $RUNDIR/download/$TARGETDIR && git -c http.sslVerify=false checkout HEAD -- $SUBDIR &> /dev/null )
+#     [ ! $? -eq 0 ] && echo "⚠ GIT checkout \"$SUBDIR\" failure!" && exit 0
+#     [ ! -d $RUNDIR/download/$TARGETDIR/$SUBDIR ] && ECHO "⚠ SUBDIR \"$SUBDIR\" is missing!" && exit 0
+#     rm -rf $RUNDIR/download/$TARGETDIR/.git/ &> /dev/null # for security issue
+#     END=$(date +%s.%N)
+#     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
+#     [ "$VERBOSE" = "1" ] && echo "Download \"$SUBDIR\" in $TIME ms"
+# }
 
 ### DOWNLOAD MAIN REPOSITORY (and COPY FILES in RUNDIR)
 function DOWNLOAD()
 {
-    [ $# -ne 3 ] && echo "⚠ Usage: DOWNLOAD REPOSITORY BRANCH SUBDIR" && exit 0
-    local REPOSITORY="$1"
-    local BRANCH="$2"
-    local SUBDIR="$3"
-    local TARGETDIR="main"  # FIXME: reallu useful?
-    DOWNLOADEXT "$REPOSITORY" "$BRANCH" "$SUBDIR" "$TARGETDIR"
-    # copy run.sh and/or eval.sh scripts (FIXME: can we improve this?)
-    cp -rf $RUNDIR/download/$TARGETDIR/$SUBDIR/* $RUNDIR/
+    if [ $# -eq 1 ] ; then
+        local REPOSITORY="$1"
+        local BRANCH="master"
+        local SUBDIR=""
+    elif [ $# -eq 2 ] ; then
+        local REPOSITORY="$1"
+        local BRANCH="$2"
+        local SUBDIR=""
+    elif [ $# -eq 3 ] ; then
+        local REPOSITORY="$1"
+        local BRANCH="$2"
+        local SUBDIR="$3"
+    else
+        echo "⚠ Usage: DOWNLOAD REPOSITORY [BRANCH [SUBDIR]]" && exit 0
+    fi
+
+    START=$(date +%s.%N)
+    [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
+    mkdir -p $RUNDIR/download
+    [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
+    [ -z "$BRANCH" ] && echo "⚠ BRANCH variable is not defined!" && exit 0
+    # [ -z "$SUBDIR" ] && echo "⚠ SUBDIR variable is not defined!" && exit 0
+    # git clone (without checkout of HEAD)
+    ( timeout 10 git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download ) &>> $LOG
+    [ ! $? -eq 0 ] && echo "⚠ GIT clone repository failure (branch \"$BRANCH\")!" && exit 0
+
+    # checkout only what is needed
+    if [ -n "$SUBDIR" ] ; then
+        ( cd $RUNDIR/download && timeout 10 git -c http.sslVerify=false checkout HEAD -- $SUBDIR ) &>> $LOG
+        [ $? -ne 0 ] && echo "⚠ GIT checkout failure (subdir \"$SUBDIR\")!" && exit 0
+        mv -f $RUNDIR/download/* $RUNDIR/ &>> $LOG  # hidden files are not copied!
+    else
+        ( cd $RUNDIR/download && timeout 10 git -c http.sslVerify=false checkout HEAD ) &>> $LOG
+        [ $? -ne 0 ] && echo "⚠ GIT checkout failure!" && exit 0
+        [ ! -d $RUNDIR/download/$SUBDIR ] && ECHO "⚠ SUBDIR \"$SUBDIR\" is missing!" && exit 0
+        mv -f $RUNDIR/download/$SUBDIR/* $RUNDIR/ &>> $LOG  # hidden files are not copied!
+    fi
+    # rm -rf $RUNDIR/.git/ &>> $LOG # for security issue, but useless here
+    rm -rf $RUNDIR/download &>> $LOG
+    END=$(date +%s.%N)
+    TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
+    [ "$VERBOSE" = "1" ] && echo "Download teacher repository in $TIME ms"
+
 }
 
 ### COPY MAIN FILES in RUNDIR
