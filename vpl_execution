@@ -10,19 +10,12 @@ else
 fi
 
 [ -z "$MODE" ] && echo "⚠ Variable \"MODE\" is not defined!" && exit 0
-if [ "$MODE" = "RUN" ] ; then
-    CMD="$RUNDIR/run.sh"
-    elif [ "$MODE" = "DEBUG" ] ; then
-    CMD="$RUNDIR/debug.sh"
-    elif [ "$MODE" = "EVAL" ] ; then
-    CMD="$RUNDIR/eval.sh"
-else
-    echo "⚠ Invalid \"MODE\" selected!" && exit 0
-fi
-
-[ ! -f "$CMD" ] && echo "⚠ File \"$CMD\" not found!" && exit 0
+grep -w $MODE <<< "RUN DEBUG EVAL" &> /dev/null
+[ $? -ne 0 ] && echo "⚠ Invalid MODE \"$MODE\"!" && exit 0
 [ -z "$RUNDIR" ] && echo "⚠ Variable \"RUNDIR\" is not defined!" && exit 0
-
+[ -z "$ENTRYPOINT" ] && echo "⚠ Variable \"ENTRYPOINT\" is not defined!" && exit 0
+CMD="$RUNDIR/$ENTRYPOINT"
+[ ! -f "$CMD" ] && echo "⚠ Entrypoint file \"$CMD\" not found!" && exit 0
 ### shell command
 SHELLCMD="bash"
 # [ "$DEBUG" = "1" ] && SHELLCMD="bash -x"

@@ -19,6 +19,7 @@ function CHECKENV()
     [ -z "$DOCKERTIMEOUT" ] && DOCKERTIMEOUT="900"
     [ -z "$DEBUG" ] && DEBUG=0
     [ -z "$VERBOSE" ] && VERBOSE=0
+    [ -z "$ENTRYPOINT" ] && ENTRYPOINT="run.sh"
     [ -z "$ARGS" ] && ARGS=""
     [ -z "$INPUTS" ] && INPUTS=""
 }
@@ -36,6 +37,7 @@ function SAVEENV()
     echo "DOCKERTIMEOUT=$DOCKERTIMEOUT" >> $RUNDIR/env.sh
     echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
     echo "VERBOSE=$VERBOSE" >> $RUNDIR/env.sh
+    echo "ENTRYPOINT=$ENTRYPOINT" >> $RUNDIR/env.sh
     echo "ARGS=$ARGS" >> $RUNDIR/env.sh
     echo "INPUTS=$INPUTS" >> $RUNDIR/env.sh
 }
@@ -64,6 +66,7 @@ function PRINTENV()
     echo "* GRAPHIC=$GRAPHIC"
     echo "* DEBUG=$DEBUG"
     echo "* VERBOSE=$VERBOSE"
+    echo "* ENTRYPOINT=$ENTRYPOINT"
     echo "* ARGS=$ARGS"
     echo "* INPUTS=$INPUTS"
 }
@@ -72,36 +75,7 @@ function PRINTENV()
 
 # TODO: add WGET and SCP methods
 
-### DOWNLOAD EXTRA REPOSITORY
-# function DOWNLOADEXT()
-# {
-#     [ $# -ne 4 ] && echo "⚠ Usage: DOWNLOADEXT REPOSITORY BRANCH SUBDIR TARGETDIR" && exit 0
-#     local REPOSITORY="$1"
-#     local BRANCH="$2"
-#     local SUBDIR="$3"       # TODO: SUBDIR could be optional, download all...
-#     local TARGETDIR="$4"
-
-#     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
-#     mkdir -p $RUNDIR/download
-
-#     START=$(date +%s.%N)
-#     mkdir -p $RUNDIR/download/$TARGETDIR
-#     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
-#     [ -z "$BRANCH" ] && echo "⚠ BRANCH variable is not defined!" && exit 0
-#     [ -z "$SUBDIR" ] && echo "⚠ SUBDIR variable is not defined!" && exit 0
-#     # FIXME: add timeout???
-#     git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download/$TARGETDIR &> /dev/null
-#     [ ! $? -eq 0 ] && echo "⚠ GIT clone repository failure (branch \"$BRANCH\")!" && exit 0
-#     ( cd $RUNDIR/download/$TARGETDIR && git -c http.sslVerify=false checkout HEAD -- $SUBDIR &> /dev/null )
-#     [ ! $? -eq 0 ] && echo "⚠ GIT checkout \"$SUBDIR\" failure!" && exit 0
-#     [ ! -d $RUNDIR/download/$TARGETDIR/$SUBDIR ] && ECHO "⚠ SUBDIR \"$SUBDIR\" is missing!" && exit 0
-#     rm -rf $RUNDIR/download/$TARGETDIR/.git/ &> /dev/null # for security issue
-#     END=$(date +%s.%N)
-#     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
-#     [ "$VERBOSE" = "1" ] && echo "Download \"$SUBDIR\" in $TIME ms"
-# }
-
-### DOWNLOAD MAIN REPOSITORY (and COPY FILES in RUNDIR)
+### DOWNLOAD TEACHER FILES FROM GIT REPOSITORY (and COPY FILES in RUNDIR)
 function DOWNLOAD()
 {
     if [ $# -eq 1 ] ; then
@@ -149,13 +123,6 @@ function DOWNLOAD()
 
 }
 
-### COPY MAIN FILES in RUNDIR
-# function RUNCOPY()
-# {
-#     # TODO: todo?
-#     return 0
-# }
-
 ### EXECUTION ###
 
 function START_ONLINE()
@@ -189,10 +156,6 @@ function START_ONLINE()
         [ ! $? -eq 0 ] && echo "⚠ cannot copy input file \"$file\" in inputs directory!"
     done
     INPUTS="$RUNDIR/inputs/"
-    # INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\" # FIXME: here bug if file contains spaces
-    # INPUTS="$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f -exec echo \"{}\" \;)"
-    # echo INPUTS="$INPUTS"
-    # INPUTS=$(echo -n \" && cd $RUNDIR && find inputs -maxdepth 1 -type f | xargs && echo -n \")
     CHECKENV
     SAVEENV
     rm -rf $RUNDIR/vpltoolkit/.git/ &> /dev/null # for security issue
@@ -209,10 +172,9 @@ function START_ONLINE()
 
 function START_OFFLINE()
 {
-    # [ ! $# -ge 1 ] && echo "⚠ Usage: START_OFFLINE INPUTDIR [...]" && exit 0
+    [ ! $# -ge 1 ] && echo "⚠ Usage: START_OFFLINE INPUTDIR [...]" && exit 0
     local INPUTDIR="$1"
     local ARGS=\"${@:2}\"
-    # [ -z "$INPUTDIR" ] && echo "⚠ INPUTDIR variable is not defined!" && exit 0
     [ ! -z "$INPUTDIR" ] && [ ! -d $INPUTDIR ] && echo "⚠ Bad INPUTDIR: \"$INPUTDIR\"!" && exit 0
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
@@ -226,8 +188,6 @@ function START_OFFLINE()
     mkdir -p $RUNDIR/inputs
     cp $INPUTDIR/* $RUNDIR/inputs/ &> /dev/null     # FIXME: error if no inputs
     INPUTS="$RUNDIR/inputs/"
-    # [ ! -z "$INPUTDIR" ] && find -L $INPUTDIR -maxdepth 1 -type f -exec cp -t $RUNDIR/inputs/ "{}" +  # TODO: bug? with +... use \;
-    # [ ! -z "$INPUTDIR" ] && INPUTS=\"$(cd $RUNDIR && find -L inputs -maxdepth 1 -type f | xargs)\"
     CHECKENV
     SAVEENV
     rm -rf $RUNDIR/vpltoolkit/.git/ &> /dev/null # for security issue

@@ -17,6 +17,7 @@ DOCKER=""
 DOCKERTIMEOUT="infinity"
 VPLTOOLKIT="https://github.com/orel33/vpltoolkit.git"
 VERSION="master"    # VPL Toolkit branch
+ENTRYPOINT="run.sh"
 DOWNLOAD=0
 
 ### USAGE ###
@@ -35,6 +36,7 @@ USAGE() {
     echo "    -d <docker> : set docker image to be used (default, no docker)"
     echo "    -b <branch>: checkout <branch> on git <repository> (default $BRANCH)"
     echo "    -s <subdir>: only download teacher files from subdir into <rundir>"
+    echo "    -e <entrypoint>: entrypoint shell script (default $ENTRYPOINT)"
     echo "    -i <inputdir>: student input directory"
     echo "    -v: enable verbose (default no)"
     echo "    -h: help"
@@ -45,7 +47,7 @@ USAGE() {
 ### PARSE ARGUMENTS ###
 
 GETARGS() {
-    while getopts "gr:l:s:i:m:d:n:b:vh" OPT ; do
+    while getopts "gr:l:s:i:m:d:n:b:e:vh" OPT ; do
         case $OPT in
             g)
                 GRAPHIC=1
@@ -81,6 +83,9 @@ GETARGS() {
             ;;
             i)
                 INPUTDIR="$OPTARG"
+            ;;
+            e)
+                ENTRYPOINT="$OPTARG"
             ;;
             v)
                 VERBOSE=1
@@ -119,6 +124,8 @@ if [ $VERBOSE -eq 1 ] ; then
     echo "ARGS=$ARGS"
     echo "DOCKER=$DOCKER"
     echo "GRAPHIC=$GRAPHIC"
+    echo "ENTRYPOINT=$ENTRYPOINT"
+
 fi
 
 ### PULL DOCKER IMAGE ###
