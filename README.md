@@ -198,6 +198,7 @@ select <download> method:
     -d <docker> : set docker image to be used (default, no docker)
     -b <branch>: checkout <branch> on git <repository> (default master)
     -s <subdir>: only download teacher files from subdir into <rundir>
+    -e <entrypoint>: entrypoint shell script (default run.sh)
     -i <inputdir>: student input directory
     -v: enable verbose (default no)
     -h: help
