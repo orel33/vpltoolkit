@@ -134,12 +134,12 @@ function DOWNLOAD()
     if [ -n "$SUBDIR" ] ; then
         ( cd $RUNDIR/download && timeout 10 git -c http.sslVerify=false checkout HEAD -- $SUBDIR ) &>> $LOG
         [ $? -ne 0 ] && echo "⚠ GIT checkout failure (subdir \"$SUBDIR\")!" && exit 0
-        mv -f $RUNDIR/download/* $RUNDIR/ &>> $LOG  # hidden files are not copied!
+        [ ! -d $RUNDIR/download/$SUBDIR ] && ECHO "⚠ SUBDIR \"$SUBDIR\" is missing!" && exit 0
+        mv -f $RUNDIR/download/$SUBDIR/* $RUNDIR/ &>> $LOG  # hidden files are not copied!
     else
         ( cd $RUNDIR/download && timeout 10 git -c http.sslVerify=false checkout HEAD ) &>> $LOG
         [ $? -ne 0 ] && echo "⚠ GIT checkout failure!" && exit 0
-        [ ! -d $RUNDIR/download/$SUBDIR ] && ECHO "⚠ SUBDIR \"$SUBDIR\" is missing!" && exit 0
-        mv -f $RUNDIR/download/$SUBDIR/* $RUNDIR/ &>> $LOG  # hidden files are not copied!
+        mv -f $RUNDIR/download/* $RUNDIR/ &>> $LOG  # hidden files are not copied!
     fi
     # rm -rf $RUNDIR/.git/ &>> $LOG # for security issue, but useless here
     rm -rf $RUNDIR/download &>> $LOG
