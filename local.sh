@@ -6,17 +6,14 @@ RUNDIR=$(mktemp -d)
 LOCALDIR=""
 REPOSITORY=""
 SUBDIR=""
-
-# RUNSUBDIR="$RUNDIR/$EXDIR"
 VERBOSE="0"
 GRAPHIC=0
-# LOCAL=0
 MODE=""
-# DOCKERPULL=0
 DOCKER="orel33/mydebian:latest"
 DOCKERTIMEOUT="infinity" # default 900s
 VPLTOOLKIT="https://github.com/orel33/vpltoolkit.git"
-VERSION="master"
+VERSION="master"    # VPL Toolkit branch
+# RUNSUBDIR="$RUNDIR/$EXDIR"
 
 ### USAGE ###
 
@@ -47,7 +44,7 @@ GETARGS() {
                 DOCKER="$OPTARG"
             ;;
             m)
-                grep -w $OPTARG <<< "RUN DEBUG EVAL"
+                grep -w $OPTARG <<< "RUN DEBUG EVAL" &> /dev/null
                 [ $? -ne 0 ] && echo "⚠ Error: Invalid option \"-m $OPTARG\"" >&2 && USAGE
                 MODE="$OPTARG"
             ;;
@@ -89,18 +86,18 @@ GETARGS() {
 
 GETARGS $*
 
-echo "VPLTOOLKIT=$VPLTOOLKIT"
-echo "VERSION=$VERSION"
-echo "RUNDIR=$RUNDIR"
-# echo "EXDIR=$EXDIR"
-# echo "RUNSUBDIR=$RUNSUBDIR"
-echo "LOCALDIR=$LOCALDIR"
-echo "REPOSITORY=$REPOSITORY"
-echo "SUBDIR=$SUBDIR"
-echo "INPUTDIR=$INPUTDIR"
-echo "ARGS=$ARGS"
-echo "DOCKER=$DOCKER"
-echo "GRAPHIC=$GRAPHIC"
+if [ $VERBOSE -eq 1 ] ; then
+    echo "VPLTOOLKIT=$VPLTOOLKIT"
+    echo "VERSION=$VERSION"
+    echo "RUNDIR=$RUNDIR"
+    echo "LOCALDIR=$LOCALDIR"
+    echo "REPOSITORY=$REPOSITORY"
+    echo "SUBDIR=$SUBDIR"
+    echo "INPUTDIR=$INPUTDIR"
+    echo "ARGS=$ARGS"
+    echo "DOCKER=$DOCKER"
+    echo "GRAPHIC=$GRAPHIC"
+fi
 
 ### PULL DOCKER IMAGE ###
 
