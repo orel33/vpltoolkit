@@ -120,12 +120,12 @@ fi
 [ $? -ne 0 ] && echo "⚠ Error: Git fails to clone \"$VPLTOOLKIT\"!"  >&2 && exit 1
 source $RUNDIR/vpltoolkit/start.sh
 
-### LOCALDIR ###
+### LOCAL ###
 
 if [ -n "$LOCALDIR" ] ; then
-    [ ! -d $LOCALDIR ] && echo "⚠ Error: invalid path \"$LOCALDIR\"!"  >&2 && exit 1
-    # TODO: how to use SUBDIR here?
-    cp -rf $LOCALDIR/* $RUNDIR/
+    [ -n "$SUBDIR" ] && SRCDIR="$LOCALDIR/$SUBDIR"
+    [ ! -d $SRCDIR ] && echo "⚠ Error: invalid path \"$SRCDIR\"!"  >&2 && exit 1
+    cp -rf $SRCDIR/* $RUNDIR/ &>> $LOG
 fi
 
 ### REPOSITORY ###
