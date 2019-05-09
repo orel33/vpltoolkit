@@ -192,6 +192,7 @@ select <download> method:
     -r <repository>: download teacher files from remote git repository
     -w <url>: download teacher files from remote web site (not yet available)
 [options]:
+    -L: use local version of VPL Toolkit
     -n <version> : set the branch/version of VPL Toolkit to use (default master)
     -m <mode>: set execution mode to RUN, DEBUG or EVAL (default RUN)
     -g : enable graphic mode (default no)
