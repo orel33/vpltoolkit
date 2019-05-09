@@ -213,6 +213,12 @@ To pull this docker image:
 $ docker pull orel33/mydebian:latest
 ```
 
+Then, you just need to set the *DOCKER* variable in your VPL startup script. For instance:
+
+```bash
+DOCKER="orel33/mydebian:latest"
+```
+
 ## Documentation
 
 * http://vpl.dis.ulpgc.es/index.php/support
