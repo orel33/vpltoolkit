@@ -23,7 +23,7 @@ USAGE() {
     echo "Download :"
     echo "    -l <localdir>: copy teacher files from local directory into <rundir>"
     echo "    -r <repository>: download teacher files from remote git repository"
-    # echo "    -w <url>: download teacher files from remote web site"
+    # echo "    -w <url>: download teacher files from remote web site"  # TODO: todo!
     echo "Options:"
     echo "    -m <mode>: set execution mode to RUN, DEBUG or EVAL (default $MODE)"
     echo "    -g : enable graphic mode (default no)"
