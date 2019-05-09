@@ -35,9 +35,9 @@ The *run.sh* (resp. *eval.sh*) script is starting from the $RUNDIR directory, or
 ```text
 $RUNDIR
   ├── env.sh              # environment variable for the VPL toolkit
-  ├── run.sh              # entry point for RUN mode
-  ├── debug.sh            # entry point for DEBUG mode
-  ├── eval.sh             # entry point for EVAL mode
+  ├── run.sh              # entrypoint for RUN mode
+  ├── debug.sh            # entrypoint for DEBUG mode
+  ├── eval.sh             # entrypoint for EVAL mode
   ├── ...                 # ...
   ├── ...                 # all files & directories provided by teacher
   ├── inputs              # all student input files ($VPL_SUBFILES)
@@ -63,17 +63,15 @@ $HOME
 
 ## Output Format and Assessment
 
-See documentation: http://vpl.dis.ulpgc.es/index.php/support
-
-(...)
-
-Rules:
+Rules for online VPL:
 
 * in RUN mode, all outputs are visible in a terminal window by students (as a basic shell script)
 * in EVAL mode, all outputs in comment window are visible by students (it is the main output window)
 * in EVAL mode, all outputs in execution window are only visible by teacher (for debug purpose)
 
 To present outputs and grades properly, we provide several useful bash functions in [toolkit.sh](https://github.com/orel33/vpltoolkit/blob/master/toolkit.sh).
+
+See documentation: http://vpl.dis.ulpgc.es/index.php/support
 
 ## Examples
 
@@ -196,13 +194,14 @@ Start VPL Toolkit on localhost.
 select <download> method:
     -l <localdir>: copy teacher files from local directory into <rundir>
     -r <repository>: download teacher files from remote git repository
-    -w <url>: download teacher files from remote web site (not yetavailable)
+    -w <url>: download teacher files from remote web site (not yet available)
 [options]:
+    -n <version> : set the branch/version of VPL Toolkit to use (default master)
     -m <mode>: set execution mode to RUN, DEBUG or EVAL (default RUN)
     -g : enable graphic mode (default no)
-    -d <docker> : set docker image to be used (default orel33mydebian:latest)
-    -n <version> : set the branch/version of VPL Toolkit to use (defaultmaster)
-    -s <subdir>: copy files from repository/subdir into <rundir>
+    -d <docker> : set docker image to be used (default orel33/mydebian:latest)
+    -b <branch>: checkout <branch> on git <repository> (default master)
+    -s <subdir>: only download teacher files from subdir into <rundir>
     -i <inputdir>: student input directory
     -v: enable verbose (default no)
     -h: help
@@ -211,7 +210,9 @@ select <download> method:
 
 For instance:
 
-
+```bash
+$ ./local.sh -m RUN -r "https://github.com/orel33/vpltoolkit.git" -b demo
+```
 
 ## Docker Support
 

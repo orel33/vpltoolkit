@@ -3,11 +3,10 @@
 # default parameters
 TIMEOUT=10
 RUNDIR=$(mktemp -d)
-
 LOCALDIR=""
 REPOSITORY=""
+BRANCH="master"
 URL=""
-
 SUBDIR=""
 INPUTDIR=""
 VERBOSE="0"
@@ -29,11 +28,12 @@ USAGE() {
     echo "    -r <repository>: download teacher files from remote git repository"
     echo "    -w <url>: download teacher files from remote web site (not yet available)"
     echo "[options]:"
+    echo "    -n <version> : set the branch/version of VPL Toolkit to use (default $VERSION)"
     echo "    -m <mode>: set execution mode to RUN, DEBUG or EVAL (default $MODE)"
     echo "    -g : enable graphic mode (default no)"
     echo "    -d <docker> : set docker image to be used (default $DOCKER)"
-    echo "    -n <version> : set the branch/version of VPL Toolkit to use (default $VERSION)"
-    echo "    -s <subdir>: copy files from repository/subdir into <rundir>"
+    echo "    -b <branch>: checkout <branch> on git <repository> (default $BRANCH)"
+    echo "    -s <subdir>: only download teacher files from subdir into <rundir>"
     echo "    -i <inputdir>: student input directory"
     echo "    -v: enable verbose (default no)"
     echo "    -h: help"
@@ -44,7 +44,7 @@ USAGE() {
 ### PARSE ARGUMENTS ###
 
 GETARGS() {
-    while getopts "gr:l:s:i:m:d:n:vh" OPT ; do
+    while getopts "gr:l:s:i:m:d:n:b:vh" OPT ; do
         case $OPT in
             g)
                 GRAPHIC=1
@@ -71,6 +71,9 @@ GETARGS() {
             w)
                 ((DOWNLOAD++))
                 URL="$OPTARG"
+            ;;
+            b)
+                BRANCH="$OPTARG"
             ;;
             s)
                 SUBDIR="$OPTARG"
@@ -108,6 +111,7 @@ if [ $VERBOSE -eq 1 ] ; then
     echo "RUNDIR=$RUNDIR"
     echo "LOCALDIR=$LOCALDIR"
     echo "REPOSITORY=$REPOSITORY"
+    echo "BRANCH=$BRANCH"
     echo "URL=$URL"
     echo "SUBDIR=$SUBDIR"
     echo "INPUTDIR=$INPUTDIR"
@@ -142,7 +146,6 @@ fi
 ### REPOSITORY ###
 
 if [ -n "$REPOSITORY" ] ; then
-    BRANCH="master"
     DOWNLOAD "$REPOSITORY" "$BRANCH" "$SUBDIR"
 fi
 
