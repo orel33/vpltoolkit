@@ -118,6 +118,7 @@ fi
 
 ( cd $RUNDIR && timeout $TIMEOUT git clone "$VPLTOOLKIT" --depth 1 -b "$VERSION" --single-branch ) &>> $LOG
 [ $? -ne 0 ] && echo "⚠ Error: Git fails to clone \"$VPLTOOLKIT\"!"  >&2 && exit 1
+source $RUNDIR/vpltoolkit/start.sh
 
 ### LOCALDIR ###
 
@@ -136,7 +137,6 @@ fi
 
 ### START ###
 
-source $RUNDIR/vpltoolkit/start.sh
 START_OFFLINE "$INPUTDIR" $ARGS
 
 # EOF
