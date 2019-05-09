@@ -43,10 +43,6 @@ $RUNDIR
   ├── inputs              # all student input files ($VPL_SUBFILES)
   │   └── student.c
   |   └── ...
-  ├── download            # download main project and extra dependencies here
-  │   └── main/...
-  │   └── dep1/...
-  │   └── dep2/...
   └── vpltoolkit          # VPL toolkit
       └── start.sh        # startup script
       └── toolkit.sh      # useful bash routines
@@ -192,6 +188,31 @@ Here is the *offline* test of this script with an input directory of the solutio
 (...)
 ```
 
+## Use VPL Toolkit on localhost
+
+```
+Usage: ./local.sh <download> [options] <...>
+Start VPL Toolkit on localhost.
+select <download> method:
+    -l <localdir>: copy teacher files from local directory into <rundir>
+    -r <repository>: download teacher files from remote git repository
+    -w <url>: download teacher files from remote web site (not yetavailable)
+[options]:
+    -m <mode>: set execution mode to RUN, DEBUG or EVAL (default RUN)
+    -g : enable graphic mode (default no)
+    -d <docker> : set docker image to be used (default orel33mydebian:latest)
+    -n <version> : set the branch/version of VPL Toolkit to use (defaultmaster)
+    -s <subdir>: copy files from repository/subdir into <rundir>
+    -i <inputdir>: student input directory
+    -v: enable verbose (default no)
+    -h: help
+<...>: extra arguments passed to START routine in VPL Toolkit
+```
+
+For instance:
+
+
+
 ## Docker Support
 
 VPL Toolkit enables to use a docker image since version 3.0. First, you need to create a docker image. Given the following [Dockerfile](docker/Dockerfile), you can build your own Debian-like image and push it on [DockerHub](https://hub.docker.com/).
@@ -227,7 +248,8 @@ DOCKER="orel33/mydebian:latest"
 
 ### Version 4.0
 
-* complete rewrite of API in toolkit.sh
+* add *local.sh* script to start VPL Toolkit on localhost
+* complete rewrite of API in *toolkit.sh*
 * improve docker support
 * add GRAPHIC option
 * add DEBUG mode

@@ -24,7 +24,7 @@ DOWNLOAD=0
 USAGE() {
     echo "Usage: $0 <download> [options] <...>"
     echo "Start VPL Toolkit on localhost."
-    echo "<download>"
+    echo "select <download> method:"
     echo "    -l <localdir>: copy teacher files from local directory into <rundir>"
     echo "    -r <repository>: download teacher files from remote git repository"
     echo "    -w <url>: download teacher files from remote web site (not yet available)"
@@ -90,7 +90,7 @@ GETARGS() {
         esac
     done
 
-    [ $DOWNLOAD -eq 0 ] && echo "⚠ Error: no download method selected!" >&2 && USAGE
+    [ $DOWNLOAD -eq 0 ] && USAGE
     [ $DOWNLOAD -gt 1 ] && echo "⚠ Error: select only one download method!" >&2 && USAGE
     shift $((OPTIND-1))
     ARGS="$@"
