@@ -16,6 +16,7 @@ MODE="RUN"
 DOCKER=""
 DOCKERTIMEOUT="infinity"
 VPLTOOLKIT="https://github.com/orel33/vpltoolkit.git"
+LOCAL="0"
 VERSION="master"    # VPL Toolkit branch
 ENTRYPOINT="run.sh"
 DOWNLOAD=0
@@ -28,8 +29,9 @@ USAGE() {
     echo "select <download> method:"
     echo "    -l <localdir>: copy teacher files from local directory into <rundir>"
     echo "    -r <repository>: download teacher files from remote git repository"
-    echo "    -w <url>: download teacher files from remote web site (not yet available)"
+    echo "    -w <url>: download teacher files from remote web site (not yet available)" # TODO:
     echo "[options]:"
+    echo "    -L: use local version of VPL Toolkit"
     echo "    -n <version> : set the branch/version of VPL Toolkit to use (default $VERSION)"
     echo "    -m <mode>: set execution mode to RUN, DEBUG or EVAL (default $MODE)"
     echo "    -g : enable graphic mode (default no)"
@@ -47,7 +49,7 @@ USAGE() {
 ### PARSE ARGUMENTS ###
 
 GETARGS() {
-    while getopts "gr:l:s:i:m:d:n:b:e:vh" OPT ; do
+    while getopts "gr:l:s:i:m:d:n:b:e:Lvh" OPT ; do
         case $OPT in
             g)
                 GRAPHIC=1
@@ -87,6 +89,9 @@ GETARGS() {
             e)
                 ENTRYPOINT="$OPTARG"
             ;;
+            L)
+                LOCAL=1
+            ;;
             v)
                 VERBOSE=1
             ;;
@@ -101,6 +106,7 @@ GETARGS() {
 
     [ $DOWNLOAD -eq 0 ] && USAGE
     [ $DOWNLOAD -gt 1 ] && echo "⚠ Error: select only one download method!" >&2 && USAGE
+    [ $LOCAL -eq 1 -a "$VERSION" != "master" ] && echo "⚠ Warning: option -n <version> is ignored!" >&2
     shift $((OPTIND-1))
     ARGS="$@"
 }
@@ -113,6 +119,7 @@ GETARGS $*
 
 if [ $VERBOSE -eq 1 ] ; then
     echo "VPLTOOLKIT=$VPLTOOLKIT"
+    echo "LOCAL=$LOCAL"
     echo "VERSION=$VERSION"
     echo "RUNDIR=$RUNDIR"
     echo "LOCALDIR=$LOCALDIR"
@@ -139,9 +146,16 @@ fi
 
 ### DOWNLOAD VPL TOOLKIT ###
 
-( cd $RUNDIR && timeout $TIMEOUT git clone "$VPLTOOLKIT" --depth 1 -b "$VERSION" --single-branch ) &>> $LOG
-[ $? -ne 0 ] && echo "⚠ Error: Git fails to clone \"$VPLTOOLKIT\" (branch $VERSION)!"  >&2 && exit 1
-source $RUNDIR/vpltoolkit/start.sh
+if [ $LOCAL -eq 0 ] ; then
+    ( cd $RUNDIR && timeout $TIMEOUT git clone "$VPLTOOLKIT" --depth 1 -b "$VERSION" --single-branch ) &>> $LOG
+    [ $? -ne 0 ] && echo "⚠ Error: Git fails to clone \"$VPLTOOLKIT\" (branch $VERSION)!"  >&2 && exit 1
+else
+    VPLDIR="$(realpath $(dirname $0))"
+    [ ! -d "$VPLDIR" ] && echo "⚠ Error: invalid local VPL Toolkit directory  \"$VPLDIR\"!"  >&2 && exit 1
+    mkdir -p $RUNDIR/vpltoolkit && cp -rf $VPLDIR/* $RUNDIR/vpltoolkit/
+fi
+
+source $RUNDIR/vpltoolkit/start.sh || exit 1
 
 ### LOCAL ###
 
