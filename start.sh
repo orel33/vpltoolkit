@@ -114,10 +114,11 @@ function DOWNLOAD()
 }
 
 ### COPY MAIN FILES in RUNDIR
-function RUNCOPY()
-{
-    # TODO: todo?
-}
+# function RUNCOPY()
+# {
+#     # TODO: todo?
+#     return 0
+# }
 
 ### EXECUTION ###
 
