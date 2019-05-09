@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# rm -f $0
+
 VERSION="4.0"
 
 ### ENVIRONMENT ###
@@ -111,6 +113,12 @@ function DOWNLOAD()
     cp -rf $RUNDIR/download/$TARGETDIR/$SUBDIR/* $RUNDIR/
 }
 
+### COPY MAIN FILES in RUNDIR
+function RUNCOPY()
+{
+    # TODO: todo?
+}
+
 ### EXECUTION ###
 
 function START_ONLINE()
@@ -124,6 +132,8 @@ function START_ONLINE()
     [ $(basename $0) == "vpl_debug.sh" ] && MODE="DEBUG"
     [ $(basename $0) == "vpl_evaluate.sh" ] && MODE="EVAL"
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
+    grep -w $MODE <<< "RUN DEBUG EVAL"
+    [ $? -ne 0 ] && echo "⚠ Invalid MODE \"$MODE\"!" && exit 0
     source $HOME/vpl_environment.sh
     mkdir -p $RUNDIR/inputs
     # [ ! -z "$VPL_SUBFILES" ] && ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs ) # FIXME: here bug if file contains spaces
@@ -171,9 +181,11 @@ function START_OFFLINE()
     [ ! -d $RUNDIR ] && echo "⚠ Bad RUNDIR: \"$RUNDIR\"!" && exit 0
     ONLINE=0
     [ $(basename $0) == "local_run.sh" ] && MODE="RUN"
-    [ $(basename $0) == "vpl_debug.sh" ] && MODE="DEBUG"
+    [ $(basename $0) == "local_debug.sh" ] && MODE="DEBUG"
     [ $(basename $0) == "local_eval.sh" ] && MODE="EVAL"
     [ -z "$MODE" ] && echo "⚠ MODE variable is not defined!" && exit 0
+    grep -w $MODE <<< "RUN DEBUG EVAL"
+    [ $? -ne 0 ] && echo "⚠ Invalid MODE \"$MODE\"!" && exit 0
     mkdir -p $RUNDIR/inputs
     cp $INPUTDIR/* $RUNDIR/inputs/ &> /dev/null     # FIXME: error if no inputs
     INPUTS="$RUNDIR/inputs/"
