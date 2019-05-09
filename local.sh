@@ -12,8 +12,9 @@ INPUTDIR=""
 VERBOSE="0"
 GRAPHIC=0
 MODE="RUN"
-DOCKER="orel33/mydebian:latest"
-DOCKERTIMEOUT="infinity" # default 900s
+# DOCKER="orel33/mydebian:latest"
+DOCKER=""
+DOCKERTIMEOUT="infinity"
 VPLTOOLKIT="https://github.com/orel33/vpltoolkit.git"
 VERSION="master"    # VPL Toolkit branch
 DOWNLOAD=0
@@ -31,7 +32,7 @@ USAGE() {
     echo "    -n <version> : set the branch/version of VPL Toolkit to use (default $VERSION)"
     echo "    -m <mode>: set execution mode to RUN, DEBUG or EVAL (default $MODE)"
     echo "    -g : enable graphic mode (default no)"
-    echo "    -d <docker> : set docker image to be used (default $DOCKER)"
+    echo "    -d <docker> : set docker image to be used (default, no docker)"
     echo "    -b <branch>: checkout <branch> on git <repository> (default $BRANCH)"
     echo "    -s <subdir>: only download teacher files from subdir into <rundir>"
     echo "    -i <inputdir>: student input directory"
@@ -124,7 +125,7 @@ fi
 
 LOG="$RUNDIR/start.log"
 
-if [ -n $DOCKER ] ; then 
+if [ -n "$DOCKER" ] ; then 
     ( timeout $TIMEOUT docker pull $DOCKER ) &>> $LOG
     [ $? -ne 0 ] && echo "⚠ Error: Docker fails to pull image \"$DOCKER\"!" >&2 && exit 1
 fi

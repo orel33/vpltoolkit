@@ -199,7 +199,7 @@ select <download> method:
     -n <version> : set the branch/version of VPL Toolkit to use (default master)
     -m <mode>: set execution mode to RUN, DEBUG or EVAL (default RUN)
     -g : enable graphic mode (default no)
-    -d <docker> : set docker image to be used (default orel33/mydebian:latest)
+    -d <docker> : set docker image to be used (default, no docker)
     -b <branch>: checkout <branch> on git <repository> (default master)
     -s <subdir>: only download teacher files from subdir into <rundir>
     -i <inputdir>: student input directory
@@ -208,10 +208,13 @@ select <download> method:
 <...>: extra arguments passed to START routine in VPL Toolkit
 ```
 
-For instance:
+For instance, let's run *hello world* example from `https://github.com/orel33/vpltoolkit.git` repository, branch `demo` and subdir `hello` in *RUN* mode using Docker *orel33/mydebian:latest*:
 
 ```bash
-$ ./local.sh -m RUN -r "https://github.com/orel33/vpltoolkit.git" -b demo
+$ ./local.sh -m RUN -d "orel33/mydebian:latest" -r "https://github.com/orel33/vpltoolkit.git" -b demo -s hello
+Run Docker orel33/mydebian:latest.
+hello world!
+Docker orel33/mydebian:latest terminated.
 ```
 
 ## Docker Support
