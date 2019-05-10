@@ -59,7 +59,9 @@ $HOME
 
 ## Output Format and Assessment
 
-Rules for online VPL:
+See documentation: http://vpl.dis.ulpgc.es/index.php/support
+
+Keep in mind this rules, when using VPL online:
 
 * in RUN mode, all outputs are visible in a terminal window by students (as a basic shell script)
 * in EVAL mode, all outputs in comment window are visible by students (it is the main output window)
@@ -67,7 +69,7 @@ Rules for online VPL:
 
 To present outputs and grades properly, we provide several useful bash functions in [toolkit.sh](https://github.com/orel33/vpltoolkit/blob/master/toolkit.sh).
 
-See documentation: http://vpl.dis.ulpgc.es/index.php/support
+TODO: give API overview...
 
 ## Examples
 
@@ -80,8 +82,6 @@ Let's consider the example [hello](https://github.com/orel33/vpltoolkit/tree/dem
 echo "hello world!"
 ```
 
-### Starting with VPL Toolkit
-
 To use the *VPL Toolkit* with Moodle online, you need to save this script as *vpl_run.sh* (resp. *vpl_evaluate.sh* or *vpl_debug.sh*).
 
 ```bash
@@ -91,12 +91,13 @@ RUNDIR=$(mktemp -d)
 DOCKER="orel33/mydebian:latest" # a docker registered on docker hub
 ( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" -b "4.0" &> /dev/null )
 [ ! $? -eq 0 ] && echo "⚠ Fail to download VPL Toolkit!" && exit 0
-source $RUNDIR/vpltoolkit/start.sh
+source $RUNDIR/vpltoolkit/start.sh || exit 0
 GITUSER="toto"
 GITPW="secret"
 GITREPOSITORY="services.emi.u-bordeaux.fr/projet/git/myrepository"
 GITBRANCH="master"
-DOWNLOAD "https://$GITUSER:$GITPW@$GITREPOSITORY" "$GITBRANCH" "$GITDIR"
+GITSUBDIR="exo1"
+DOWNLOAD "https://$GITUSER:$GITPW@$GITREPOSITORY" "$GITBRANCH" "$GITSUBDIR"
 START_ONLINE "arg0" "arg1"
 ```
 
@@ -113,30 +114,10 @@ DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "demo" "hello"
 START_ONLINE
 ```
 
-To launch this example *offline*, you need to write a script named *local_run.sh* & *local_evaluate.sh* as follow.
+To launch this example *offline* in *RUN* mode, you have to use the script [local.sh](https://github.com/orel33/vpltoolkit/blob/master/local.sh) provided in the VPL Toolkit repository.
 
 ```bash
-#!/bin/bash
-RUNDIR=$(mktemp -d)
-DOCKER="orel33/mydebian:latest"
-( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" -b "4.0" &> /dev/null )
-source $RUNDIR/vpltoolkit/start.sh
-DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "demo" "hello"
-START_OFFLINE
-```
-
-Or if you prefer, you can use the [local_run.sh](https://github.com/orel33/vpltoolkit/blob/master/local_run.sh) (or [local_evaluate.sh](https://github.com/orel33/vpltoolkit/blob/master/local_evaluate.sh)) provided in this repository.
-
-```bash
-$ ./local_run.sh hello
-hello world!
-```
-
-Using Bash DEBUG mode (set -x).
-
-```bash
-$ DEBUG=1 ./local_run.sh hello
-+ echo 'hello world!'
+$ ./local.sh -m RUN -d "orel33/mydebian:latest" -r "https://github.com/orel33/vpltoolkit.git" -b demo -s hello
 hello world!
 ```
 
