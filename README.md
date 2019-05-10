@@ -74,10 +74,6 @@ Keep in mind this rules, when using VPL online:
 * in EVAL mode, all outputs in comment window are visible by students (it is the main output window)
 * in EVAL mode, all outputs in execution window are only visible by teacher (for debug purpose)
 
-To present outputs and grades properly, we provide several useful bash functions in [toolkit.sh](https://github.com/orel33/vpltoolkit/blob/master/toolkit.sh).
-
-TODO: give API overview...
-
 ## Examples
 
 ### Hello World
@@ -179,7 +175,51 @@ Run Docker orel33/mydebian:latest.
 Docker orel33/mydebian:latest terminated.
 ```
 
-## Use VPL Toolkit on localhost
+## VPL Toolkit API
+
+To present outputs and grades properly in different modes, we provide several useful bash functions in [toolkit.sh](https://github.com/orel33/vpltoolkit/blob/master/toolkit.sh).
+
+```bash
+function CHECKVERSION()
+function CHECKDOCKER()
+function CHECK()
+function CHECKINPUTS()
+function COPYINPUTS()
+function ECHOBLUE()
+function ECHOGREEN()
+function ECHORED()
+function ECHOYELLOW()
+function ECHO()
+function ECHO_TEACHER()
+function ECHO_DEBUG()
+function PRE()
+function WARNING()
+function ERROR()
+function CRASH()
+function INFO()
+function PRINTOK()
+function PRINTKO()
+function TITLE()
+function TITLE_TEACHER()
+function CAT()
+function CAT_TEACHER()
+function EXEC()
+function STRSTATUS()
+function TRACE()
+function TRACE_TEACHER()
+function WAIT()
+function PYCOMPUTE()
+function UPDATE_GRADE()
+function EVALOK()
+function EVALKO()
+function EVAL()
+function EXIT_GRADE()
+```
+
+TODO: Explain API guideline and write the documentation... In the meantime, read *toolkit.sh*...
+
+
+## Use VPL Toolkit on localhost: local.sh
 
 ```
 Usage: ./local.sh <download> [options] <...>
