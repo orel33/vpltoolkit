@@ -8,13 +8,20 @@ Features:
 
 * a public & reusable execution model for VPL
 * a toolkit with some basic bash functions
-* offline execution
+* offline execution using a local script
+* execution of VPL scripts within docker containers (both online & offline)
 
 ## Execution Model of VPL
 
 What happens when a student clicks on the *Run button* of your VPL Editor in Moodle (or in *Test Activity*, if you are teacher)? First, it will launch the *vpl_run.sh* script, that you must provide in the VPL Interface > Execution Files. Typically, this script must provide in any way a new shell script called *vpl_execution* (or *vpl_wexecution* for graphic session), that will be implicitly launched after *vpl_run.sh* is completed. At this stage, *vpl_execution* calls a teacher-defined entrypoint script (default, *ENTRYPOINT="run.sh"*). By default, VPL starts in text mode. However, it is also possible to start a graphic session through a VNC connection by setting the variable *GRAPHIC=1* in *vpl_run.sh*.
 
-Here is an overview of this process for the three different modes: *RUN*, *DEBUG* and *EVAL*.
+VPL provides three different execution modes:
+
+* RUN: ...
+* DEBUG: ...
+* EVAL: ...
+
+Here is an overview of this process for the three different modes:
 
 ```text
 click RUN button -----> vpl_run.sh --------+
@@ -75,7 +82,8 @@ TODO: give API overview...
 
 ### Hello World
 
-Let's consider the example [hello](https://github.com/orel33/vpltoolkit/tree/demo/hello). First, you need to add a new activity  This activity consists of only scripts *run.sh* & *eval.sh* that just print "hello world!" on standard output. 
+Let's consider the example [hello](https://github.com/orel33/vpltoolkit/tree/master/demo/hello). The entrypoint of a VPL activity in our framework is just simple bash script *run.sh* available on Internet through a GIT repository.
+In this dummy example, our script just prints "hello world!" on standard output.
 
 ```bash
 #!/bin/bash
@@ -105,25 +113,24 @@ For instance:
 
 ```bash
 #!/bin/bash
-rm -f $0 # for security issue
 RUNDIR=$(mktemp -d)
 DOCKER="orel33/mydebian:latest"
 ( cd $RUNDIR && git clone "https://github.com/orel33/vpltoolkit.git" -b "4.0" &> /dev/null )
 source $RUNDIR/vpltoolkit/start.sh
-DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "demo" "hello"
+DOWNLOAD "https://github.com/orel33/vpltoolkit.git" "master" "demo/hello"
 START_ONLINE
 ```
 
-To launch this example *offline* in *RUN* mode, you have to use the script [local.sh](https://github.com/orel33/vpltoolkit/blob/master/local.sh) provided in the VPL Toolkit repository.
+To launch this example *offline* in *RUN* mode, you have to use the script [local.sh](https://github.com/orel33/vpltoolkit/blob/master/local.sh) provided by VPL Toolkit.
 
 ```bash
-$ ./local.sh -m RUN -d "orel33/mydebian:latest" -r "https://github.com/orel33/vpltoolkit.git" -b demo -s hello
+$ ./local.sh -m RUN -r "https://github.com/orel33/vpltoolkit.git" -s demo/hello
 hello world!
 ```
 
 ### My Cat
 
-An advanced example is found in the *demo* branch of this repository: see [mycat](https://github.com/orel33/vpltoolkit/tree/demo/mycat). Let's have a look on the *eval.sh* script for instance.
+Another example is a C programming exercice of the Unix *cat* command: [mycat](https://github.com/orel33/vpltoolkit/tree/master/demo/mycat). The student must implement this command in a file named *mycat.c* (available in the inputs/ directory). Let's have a look on the entrypoint script *run.sh*.
 
 ```bash
 #!/bin/bash
@@ -157,10 +164,11 @@ EVAL $? "test mycat" 60 0
 EXIT_GRADE
 ```
 
-Here is the *offline* test of this script with an input directory of the solution (grade 100% expected).
+Here is way to launch this example *offline*, with an input directory of the solution (grade 100% expected).
 
 ```bash
-(...)
+$ ./local.sh -m RUN -d "orel33/mydebian:latest" -r "https://github.com/orel33/vpltoolkit.git" -s demo/mycat -i demo/mycat/test/solution
+...
 ```
 
 ## Use VPL Toolkit on localhost
