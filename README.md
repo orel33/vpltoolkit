@@ -139,10 +139,11 @@ Another example is a C programming exercice of the Unix *cat* command: [mycat](h
 source env.sh || exit 0
 source vpltoolkit/toolkit.sh || exit 0
 CHECKVERSION "4.0"
-CHECKINPUTS
+CHECKDOCKER "orel33/mydebian:latest"
 GRADE=0
 
-### copy inputs
+### student inputs
+[ ! -f inputs/mycat.c ] && ERROR "Input file mycat.c expected but not found!" && EXIT_GRADE 0
 cp inputs/mycat.c .
 
 ### compilation
@@ -161,6 +162,7 @@ TRACE_TEACHER "cat mycat.in | ./mycat > mycat.out"
 EVAL $? "run mycat" 10 0
 TRACE_TEACHER "diff -q mycat.in mycat.out"
 EVAL $? "test mycat" 60 0
+
 EXIT_GRADE
 ```
 
@@ -168,7 +170,13 @@ Here is way to launch this example *offline*, with an input directory of the sol
 
 ```bash
 $ ./local.sh -m RUN -d "orel33/mydebian:latest" -r "https://github.com/orel33/vpltoolkit.git" -s demo/mycat -i demo/mycat/test/solution
-...
+Run Docker orel33/mydebian:latest.
+######### COMPILATION ##########
+✔️ compilation: success (success) [+30.00%]
+######### EXECUTION ##########
+✔️ run mycat: success  [+10.00%]
+✔️ test mycat: success  [+60.00%]
+Docker orel33/mydebian:latest terminated.
 ```
 
 ## Use VPL Toolkit on localhost
