@@ -182,9 +182,7 @@ To present outputs and grades properly in different modes, we provide several us
 ```bash
 function CHECKVERSION()
 function CHECKDOCKER()
-function CHECK()
-function CHECKINPUTS()
-function COPYINPUTS()
+function CHECKFILES()
 function ECHOBLUE()
 function ECHOGREEN()
 function ECHORED()

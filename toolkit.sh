@@ -18,22 +18,12 @@ function CHECKDOCKER()
     [ "$EXPECTED" != "$DOCKER" ] && ECHO "⚠ Error: Toolkit docker $EXPECTED expected (but docker \"$DOCKER\" found)!" && exit 0
 }
 
-function CHECK()
+function CHECKFILES()
 {
     # TODO: check if it supports filenames with spaces
     for FILE in "$@" ; do
         [ ! -f "$FILE" ] && ECHO "⚠ File \"$FILE\" is missing!" && exit 0
     done
-}
-
-function CHECKINPUTS()
-{
-    ERROR "CHECKINPUTS: deprecated function" && exit 0
-}
-
-function COPYINPUTS()
-{
-    ERROR "COPYINPUTS: deprecated function" && exit 0
 }
 
 ####################################################
