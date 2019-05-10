@@ -101,17 +101,17 @@ function DOWNLOAD()
     [ -z "$BRANCH" ] && echo "⚠ BRANCH variable is not defined!" && exit 0
     # [ -z "$SUBDIR" ] && echo "⚠ SUBDIR variable is not defined!" && exit 0
     # git clone (without checkout of HEAD)
-    ( timeout 10 git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download ) &>> $LOG
+    ( git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download ) &>> $LOG
     [ ! $? -eq 0 ] && echo "⚠ GIT clone repository failure (branch \"$BRANCH\")!" && exit 0
 
     # checkout only what is needed
     if [ -n "$SUBDIR" ] ; then
-        ( cd $RUNDIR/download && timeout 10 git -c http.sslVerify=false checkout HEAD -- $SUBDIR ) &>> $LOG
+        ( cd $RUNDIR/download && git -c http.sslVerify=false checkout HEAD -- $SUBDIR ) &>> $LOG
         [ $? -ne 0 ] && echo "⚠ GIT checkout failure (subdir \"$SUBDIR\")!" && exit 0
         [ ! -d $RUNDIR/download/$SUBDIR ] && ECHO "⚠ SUBDIR \"$SUBDIR\" is missing!" && exit 0
         mv -f $RUNDIR/download/$SUBDIR/* $RUNDIR/ &>> $LOG  # hidden files are not copied!
     else
-        ( cd $RUNDIR/download && timeout 10 git -c http.sslVerify=false checkout HEAD ) &>> $LOG
+        ( cd $RUNDIR/download && git -c http.sslVerify=false checkout HEAD ) &>> $LOG
         [ $? -ne 0 ] && echo "⚠ GIT checkout failure!" && exit 0
         mv -f $RUNDIR/download/* $RUNDIR/ &>> $LOG  # hidden files are not copied!
     fi
