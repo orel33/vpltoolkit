@@ -101,22 +101,24 @@ function DOWNLOAD()
     [ -z "$BRANCH" ] && echo "⚠ BRANCH variable is not defined!" && exit 0
     # [ -z "$SUBDIR" ] && echo "⚠ SUBDIR variable is not defined!" && exit 0
     # git clone (without checkout of HEAD)
-    # ( timeout 10 git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download ) # &>> $LOG
-    git clone -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download # &>> $LOG
-    [ $? -eq 124 ] && echo "⚠ GIT clone repository failure (timeout)!" && exit 0
-    [ $? -ne 0 ] && echo "⚠ GIT clone repository failure (branch \"$BRANCH\")!" && exit 0
+    ( timeout 10 git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download ) &>> $LOG
+    RET=$?
+    [ $RET -eq 124 ] && echo "⚠ GIT clone repository failure (timeout)!" && exit 0
+    [ $RET -ne 0 ] && echo "⚠ GIT clone repository failure (branch \"$BRANCH\")!" && exit 0
 
     # checkout only what is needed
     if [ -n "$SUBDIR" ] ; then
         ( cd $RUNDIR/download && timeout 10 git -c http.sslVerify=false checkout HEAD -- $SUBDIR ) &>> $LOG
-        [ $? -eq 124 ] && echo "⚠ GIT checkout failure (timeout)!" && exit 0
-        [ $? -ne 0 ] && echo "⚠ GIT checkout failure (subdir \"$SUBDIR\")!" && exit 0
+        RET=$?
+        [ $RET -eq 124 ] && echo "⚠ GIT checkout failure (timeout)!" && exit 0
+        [ $RET -ne 0 ] && echo "⚠ GIT checkout failure (subdir \"$SUBDIR\")!" && exit 0
         [ ! -d $RUNDIR/download/$SUBDIR ] && ECHO "⚠ SUBDIR \"$SUBDIR\" is missing!" && exit 0
         mv -f $RUNDIR/download/$SUBDIR/* $RUNDIR/ &>> $LOG  # hidden files are not copied!
     else
         ( cd $RUNDIR/download && timeout 10 git -c http.sslVerify=false checkout HEAD ) &>> $LOG
-        [ $? -eq 124 ] && echo "⚠ GIT checkout failure (timeout)!" && exit 0
-        [ $? -ne 0 ] && echo "⚠ GIT checkout failure!" && exit 0
+        RET=$?
+        [ $RET -eq 124 ] && echo "⚠ GIT checkout failure (timeout)!" && exit 0
+        [ $RET -ne 0 ] && echo "⚠ GIT checkout failure!" && exit 0
         mv -f $RUNDIR/download/* $RUNDIR/ &>> $LOG  # hidden files are not copied!
     fi
     # rm -rf $RUNDIR/.git/ &>> $LOG # for security issue, but useless here
