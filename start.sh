@@ -102,7 +102,7 @@ function DOWNLOAD()
     # [ -z "$SUBDIR" ] && echo "⚠ SUBDIR variable is not defined!" && exit 0
     # git clone (without checkout of HEAD)
     # ( timeout 10 git -c http.sslVerify=false clone -q -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download ) # &>> $LOG
-    git clone --progress -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download # &>> $LOG
+    git clone -n $REPOSITORY --branch $BRANCH --depth 1 $RUNDIR/download # &>> $LOG
     [ $? -eq 124 ] && echo "⚠ GIT clone repository failure (timeout)!" && exit 0
     [ $? -ne 0 ] && echo "⚠ GIT clone repository failure (branch \"$BRANCH\")!" && exit 0
 
