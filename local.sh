@@ -162,7 +162,7 @@ source $RUNDIR/vpltoolkit/start.sh || exit 1
 if [ -n "$LOCALDIR" ] ; then
     [ -n "$SUBDIR" ] && SRCDIR="$LOCALDIR/$SUBDIR"
     [ ! -d $SRCDIR ] && echo "⚠ Error: invalid path \"$SRCDIR\"!"  >&2 && exit 1
-    cp -rf $SRCDIR/* $RUNDIR/ &>> $LOG
+    cp -rf $SRCDIR/. $RUNDIR/ &>> $LOG      # copy all files included hidden files!
 fi
 
 ### REPOSITORY ###
