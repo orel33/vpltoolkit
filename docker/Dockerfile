@@ -8,7 +8,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 COPY sources.list /etc/apt/
 COPY preferences /etc/apt/preferences.d/
 RUN apt-get update
-RUN apt-get install -y apt-utils apt-file
+RUN apt-get install -y apt-utils apt-file gdebi
 # RUN apt-get install -y apt-show-versions
 
 # editing
@@ -45,8 +45,8 @@ RUN apt-get install -y tigervnc-standalone-server tigervnc-common
 
 # Window Manager
 RUN apt-get install -y fluxbox lxterminal lxsession 
-RUN apt-get install -y xmonad xmobar
-RUN apt-get install -y i3
+# RUN apt-get install -y xmonad xmobar
+# RUN apt-get install -y i3
 
 # remove hardware-accelerated Mesa libraries and install the software-only render
 # RUN apt-get install -y libgl1-mesa-swx11 
@@ -59,10 +59,24 @@ RUN apt-get install -y firefox
 RUN apt-get install -y bash bash-completion
 RUN apt-get install -y locales-all tmux screen expect unzip git
 RUN apt-get install -y moreutils
+RUN apt-get install -y gedit
+RUN apt-get install -y sudo
 
 # clean
 RUN apt-get -y autoremove
 
-# WORKDIR /root
+# user toto
+# RUN useradd -ms /bin/bash toto
+# RUN echo 'toto ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+# RUN gpasswd -a toto sudo
+# # RUN sudo bash -c 'echo -e "toto\ntoto\n" | passwd toto'
+# WORKDIR /home/toto
+# ENV USER toto
+# USER toto
+
+# VS Code
+# RUN wget -q "https://vscode-update.azurewebsites.net/latest/linux-deb-x64/stable" -O /tmp/vscode.deb && sudo gdebi --n /tmp/vscode.deb
+# RUN wget -q "https://raw.githubusercontent.com/orel33/vscode/master/extensions.sh" -O /tmp/extensions.sh && bash /tmp/extensions.sh
+
 
 # EOF
