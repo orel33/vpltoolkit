@@ -123,7 +123,7 @@ function DOWNLOAD()
     fi
     # rm -rf $RUNDIR/.git/ &>> $LOG # for security issue, but useless here
     rm -rf $RUNDIR/download &>> $LOG
-    END=$(date +%s.%N)
+    END=$(date +%s.%N)          # FIXME: problem with %N (nanoseconds) option on MacOS
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
     [ "$VERBOSE" = "1" ] && echo "Download teacher repository in $TIME ms"
 
