@@ -307,8 +307,7 @@ DOCKER="orel33/mydebian:latest"
 
 ### To Do
 
-* update documentation in README.md (details on how to build an exercice: file hierarchy, tests, ...)
-* update hello example that should not work since version 2.0
+* update documentation in README.md
 * add unit tests of tookit.sh
 * add possibility to enrich env.sh with user-defined variables
 * add other DOWNLOAD methods for wget and scp, and the possibility to download several stuffs
