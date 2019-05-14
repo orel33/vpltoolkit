@@ -241,10 +241,10 @@ select <download> method:
 <...>: extra arguments passed to START routine in VPL Toolkit
 ```
 
-For instance, let's run *hello world* example from `https://github.com/orel33/vpltoolkit.git` repository, branch `demo` and subdir `hello` in *RUN* mode using Docker *orel33/mydebian:latest*:
+For instance, let's run *hello world* example from `https://github.com/orel33/vpltoolkit.git` repository and subdir `demo/hello` in *RUN* mode using Docker *orel33/mydebian:latest*:
 
 ```bash
-$ ./local.sh -m RUN -d "orel33/mydebian:latest" -r "https://github.com/orel33/vpltoolkit.git" -b demo -s hello
+$ ./local.sh -m RUN -d "orel33/mydebian:latest" -r "https://github.com/orel33/vpltoolkit.git" -s demo/hello
 Run Docker orel33/mydebian:latest.
 hello world!
 Docker orel33/mydebian:latest terminated.
