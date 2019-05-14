@@ -20,6 +20,7 @@ LOCAL="0"
 VERSION="master"    # VPL Toolkit branch
 ENTRYPOINT="run.sh"
 DOWNLOAD=0
+DEBUG=0
 
 ### USAGE ###
 
@@ -41,6 +42,7 @@ USAGE() {
     echo "    -e <entrypoint>: entrypoint shell script (default $ENTRYPOINT)"
     echo "    -i <inputdir>: student input directory"
     echo "    -v: enable verbose (default no)"
+    echo "    -D : enable DEBUG mode (default no)"
     echo "    -h: help"
     echo "<...>: extra arguments passed to START routine in VPL Toolkit"
     exit 0
@@ -49,7 +51,7 @@ USAGE() {
 ### PARSE ARGUMENTS ###
 
 GETARGS() {
-    while getopts "gr:l:s:i:m:d:n:b:e:Lvh" OPT ; do
+    while getopts "gr:l:s:i:m:d:n:b:e:LDvh" OPT ; do
         case $OPT in
             g)
                 GRAPHIC=1
@@ -91,6 +93,9 @@ GETARGS() {
             ;;
             L)
                 LOCAL=1
+            ;;
+            D)
+                DEBUG=1
             ;;
             v)
                 VERBOSE=1
