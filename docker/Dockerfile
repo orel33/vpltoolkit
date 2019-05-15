@@ -44,23 +44,26 @@ RUN apt-get install -y tightvncserver xtightvncviewer
 RUN apt-get install -y tigervnc-standalone-server tigervnc-common
 
 # Window Manager
-RUN apt-get install -y fluxbox lxterminal lxsession 
+RUN apt-get install -y fluxbox lxterminal lxsession
 # RUN apt-get install -y xmonad xmobar
 # RUN apt-get install -y i3
 
 # remove hardware-accelerated Mesa libraries and install the software-only render
-# RUN apt-get install -y libgl1-mesa-swx11 
-
-# BD Web
-RUN apt-get install -y python-psycopg2 python3-psycopg2 python3-flask python-flask
-RUN apt-get install -y firefox
+# RUN apt-get install -y libgl1-mesa-swx11
 
 # misc
 RUN apt-get install -y bash bash-completion
 RUN apt-get install -y locales-all tmux screen expect unzip git
 RUN apt-get install -y moreutils
-RUN apt-get install -y gedit
 RUN apt-get install -y sudo
+
+# BD Web
+RUN apt-get install -y python-psycopg2 python3-psycopg2 python3-flask python-flask
+RUN apt-get install -y firefox
+RUN apt-get install -y gedit
+
+# RUN mkdir -p /run/user/0
+# ENV XDG_RUNTIME_DIR /run/user/0
 
 # clean
 RUN apt-get -y autoremove
