@@ -60,7 +60,7 @@ if [ -n "$DOCKER" ] ; then
     else
         echo "⚠ Warning: /var/run/docker.sock not found!"
     fi
-    if [ -f /dev/kvm ] ; then
+    if [ -e /dev/kvm ] ; then
         DOCKEROPT="$DOCKEROPT --device=/dev/kvm:/dev/kvm"
     else
         echo "⚠ Warning: /dev/kvm not found!"
