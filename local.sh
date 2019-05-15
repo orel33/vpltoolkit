@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # default parameters
-TIMEOUT=10
 RUNDIR=$(mktemp -d)
 LOCALDIR=""
 REPOSITORY=""
@@ -137,11 +136,20 @@ fi
 
 ### PULL DOCKER IMAGE ###
 
+TIMEOUT=10
 LOG="$RUNDIR/start.log"
 
 if [ -n "$DOCKER" ] ; then 
-    ( timeout $TIMEOUT docker pull $DOCKER ) &>> $LOG
-    [ $? -ne 0 ] && echo "⚠ Error: Docker fails to pull image \"$DOCKER\"!" >&2 && exit 1
+    # [ -z $(docker images -q $DOCKER) ] && "⚠ Error: Docker image \"$DOCKER\" not found... please, pull it!" >&2 && exit 1
+    # timeout $TIMEOUT docker pull $DOCKER
+    if [ $VERBOSE -eq 1 ] ; then
+        docker pull $DOCKER
+    else
+        docker pull $DOCKER &>> $LOG
+    fi
+    RET=$?
+    [ $RET -eq 124 ] && echo "⚠ Error: pulling docker image \"$DOCKER\" (timeout)!" >&2 && exit 1
+    [ $RET -ne 0 ] && echo "⚠ Error: pulling docker image \"$DOCKER\" (failure)!" >&2 && exit 1
 fi
 
 ### DOWNLOAD VPL TOOLKIT ###
