@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # rm -f $0
 
 if [ -f ./env.sh ] ; then
@@ -48,13 +48,23 @@ if [ -n "$DOCKER" ] ; then
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && cat output && exit 0
     # DOCKEROPT="--privileged"
     # DOCKEROPT="$DOCKEROPT -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix"
-    XSOCK="/tmp/.X11-unix/X${DISPLAY:1}"
+    XDISPLAY=$(cut -d: -f2 $DISPLAY)
+    XSOCK="/tmp/.X11-unix/X$XDISPLAY"
+    [ ! -S /tmp/.X11-unix/X$XDISPLAY ] && echo "⚠ X11 socket \"$XSOCK\" not found!" && exit 0
     # [ $GRAPHIC -eq 1 ] && echo "DISPLAY=$DISPLAY"
     # [ $GRAPHIC -eq 1 ] && echo "XSOCK=$XSOCK"
     DOCKEROPT="$DOCKEROPT -e DISPLAY=$DISPLAY -v $XSOCK:$XSOCK"
     # DOCKEROPT="$DOCKEROPT --device=/dev/dri:/dev/dri" # direct rendering
-    DOCKEROPT="$DOCKEROPT -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker"
-    DOCKEROPT="$DOCKEROPT --device=/dev/kvm:/dev/kvm"
+    if [ -S /var/run/docker.sock ] ; then
+        DOCKEROPT="$DOCKEROPT -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker"
+    else
+        echo "⚠ Warning: /var/run/docker.sock not found!"
+    fi
+    if [ -f /dev/kvm ] ; then
+        DOCKEROPT="$DOCKEROPT --device=/dev/kvm:/dev/kvm"
+    else
+        echo "⚠ Warning: /dev/kvm not found!"
+    fi
     # DOCKEROPT="$DOCKEROPT -v /dev/kvm:/dev/kvm" # failure on moodle, ok at home!?
     # DOCKEROPT="$DOCKEROPT -v /root/stockage:/root/stockage"
     # DOCKEROPT="$DOCKEROPT --rm --stop-signal=SIGTERM --stop-timeout=$DOCKERTIMEOUT" # useless ???

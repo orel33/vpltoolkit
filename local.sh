@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # default parameters
 TIMEOUT=10
@@ -14,7 +14,7 @@ GRAPHIC=0
 MODE="RUN"
 # DOCKER="orel33/mydebian:latest"
 DOCKER=""
-DOCKERTIMEOUT="infinity"
+DOCKERTIMEOUT="1h"  # 1 hour
 VPLTOOLKIT="https://github.com/orel33/vpltoolkit.git"
 LOCAL="0"
 VERSION="master"    # VPL Toolkit branch
