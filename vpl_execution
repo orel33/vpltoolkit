@@ -48,7 +48,7 @@ if [ -n "$DOCKER" ] ; then
     [ $? -ne 0 ] && echo "⚠ Docker image \"$DOCKER\" is required, but not locally installed!" && cat output && exit 0
     # DOCKEROPT="--privileged"
     # DOCKEROPT="$DOCKEROPT -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix"
-    XDISPLAY=$(cut -d: -f2 $DISPLAY)
+    XDISPLAY=$(sed -e 's/.*:\(.*\)/\1/' <<< $DISPLAY)
     XSOCK="/tmp/.X11-unix/X$XDISPLAY"
     [ ! -S /tmp/.X11-unix/X$XDISPLAY ] && echo "⚠ X11 socket \"$XSOCK\" not found!" && exit 0
     # [ $GRAPHIC -eq 1 ] && echo "DISPLAY=$DISPLAY"
