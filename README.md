@@ -285,6 +285,7 @@ DOCKER="orel33/mydebian:latest"
 
 ### Version 4.0
 
+* MacOS portability
 * add *local.sh* script to start VPL Toolkit on localhost
 * complete rewrite of API in *toolkit.sh*
 * improve docker support

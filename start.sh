@@ -7,6 +7,12 @@ LOG="$RUNDIR/start.log"
 
 ### ENVIRONMENT ###
 
+# print date in seconds.microseconds
+function DATE()
+{
+    python3 -c "import datetime ; now = datetime.datetime.now() ; print(\"{}.{:06d}\".format(now.second,now.microsecond))"
+}
+
 function CHECKENV()
 {
     # basic environment
@@ -94,7 +100,8 @@ function DOWNLOAD()
         echo "⚠ Usage: DOWNLOAD REPOSITORY [BRANCH [SUBDIR]]" && exit 0
     fi
 
-    START=$(date +%s.%N)
+    # START=$(date +%s.%N)
+    START=$(DATE)
     [ -z "$RUNDIR" ] && echo "⚠ RUNDIR variable is not defined!" && exit 0
     mkdir -p $RUNDIR/download
     [ -z "$REPOSITORY" ] && echo "⚠ REPOSITORY variable is not defined!" && exit 0
@@ -123,7 +130,8 @@ function DOWNLOAD()
     fi
     # rm -rf $RUNDIR/.git/ &>> $LOG # for security issue, but useless here
     rm -rf $RUNDIR/download &>> $LOG
-    END=$(date +%s.%N)          # FIXME: problem with %N (nanoseconds) option on MacOS
+    # END=$(date +%s.%N)
+    END=$(DATE)
     TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
     [ "$VERBOSE" = "1" ] && echo "Download teacher repository in $TIME ms"
 
