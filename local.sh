@@ -149,9 +149,8 @@ fi
 TIMEOUT=10
 LOG="$RUNDIR/start.log"
 
-if [ -n "$DOCKER" ] ; then 
-    # [ -z $(docker images -q $DOCKER) ] && "⚠ Error: Docker image \"$DOCKER\" not found... please, pull it!" >&2 && exit 1
-    # timeout $TIMEOUT docker pull $DOCKER
+if [ -n "$DOCKER" ] ; then
+    [ -z $(docker images -q $DOCKER) ] && "⚠ Warning: Docker image \"$DOCKER\" not found! I will pull it..." >&2
     if [ $VERBOSE -eq 1 ] ; then
         docker pull $DOCKER
     else
