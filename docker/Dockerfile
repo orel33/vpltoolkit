@@ -53,7 +53,7 @@ RUN apt-get install -y fluxbox lxterminal lxsession
 
 # misc
 RUN apt-get install -y bash bash-completion
-RUN apt-get install -y locales-all tmux screen expect unzip git
+RUN apt-get install -y locales-all tmux screen expect zip unzip git
 RUN apt-get install -y moreutils
 RUN apt-get install -y sudo
 

@@ -159,7 +159,7 @@ function WGET()
 
     START=$(DATE)
     mkdir -p $RUNDIR/download
-    timeout $TIMEOUT wget "$URL" -O $RUNDIR/download/teacher.zip &>> $LOG
+    timeout $TIMEOUT wget -a $LOG -O $RUNDIR/download/teacher.zip "$URL"
     RET=$?
     [ $RET -eq 124 ] && echo "⚠ Error: wget failure (timeout)!" >&2 && exit 1
     [ $RET -ne 0 ] && echo "⚠ Error: wget failure!" >&2 && exit 1
