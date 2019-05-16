@@ -20,6 +20,7 @@ CHECKVERSION "4.0"
 ####################################################
 
 gcc -std=c99 segfault.c -o segfault
+[ $? -ne 0 ] && echo "Error: compilation segfault.c" && exit 0
 
 ####################################################
 
