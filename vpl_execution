@@ -44,7 +44,7 @@ fi
 if [ -n "$DOCKER" ] ; then
     trap 'dockerclean' EXIT
     [ -z "$DOCKERTIMEOUT" ] && echo "⚠ Error: Variable \"DOCKERTIMEOUT\" is not defined!" && exit 0
-    [ -z $(docker images -q $DOCKER) ] && "⚠ Warning: Docker image \"$DOCKER\" not found! I will pull it..."
+    [ -z $(docker images -q $DOCKER) ] && echo "⚠ Warning: Docker image \"$DOCKER\" not found! I will pull it..."
     docker pull $DOCKER # &>> $LOG
     [ $? -ne 0 ] && echo "⚠ Error: pulling docker image \"$DOCKER\" (failure)!" >&2 && exit 1
     # docker image inspect $DOCKER &> output
