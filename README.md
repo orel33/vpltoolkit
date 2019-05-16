@@ -225,7 +225,7 @@ Start VPL Toolkit on localhost.
 select <download> method:
     -l <localdir>: copy teacher files from local directory into <rundir>
     -r <repository>: download teacher files from remote git repository
-    -w <url>: download teacher files from remote web site (not yet available)
+    -w <url>: download teacher files from remote web site
 [options]:
     -L: use local version of VPL Toolkit
     -n <version> : set the branch/version of VPL Toolkit to use (default master)
@@ -236,7 +236,8 @@ select <download> method:
     -s <subdir>: only download teacher files from subdir into <rundir>
     -e <entrypoint>: entrypoint shell script (default run.sh)
     -i <inputdir>: student input directory
-    -v: enable verbose (default no)
+    -v: enable verbose mode (default no)
+    -D: enable debug mode (default no)
     -h: help
 <...>: extra arguments passed to START routine in VPL Toolkit
 ```
@@ -244,10 +245,16 @@ select <download> method:
 For instance, let's run *hello world* example from `https://github.com/orel33/vpltoolkit.git` repository and subdir `demo/hello` in *RUN* mode using Docker *orel33/mydebian:latest*:
 
 ```bash
-$ ./local.sh -m RUN -d "orel33/mydebian:latest" -r "https://github.com/orel33/vpltoolkit.git" -s demo/hello
+$ ./local.sh -m RUN -d "orel33/mydebian:latest" -l . -s demo/hello
 Run Docker orel33/mydebian:latest.
 hello world!
 Docker orel33/mydebian:latest terminated.
+```
+
+Instead of using local files (option -l), you can use a remote GIT repository as follows:
+
+```bash
+$ ./local.sh -m RUN -d "orel33/mydebian:latest" -r "https://github.com/orel33/vpltoolkit.git" -s demo/hello
 ```
 
 ## Docker Support
