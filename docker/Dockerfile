@@ -24,6 +24,9 @@ RUN apt-get install -y tcl8.5 tcl8.5-dev
 RUN apt-get install -y python3 python3-pip python3-numpy  python3-termcolor
 RUN apt-get install -y python python-pip python-numpy python-pytest python-termcolor
 RUN apt-get install -y radon
+RUN pip install --upgrade pip
+RUN pip3 install --upgrade pip
+# RUN pip install numpy scipy scikit-learn matplotlib pandas pytest ipython pytest-cov coverage scan-build
 
 # networking
 RUN apt-get install -y net-tools socat rlwrap wget curl tcpdump
