@@ -219,6 +219,8 @@ function START_ONLINE()
     cp $RUNDIR/env.sh $HOME
     cp $RUNDIR/vpltoolkit/toolkit.sh $HOME
     cp $RUNDIR/vpltoolkit/vpl_execution $HOME
+    cp $HOME/vpl_environment.sh $RUNDIR/
+    cp $HOME/common_script.sh $RUNDIR/
     # graphic session
     [ $GRAPHIC -eq 1 ] && mv $HOME/vpl_execution $HOME/vpl_wexecution
     # print in compilation window

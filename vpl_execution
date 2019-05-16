@@ -44,9 +44,9 @@ fi
 if [ -n "$DOCKER" ] ; then
     trap 'dockerclean' EXIT
     [ -z "$DOCKERTIMEOUT" ] && echo "⚠ Error: Variable \"DOCKERTIMEOUT\" is not defined!" && exit 0
-    [ -z $(docker images -q $DOCKER) ] && "⚠ Warning: Docker image \"$DOCKER\" not found! I will pull it..."
-    docker pull $DOCKER # &>> $LOG
-    [ $? -ne 0 ] && echo "⚠ Error: pulling docker image \"$DOCKER\" (failure)!" >&2 && exit 1
+    [ -z $(docker images -q $DOCKER) ] && echo "⚠ Warning: Docker image \"$DOCKER\" not found! I will pull it..."
+    docker pull $DOCKER &> /dev/null # FIXME: show progress...
+    [ $? -ne 0 ] && echo "⚠ Error: pulling docker image \"$DOCKER\" (failure)!" && exit 1
     # docker image inspect $DOCKER &> output
     # [ $? -ne 0 ] && echo "⚠ Error: Docker image \"$DOCKER\" is required, but not locally installed!" && cat output && exit 0
 
@@ -77,11 +77,13 @@ if [ -n "$DOCKER" ] ; then
     DOCKEROPT="$DOCKEROPT -d --rm -w $RUNDIR" # detached, auto-remove
     DOCKERID=$(docker run $DOCKEROPT $DOCKER sleep $DOCKERTIMEOUT)
     echo "Run Docker $DOCKER."
+    # give all permissions for nested docker user (if not root)
+    chmod -R 777 $RUNDIR/ $HOME/
     # copy all rundir inside docker...
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
-    # TODO: copy only desired files... vpl_*.sh, env.sh, ... ???
-    # FIXME: use docker as USER not root!
-    [ $ONLINE -eq 1 ] && docker cp $HOME/. $DOCKERID:/root &> /dev/null # assuming $HOME is /root
+    # DOCKERHOME="/root" # FIXME: assuming $HOME is /root 
+    # [ $ONLINE -eq 1 ] && docker cp $HOME/. $DOCKERID:$DOCKERHOME &> /dev/null 
+
     if [ $GRAPHIC -eq 0 ] ; then
         docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
         [ $DEBUG -eq 1 ] && docker exec -it $DOCKERID bash
