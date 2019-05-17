@@ -78,7 +78,7 @@ if [ -n "$DOCKER" ] ; then
     DOCKERID=$(docker run $DOCKEROPT $DOCKER sleep $DOCKERTIMEOUT)
     echo "Run Docker $DOCKER."
     # give all permissions for nested docker user (if not root)
-    chmod -R 777 $RUNDIR/ $HOME/
+    # chmod -R 777 $RUNDIR/ $HOME/ # FIXME: DON'T DO THIS!!!!!
     # copy all rundir inside docker...
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
     # DOCKERHOME="/root" # FIXME: assuming $HOME is /root 
