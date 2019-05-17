@@ -80,7 +80,7 @@ if [ -n "$DOCKER" ] ; then
     # give all permissions for nested docker user (if not root)
     chmod -R 777 $RUNDIR/ $HOME/
     # copy all rundir inside docker...
-    docker cp -a $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
+    docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
     # DOCKERHOME="/root" # FIXME: assuming $HOME is /root 
     # [ $ONLINE -eq 1 ] && docker cp $HOME/. $DOCKERID:$DOCKERHOME &> /dev/null 
 
