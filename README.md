@@ -225,14 +225,15 @@ Start VPL Toolkit on localhost.
 select <download> method:
     -l <localdir>: copy teacher files from local directory into <rundir>
     -r <repository>: download teacher files from remote git repository
-    -w <url>: download teacher files from remote web site
+    -w <url>: download teacher zip archive from remote web site
 [options]:
     -L: use local version of VPL Toolkit
     -n <version> : set the branch/version of VPL Toolkit to use (default master)
     -m <mode>: set execution mode to RUN, DEBUG or EVAL (default RUN)
     -g : enable graphic mode (default no)
     -d <docker> : set docker image to be used (default, no docker)
-    -b <branch>: checkout <branch> on git <repository> (default master)
+    -b <branch>: checkout a branch from git repository (default master, -r required)
+    -p <password>: unzip teacher archive using a password (-w required)
     -s <subdir>: only download teacher files from subdir into <rundir>
     -e <entrypoint>: entrypoint shell script (default run.sh)
     -i <inputdir>: student input directory
