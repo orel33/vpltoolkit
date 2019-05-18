@@ -1,4 +1,4 @@
-FROM orel33/mydebian:user
+FROM orel33/mydebian:latest
 MAINTAINER Aurelien Esnard <aurelien.esnard@u-bordeaux.fr>
 
 # add user
@@ -8,19 +8,16 @@ RUN gpasswd -a toto sudo
 # RUN echo -e "toto\ntoto\n" | passwd toto
 # RUN echo "toto:toto" | chpasswd
 WORKDIR /home/toto
-chown -R toto:toto /home/gitlab/
+RUN chown -R toto:toto /home/toto
 ENV USER toto
 USER toto
-
 
 # RUN groupadd -f -g 1000 gitlab && \
 #     useradd -u 1000 -g gitlab -ms /bin/bash gitlab && \
 #     mkdir /builds && \
 #     chown -R gitlab:gitlab /builds && \
 #     echo "gitlab:gitlab" | chpasswd && adduser gitlab sudo
-
 # RUN chown -R gitlab:gitlab /home/gitlab/
-# 
 # USER gitlab
 # # change the default shell to be bash
 # SHELL ["/bin/bash", "-c"]
