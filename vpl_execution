@@ -80,11 +80,11 @@ if [ -n "$DOCKER" ] ; then
     # give all permissions for nested docker user (if not root)
     chmod -R a+w $RUNDIR/
     # copy all rundir inside docker...
-    docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null   # FIXME: RUNDIR has not the right permission
-    # docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
-
-    # DOCKERHOME="/root" # FIXME: assuming $HOME is /root 
-    # [ $ONLINE -eq 1 ] && docker cp $HOME/. $DOCKERID:$DOCKERHOME &> /dev/null 
+    DSTDIR=$(dirname $RUNDIR)
+    docker cp $RUNDIR/toto $DOCKERID:$DSTDIR &> /dev/null
+    [ $? -ne 0 ] && echo "⚠ Warning: fails to copy $RUNDIR into docker!" && exit 0
+    # DOCKERHOME="/root" # FIXME: assuming $HOME is /root
+    # [ $ONLINE -eq 1 ] && docker cp $HOME/. $DOCKERID:$DOCKERHOME &> /dev/null
 
     if [ $GRAPHIC -eq 0 ] ; then
         docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
@@ -95,7 +95,7 @@ if [ -n "$DOCKER" ] ; then
         [ $DEBUG -eq 1 ] && xterm -T debug -hold -e docker exec -it $DOCKERID bash
     fi
     docker container stop -t 0 $DOCKERID &> /dev/null
-    
+
     ### regular run (no docker) ###
 else
     echo "Run..."

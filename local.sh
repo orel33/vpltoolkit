@@ -151,6 +151,7 @@ LOG="$RUNDIR/start.log"
 
 if [ -n "$DOCKER" ] ; then
     [ -z $(docker images -q $DOCKER) ] && echo "⚠ Warning: Docker image \"$DOCKER\" not found! I will pull it..." >&2
+    # TODO: add NOPULL option for local Docker image...
     if [ $VERBOSE -eq 1 ] ; then
         docker pull $DOCKER
     else
