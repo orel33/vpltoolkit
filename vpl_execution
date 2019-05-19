@@ -81,7 +81,7 @@ if [ -n "$DOCKER" ] ; then
     chmod -R a+w $RUNDIR/
     # copy all rundir inside docker...
     DSTDIR=$(dirname $RUNDIR)
-    docker cp $RUNDIR/toto $DOCKERID:$DSTDIR &> /dev/null
+    docker cp $RUNDIR/ $DOCKERID:$DSTDIR &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Warning: fails to copy $RUNDIR into docker!" && exit 0
     # DOCKERHOME="/root" # FIXME: assuming $HOME is /root
     # [ $ONLINE -eq 1 ] && docker cp $HOME/. $DOCKERID:$DOCKERHOME &> /dev/null
