@@ -53,7 +53,7 @@ $RUNDIR
       └── ...
 ```
 
-Besides, you will find important VPL files in $HOME, that are useful for VPL execution *online*. For security issues, some of these files are removed at runtime.
+Besides, you will find important VPL files in $HOME, that are useful for VPL execution *online*. For security issues, some of these files are removed at runtime. For practical reasons, some of these files are also copied into the *RUNDIR* directory, as for instance *vpl_environment.sh*.
 
 ```text
 $HOME
@@ -61,6 +61,7 @@ $HOME
   ├── vpl_execution
   ├── vpl_run.sh
   ├── vpl_evaluate.sh
+  ├── vpl_environment.sh
   └── ...
 ```
 
@@ -319,7 +320,7 @@ DOCKER="orel33/mydebian:latest"
 * update documentation in README.md (API in toolkit.sh)
 * update unit tests of tookit.sh
 * add possibility to enrich env.sh with user-defined variables
-* add other DOWNLOAD methods for wget and scp
+* imagine a way to use docker with regular user (no root)
 
 ---
 aurelien.esnard@u-bordeaux.fr
