@@ -233,6 +233,7 @@ select <download> method:
     -m <mode>: set execution mode to RUN, DEBUG or EVAL (default RUN)
     -g : enable graphic mode (default no)
     -d <docker> : set docker image to be used (default, no docker)
+    -u <dockeruser>: set docker user (-d required)
     -b <branch>: checkout a branch from git repository (default master, -r required)
     -p <password>: unzip teacher archive using a password (-w required)
     -s <subdir>: only download teacher files from subdir into <rundir>

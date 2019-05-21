@@ -79,25 +79,25 @@ if [ -n "$DOCKER" ] ; then
     echo "Run Docker $DOCKER."
 
     # copy all RUNDIR inside docker...
-    docker cp $RUNDIR/. $DOCKERID:$RUNDIR # &> /dev/null
+    docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Warning: fails to copy \"$RUNDIR\" into docker!" && exit 0
 
     # chown RUNDIR as docker user
     if [ -n "$DOCKERUSER" ] ; then
-        docker exec -u root $DOCKERID chown -R $DOCKERUSER:$DOCKERUSER $RUNDIR # &> /dev/null
+        docker exec -u root $DOCKERID chown -R $DOCKERUSER:$DOCKERUSER $RUNDIR &> /dev/null
         [ $? -ne 0 ] && echo "⚠ Warning: fails to exec chown \"$DOCKERUSER\" into docker!" && exit 0
     fi
 
-    # DOCKERHOME="/root" # FIXME: assuming $HOME is /root
-    # [ $ONLINE -eq 1 ] && docker cp $HOME/. $DOCKERID:$DOCKERHOME &> /dev/null
+    DOCKERUSEROPT=""
+    [ -n "$DOCKERUSER" ] && DOCKERUSEROPT="-u $DOCKERUSER"
 
     if [ $GRAPHIC -eq 0 ] ; then
-        docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
-        [ $DEBUG -eq 1 ] && docker exec -it $DOCKERID bash
+        docker exec $DOCKERUSEROPT -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
+        [ $DEBUG -eq 1 ] && docker exec $DOCKERUSEROPT -it $DOCKERID bash
     else
         # pkill -9 fluxbox    # FIXME: need to kill fluxbox at VPL Jail entrypoint...
-        xterm -T main -hold -e docker exec -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
-        [ $DEBUG -eq 1 ] && xterm -T debug -hold -e docker exec -it $DOCKERID bash
+        xterm -T main -hold -e docker exec $DOCKERUSEROPT -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
+        [ $DEBUG -eq 1 ] && xterm -T debug -hold -e docker exec $DOCKERUSEROPT -it $DOCKERID bash
     fi
     docker container stop -t 0 $DOCKERID &> /dev/null
 
