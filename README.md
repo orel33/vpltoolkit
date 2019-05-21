@@ -298,8 +298,9 @@ DOCKER="orel33/mydebian:latest"
 * add *local.sh* script to start VPL Toolkit on localhost
 * complete rewrite of API in *toolkit.sh*
 * improve docker support
-* add GRAPHIC option
-* add DEBUG mode
+* add GRAPHIC=0|1 option
+* add DEBUG=0|1 option
+* add DOCKERUSER option to enable docker image with regular user (no root)
 
 ### Version 3.0
 
@@ -320,7 +321,6 @@ DOCKER="orel33/mydebian:latest"
 * update documentation in README.md (API in toolkit.sh)
 * update unit tests of tookit.sh
 * add possibility to enrich env.sh with user-defined variables
-* imagine a way to use docker with regular user (no root)
 
 ---
 aurelien.esnard@u-bordeaux.fr

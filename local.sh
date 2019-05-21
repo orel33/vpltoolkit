@@ -13,6 +13,7 @@ VERBOSE=0
 GRAPHIC=0
 MODE="RUN"
 DOCKER=""
+DOCKERUSER=""
 DOCKERTIMEOUT="1h"  # 1 hour
 VPLTOOLKIT="https://github.com/orel33/vpltoolkit.git"
 LOCAL=0
@@ -36,6 +37,7 @@ USAGE() {
     echo "    -m <mode>: set execution mode to RUN, DEBUG or EVAL (default $MODE)"
     echo "    -g : enable graphic mode (default no)"
     echo "    -d <docker> : set docker image to be used (default, no docker)"
+    echo "    -u <dockeruser>: set docker user (-d required)"
     echo "    -b <branch>: checkout a branch from git repository (default $BRANCH, -r required)"
     echo "    -p <password>: unzip teacher archive using a password (-w required)"
     echo "    -s <subdir>: only download teacher files from subdir into <rundir>"
@@ -51,13 +53,16 @@ USAGE() {
 ### PARSE ARGUMENTS ###
 
 GETARGS() {
-    while getopts "gr:w:l:s:i:m:d:n:b:p:e:DLvh" OPT ; do
+    while getopts "gr:w:l:s:i:m:d:u:n:b:p:e:DLvh" OPT ; do
         case $OPT in
             g)
                 GRAPHIC=1
             ;;
             d)
                 DOCKER="$OPTARG"
+            ;;
+            u)
+                DOCKERUSER="$OPTARG"
             ;;
             m)
                 grep -w $OPTARG <<< "RUN DEBUG EVAL" &> /dev/null
@@ -115,6 +120,7 @@ GETARGS() {
     [ $DOWNLOAD -eq 0 ] && USAGE
     [ $DOWNLOAD -gt 1 ] && echo "⚠ Error: select only one download method!" >&2 && USAGE
     [ $LOCAL -eq 1 -a "$VERSION" != "master" ] && echo "⚠ Warning: option -n <version> is ignored!" >&2
+    [ -z "$DOCKER" -a -n "$DOCKERUSER" ] && echo "⚠ Warning: option -u <dockeruser> is ignored!" >&2
     shift $((OPTIND-1))
     ARGS="$@"
 }
@@ -138,6 +144,7 @@ if [ $VERBOSE -eq 1 ] ; then
     echo "INPUTDIR=$INPUTDIR"
     echo "ARGS=$ARGS"
     echo "DOCKER=$DOCKER"
+    echo "DOCKERUSER=$DOCKERUSER"
     echo "GRAPHIC=$GRAPHIC"
     echo "ENTRYPOINT=$ENTRYPOINT"
     echo "VERBOSE=$VERBOSE"

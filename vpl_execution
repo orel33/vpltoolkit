@@ -77,13 +77,17 @@ if [ -n "$DOCKER" ] ; then
     DOCKEROPT="$DOCKEROPT -d --rm -w $RUNDIR" # detached, auto-remove
     DOCKERID=$(docker run $DOCKEROPT $DOCKER sleep $DOCKERTIMEOUT)
     echo "Run Docker $DOCKER."
-    # give all permissions for nested docker user (if not root)
-    chmod -R a+w $RUNDIR/
-    # copy all rundir inside docker...
-    # DSTDIR=$(dirname $RUNDIR)
-    # docker cp $RUNDIR $DOCKERID:$DSTDIR # &> /dev/null
+
+    # copy all RUNDIR inside docker...
     docker cp $RUNDIR/. $DOCKERID:$RUNDIR # &> /dev/null
-    [ $? -ne 0 ] && echo "⚠ Warning: fails to copy $RUNDIR into docker!" && exit 0
+    [ $? -ne 0 ] && echo "⚠ Warning: fails to copy \"$RUNDIR\" into docker!" && exit 0
+
+    # chown RUNDIR as docker user
+    if [ -n "$DOCKERUSER" ] ; then
+        docker exec -u root $DOCKERID chown -R $DOCKERUSER:$DOCKERUSER $RUNDIR # &> /dev/null
+        [ $? -ne 0 ] && echo "⚠ Warning: fails to exec chown \"$DOCKERUSER\" into docker!" && exit 0
+    fi
+
     # DOCKERHOME="/root" # FIXME: assuming $HOME is /root
     # [ $ONLINE -eq 1 ] && docker cp $HOME/. $DOCKERID:$DOCKERHOME &> /dev/null
 

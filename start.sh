@@ -25,6 +25,7 @@ function CHECKENV()
     [ -z "$RUNDIR" ] && echo "⚠ Error: Error: RUNDIR variable is not defined!" >&2 && exit 1
     [ -z "$GRAPHIC" ] && GRAPHIC=0
     [ -z "$DOCKER" ] && DOCKER=""
+    [ -z "$DOCKERUSER" ] && DOCKERUSER=""   # FIXME: maybe set as "root"?
     [ -z "$DOCKERTIMEOUT" ] && DOCKERTIMEOUT="900"
     [ -z "$DEBUG" ] && DEBUG=0
     [ -z "$VERBOSE" ] && VERBOSE=0
@@ -44,6 +45,7 @@ function SAVEENV()
     echo "RUNDIR=$RUNDIR" >> $RUNDIR/env.sh
     echo "GRAPHIC=$GRAPHIC" >> $RUNDIR/env.sh
     echo "DOCKER=$DOCKER" >> $RUNDIR/env.sh
+    echo "DOCKERUSER=$DOCKERUSER" >> $RUNDIR/env.sh
     echo "DOCKERTIMEOUT=$DOCKERTIMEOUT" >> $RUNDIR/env.sh
     echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
     echo "VERBOSE=$VERBOSE" >> $RUNDIR/env.sh
@@ -74,6 +76,7 @@ function PRINTENV()
     echo "* MODE=$MODE"
     echo "* RUNDIR=$RUNDIR"
     echo "* DOCKER=$DOCKER"
+    echo "* DOCKERUSER=$DOCKERUSER"
     echo "* DOCKERTIMEOUT=$DOCKERTIMEOUT"
     echo "* GRAPHIC=$GRAPHIC"
     echo "* DEBUG=$DEBUG"
@@ -83,6 +86,8 @@ function PRINTENV()
     echo "* INPUTS=$INPUTS"
     return 0
 }
+
+# TODO: function ADDENV()
 
 ### DOWNLOAD ###
 
@@ -139,6 +144,7 @@ function DOWNLOAD()
 }
 
 ### DOWNLOAD TEACHER ARCHIVE (ZIP) FROM A WEB SITE
+# TODO: use htaccess login:password instead of zip encryption
 function WGET()
 {
     if [ $# -eq 1 ] ; then
