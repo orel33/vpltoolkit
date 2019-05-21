@@ -72,6 +72,18 @@ RUN apt-get install -y sbcl
 # clean
 RUN apt-get -y autoremove
 
+# add user
+RUN useradd -ms /bin/bash toto
+RUN echo 'toto ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+RUN gpasswd -a toto sudo
+# RUN echo -e "toto\ntoto\n" | passwd toto
+RUN echo "toto:toto" | chpasswd
+# WORKDIR /home/toto
+RUN chown -R toto:toto /home/toto
+# ENV USER toto
+# USER toto
+
+
 # VS Code
 # RUN wget -q "https://vscode-update.azurewebsites.net/latest/linux-deb-x64/stable" -O /tmp/vscode.deb && sudo gdebi --n /tmp/vscode.deb
 # RUN wget -q "https://raw.githubusercontent.com/orel33/vscode/master/extensions.sh" -O /tmp/extensions.sh && bash /tmp/extensions.sh
