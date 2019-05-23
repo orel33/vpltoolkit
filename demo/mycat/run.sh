@@ -16,10 +16,10 @@ cp inputs/mycat.c .
 TITLE "COMPILATION"
 CFLAGS="-std=c99 -Wall"
 WFLAGS="-Wl,--wrap=system"
-TRACE "gcc $CFLAGS $WFLAGS mycat.c -o mycat |& tee warnings"
+TRACE "gcc $CFLAGS $WFLAGS mycat.c -o mycat &> warnings"
 EVALKO $? "compilation" 0 "errors" && EXIT_GRADE 0
 [ -x mycat ] && EVALOK $? "compilation" 30 "success"
-[ -s warnings ] && EVALKO 1 "compilation" -10 "warnings"
+[ -s warnings ] && EVALKO 1 "compilation" -10 "warnings" && CAT warnings
 
 ### execution
 TITLE "EXECUTION"

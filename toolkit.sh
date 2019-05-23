@@ -301,7 +301,7 @@ function TRACE()
         # setsid -w bash -c "$@" |& sed -e 's/^/>/;' # preformated output
         bash -c "$@" |& sed -e 's/^/>/;' # preformated output
         RET=${PIPESTATUS[0]}  # return status of first piped command!
-        echo ; echo "--|>"
+        echo ; echo "--|>" # FIXME: append this echo only if needed! cf. CAT
         local STATUS=$(STRSTATUS $RET)
         echo -e "${CL}Teacher :=>> Status $RET ($STATUS)"
     else
