@@ -3,30 +3,6 @@
 LOG="teacher.log"
 
 ####################################################
-#                      MISC                        #
-####################################################
-
-function CHECKVERSION()
-{
-    local EXPECTED="$1"
-    [ "$EXPECTED" != "$VERSION" ] && ECHO "⚠ Error: Toolkit version $EXPECTED expected (but version \"$VERSION\" found)!" && exit 0
-}
-
-function CHECKDOCKER()
-{
-    local EXPECTED="$1"
-    [ "$EXPECTED" != "$DOCKER" ] && ECHO "⚠ Error: Toolkit docker $EXPECTED expected (but docker \"$DOCKER\" found)!" && exit 0
-}
-
-function CHECKFILES()
-{
-    # TODO: check if it supports filenames with spaces
-    for FILE in "$@" ; do
-        [ ! -f "$FILE" ] && ECHO "⚠ File \"$FILE\" is missing!" && exit 0
-    done
-}
-
-####################################################
 #                       ECHO                       #
 ####################################################
 
@@ -548,6 +524,39 @@ function EXIT_GRADE()
         ECHO_TEACHER "GRADE: $GRADE%"
     fi
     exit 0
+}
+
+####################################################
+#                      CHECK                       #
+####################################################
+
+function CHECKVERSION()
+{
+    local EXPECTED="$1"
+    [ "$EXPECTED" != "$VERSION" ] && ERROR "Toolkit version $EXPECTED expected (but version \"$VERSION\" found)!" && exit 1
+}
+
+function CHECKDOCKER()
+{
+    local EXPECTED="$1"
+    [ "$EXPECTED" != "$DOCKER" ] && ERROR "Docker $EXPECTED expected (but docker \"$DOCKER\" found)!" && exit 1
+}
+
+function CHECKFILES()
+{
+    # TODO: check if it supports filenames with spaces
+    for FILE in "$@" ; do
+        [ ! -f "$FILE" ] && ERROR "File \"$FILE\" is missing!" && exit 1
+    done
+}
+
+function CHECKPROGRAMS()
+{
+    # TODO: check if it supports filenames with spaces
+    for PROGRAM in "$@" ; do
+        type "$PROGRAM" &> /dev/null
+        [ $? -ne 0 ] && ERROR "Program \"$PROGRAM\" is missing!" && exit 1
+    done
 }
 
 ####################################################
