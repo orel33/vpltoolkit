@@ -74,7 +74,7 @@ if [ -n "$DOCKER" ] ; then
     # DOCKEROPT="$DOCKEROPT -v /dev/kvm:/dev/kvm" # failure on moodle, ok at home!?
     # DOCKEROPT="$DOCKEROPT -v /root/stockage:/root/stockage"
     # DOCKEROPT="$DOCKEROPT --rm --stop-signal=SIGTERM --stop-timeout=$DOCKERTIMEOUT" # useless ???
-    local DOCKERHOSTNAME="pouet"
+    DOCKERHOSTNAME="pouet"
     DOCKEROPT="$DOCKEROPT -d --rm -w $RUNDIR --hostname $DOCKERHOSTNAME" # detached, auto-remove
     DOCKERID=$(docker run $DOCKEROPT $DOCKER sleep $DOCKERTIMEOUT)
     echo "Run Docker $DOCKER."
