@@ -11,6 +11,8 @@ Features:
 * offline execution using a local script
 * execution of VPL scripts within docker containers (both online & offline)
 
+A short tutorial is available [here](misc/talk-grenoble-2019.md).
+
 ## Execution Model of VPL
 
 What happens when a student clicks on the *Run button* of your VPL Editor in Moodle (or in *Test Activity*, if you are teacher)? First, it will launch the *vpl_run.sh* script, that you must provide in the VPL Interface > Execution Files. Typically, this script must provide in any way a new shell script called *vpl_execution* (or *vpl_wexecution* for graphic session), that will be implicitly launched after *vpl_run.sh* is completed. At this stage, *vpl_execution* calls a teacher-defined entrypoint script (default, *ENTRYPOINT="run.sh"*). By default, VPL starts in text mode. However, it is also possible to start a graphic session through a VNC connection by setting the variable *GRAPHIC=1* in *vpl_run.sh*.
