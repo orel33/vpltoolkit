@@ -72,17 +72,19 @@ RUN apt-get install -y sbcl
 # clean
 RUN apt-get -y autoremove
 
-# add user
+# add user toto
 RUN useradd -ms /bin/bash toto
 RUN echo 'toto ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 RUN gpasswd -a toto sudo
-# RUN echo -e "toto\ntoto\n" | passwd toto
 RUN echo "toto:toto" | chpasswd
-# WORKDIR /home/toto
 RUN chown -R toto:toto /home/toto
-# ENV USER toto
-# USER toto
 
+# add user tutu
+RUN useradd -ms /bin/bash tutu
+RUN echo 'tutu ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+RUN gpasswd -a tutu sudo
+RUN echo "tutu:tutu" | chpasswd
+RUN chown -R tutu:tutu /home/tutu
 
 # VS Code
 # RUN wget -q "https://vscode-update.azurewebsites.net/latest/linux-deb-x64/stable" -O /tmp/vscode.deb && sudo gdebi --n /tmp/vscode.deb

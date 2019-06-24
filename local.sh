@@ -129,7 +129,7 @@ GETARGS() {
 #                                           LOCAL RUN                                      #
 ############################################################################################
 
-GETARGS $*
+GETARGS $*          # FIXME: it should be $@ ???
 
 if [ $VERBOSE -eq 1 ] ; then
     echo "VPLTOOLKIT=$VPLTOOLKIT"

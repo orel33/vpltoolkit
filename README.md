@@ -181,9 +181,6 @@ Docker orel33/mydebian:latest terminated.
 To present outputs and grades properly in different modes, we provide several useful bash functions in [toolkit.sh](https://github.com/orel33/vpltoolkit/blob/master/toolkit.sh).
 
 ```bash
-function CHECKVERSION()
-function CHECKDOCKER()
-function CHECKFILES()
 function ECHOBLUE()
 function ECHOGREEN()
 function ECHORED()
@@ -213,6 +210,10 @@ function EVALOK()
 function EVALKO()
 function EVAL()
 function EXIT_GRADE()
+function CHECKVERSION()
+function CHECKDOCKER()
+function CHECKFILES()
+function CHECKPROGRAMS()
 ```
 
 TODO: Explain API guideline and write the documentation... In the meantime, read *toolkit.sh*...

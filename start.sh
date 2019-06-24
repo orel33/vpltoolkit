@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
-# rm -f $0
-
 VERSION="4.0"
+[ -z "$RUNDIR"] && RUNDIR=$(mktemp -d)
 LOG="$RUNDIR/start.log"
 TIMEOUT=10
 
-### ENVIRONMENT ###
+####################################################
+#                      MISC                        #
+####################################################
 
 # print date in seconds.microseconds
 function DATE()
@@ -15,6 +16,10 @@ function DATE()
     python3 -c "import datetime ; now = datetime.datetime.now() ; print(\"{}.{:06d}\".format(now.second,now.microsecond))"
     return 0
 }
+
+####################################################
+#                 ENVIRONMENT                      #
+####################################################
 
 function CHECKENV()
 {
@@ -34,6 +39,8 @@ function CHECKENV()
     [ -z "$INPUTS" ] && INPUTS=""
     return 0
 }
+
+####################################################
 
 function SAVEENV()
 {
@@ -55,6 +62,8 @@ function SAVEENV()
     return 0
 }
 
+####################################################
+
 function LOADENV()
 {
     if [ -f $RUNDIR/env.sh ] ; then
@@ -68,6 +77,8 @@ function LOADENV()
     fi
     return 0
 }
+
+####################################################
 
 function PRINTENV()
 {
@@ -87,9 +98,13 @@ function PRINTENV()
     return 0
 }
 
+####################################################
+
 # TODO: function ADDENV()
 
-### DOWNLOAD ###
+####################################################
+#                   DOWNLOAD                       #
+####################################################
 
 ### DOWNLOAD TEACHER FILES FROM GIT REPOSITORY (and COPY FILES in RUNDIR)
 function DOWNLOAD()
@@ -143,6 +158,8 @@ function DOWNLOAD()
     return 0
 }
 
+####################################################
+
 ### DOWNLOAD TEACHER ARCHIVE (ZIP) FROM A WEB SITE
 # TODO: use htaccess login:password instead of zip encryption
 function WGET()
@@ -186,7 +203,9 @@ function WGET()
     return 0
 }
 
-### EXECUTION ###
+####################################################
+#                      START                       #
+####################################################
 
 function START_ONLINE()
 {
@@ -236,6 +255,8 @@ function START_ONLINE()
     return 0
 }
 
+####################################################
+
 function START_OFFLINE()
 {
     [ ! $# -ge 1 ] && echo "⚠ Error: Usage: START_OFFLINE INPUTDIR [...]" >&2 && exit 1
@@ -245,9 +266,9 @@ function START_OFFLINE()
     [ -z "$RUNDIR" ] && echo "⚠ Error: RUNDIR variable is not defined!" >&2 && exit 1
     [ ! -d $RUNDIR ] && echo "⚠ Error: Bad RUNDIR: \"$RUNDIR\"!" >&2 && exit 1
     ONLINE=0
-    [ $(basename $0) == "local_run.sh" ] && MODE="RUN"
-    [ $(basename $0) == "local_debug.sh" ] && MODE="DEBUG"
-    [ $(basename $0) == "local_eval.sh" ] && MODE="EVAL"
+    # [ $(basename $0) == "local_run.sh" ] && MODE="RUN"
+    # [ $(basename $0) == "local_debug.sh" ] && MODE="DEBUG"
+    # [ $(basename $0) == "local_eval.sh" ] && MODE="EVAL"
     [ -z "$MODE" ] && echo "⚠ Error: MODE variable is not defined!" >&2 && exit 1
     grep -w $MODE <<< "RUN DEBUG EVAL" &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Error: Invalid MODE \"$MODE\"!" >&2 && exit 1
@@ -261,6 +282,20 @@ function START_OFFLINE()
     PRINTENV
     cd $RUNDIR && $RUNDIR/vpltoolkit/vpl_execution
     # => explicit run of vpl_execution in $RUNDIR
+    return 0
+}
+
+
+####################################################
+
+function START()
+{
+    ONLINE=0
+    [ $(basename $0) == "vpl_run.sh" ] && ONLINE=1
+    [ $(basename $0) == "vpl_debug.sh" ] && ONLINE=1
+    [ $(basename $0) == "vpl_evaluate.sh" ] && ONLINE=1
+    ARGS=\"${@:1}\"
+    if [ $ONLINE -eq 1 ] ; then START_ONLINE $ARGS ; else START_OFFLINE $ARGS ; fi
     return 0
 }
 
