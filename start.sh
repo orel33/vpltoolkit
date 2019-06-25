@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 VERSION="4.0"
-[ -z "$RUNDIR"] && RUNDIR=$(mktemp -d)
+[ -z "$RUNDIR" ] && RUNDIR=$(mktemp -d)
 LOG="$RUNDIR/start.log"
 TIMEOUT=10
 
