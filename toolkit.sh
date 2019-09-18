@@ -553,7 +553,7 @@ function CHECKFILES()
 function CHECKINPUTS()
 {
     for FILE in "$@" ; do
-        [ ! -f "$FILE" ] && ERROR "Requested input file \"$FILE\" is missing!" && exit 1
+        [ ! -f "$RUNDIR/inputs/$FILE" ] && ERROR "Requested input file \"$FILE\" is missing!" && exit 1
     done
 }
 
