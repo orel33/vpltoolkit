@@ -80,8 +80,8 @@ if [ -n "$DOCKER" ] ; then
     echo "Run Docker $DOCKER ($DOCKERID)."
 
     # copy all RUNDIR inside docker...
-    docker cp $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
-    [ $? -ne 0 ] && echo "⚠ Warning: fails to copy \"$RUNDIR\" into docker!" # && exit 0
+    docker cp -L $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
+    [ $? -ne 0 ] && echo "⚠ Warning: fails to copy \"$RUNDIR\" into docker!" && exit 0
 
     # chown RUNDIR as docker user
     if [ -n "$DOCKERUSER" ] ; then
