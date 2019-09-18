@@ -550,6 +550,14 @@ function CHECKFILES()
     done
 }
 
+function CHECKINPUTS()
+{
+    for FILE in "$@" ; do
+        [ ! -f "$FILE" ] && ERROR "Requested input file \"$FILE\" is missing!" && exit 1
+    done
+}
+
+
 function CHECKPROGRAMS()
 {
     # TODO: check if it supports filenames with spaces
