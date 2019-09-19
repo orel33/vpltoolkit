@@ -158,6 +158,16 @@ function PRINTKO()
     return 0
 }
 
+# inputs: MSG
+# return 0
+function PRINTW()
+{
+    [ $# -ne 1 ] && ECHO "Usage: PRINTW MSG" && exit 0
+    local MSG="$1"
+    ECHOYELLOW "⚠️ $MSG"
+    return 0
+}
+
 ####################################################
 #                       TITLE                      #
 ####################################################
@@ -468,8 +478,6 @@ function EVALKO()
 
 ####################################################
 
-# TODO: TODO
-
 # inputs: RET MSG SCORE [INFO]
 # return 0 if RET!=0, else return 1
 function EVALW()
@@ -498,9 +506,9 @@ function EVALW()
         GRADE=$(PYCOMPUTE "$GRADE+$LGRADE")
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
-    [ -z "$INFO" ] && INFO=$(STRSTATUS $RET) # default INFO
+    [ -z "$INFO" ] && INFO="" # default INFO
     [ -n "$INFO" ] && INFO="($INFO)"
-    WARNING "$MSG: warning $INFO $MSGSCORE"
+    PRINTW "$MSG: warning $INFO $MSGSCORE"
     return 0
 }
 
