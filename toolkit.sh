@@ -591,6 +591,7 @@ function COMPILE()
     fi
 
     EVALOK $RET "compilation" $BONUS
+    ECHO "COMPILE OKOKOK"
     rm -f $TEMP
 
     return 0
