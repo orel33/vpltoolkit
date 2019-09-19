@@ -562,16 +562,16 @@ function COMPILE()
     elif [ $# -eq 5 ] ; then
         local CMD="$1"
         local EXPECTED="$2"
-        BONUS="$3"          # TODO: check positive
-        WARNINGMALUS="$4"   # TODO: check negative
-        ERRORMALUS="$5"     # TODO: check negative
+        local BONUS="$3"          # TODO: check positive
+        local WARNINGMALUS="$4"   # TODO: check negative
+        local ERRORMALUS="$5"     # TODO: check negative
     else
         ECHO "Usage: COMPILE CMD EXPECTED_FILE [BONUS WARNING_MALUS ERROR_MALUS]" && exit 0
     fi
 
-    TEMP=$(mktemp)
+    local TEMP=$(mktemp)
     bash -c "$CMD" &> $TEMP
-    RET=$?
+    local RET=$?
 
     # check errors
     EVALKO $RET "compilation" "$ERRORMALUS" "" && CAT $TEMP && return $RET # error !
