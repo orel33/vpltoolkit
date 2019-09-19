@@ -574,7 +574,7 @@ function COMPILE()
     RET=$?
 
     # check errors
-    EVALKO $RET "compilation" $ERRORMALUS "errors" && CAT $TEMP && return $RET # error !
+    EVALKO $RET "compilation" $ERRORMALUS && CAT $TEMP && return $RET # error !
 
     if [ ! -x $EXPECTED ] ; then 
         EVALKO 1 "compilation" 0 "expected file \"$EXPECTED\" not found!" 
