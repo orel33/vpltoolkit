@@ -26,6 +26,8 @@ CEOL=$(tput el)       # tput requires package "ncurses-bin"
 CL=""
 
 
+####################################################
+
 function ECHOBLUE()
 {
     if [ "$MODE" = "EVAL" ] ; then
@@ -34,6 +36,8 @@ function ECHOBLUE()
         echo -n -e "${BLUE}" && echo -n "$@" && echo -e "${NC}"
     fi
 }
+
+####################################################
 
 function ECHOGREEN()
 {
@@ -44,6 +48,8 @@ function ECHOGREEN()
     fi
 }
 
+####################################################
+
 function ECHORED()
 {
     if [ "$MODE" = "EVAL" ] ; then
@@ -52,6 +58,8 @@ function ECHORED()
         echo -n -e "${RED}"  && echo -n "$@" && echo -e "${NC}"
     fi
 }
+
+####################################################
 
 function ECHOYELLOW()
 {
@@ -73,6 +81,8 @@ function ECHO()
     fi
 }
 
+####################################################
+
 function ECHO_TEACHER()
 {
     if [ "$MODE" = "EVAL" ] ; then
@@ -81,6 +91,8 @@ function ECHO_TEACHER()
         echo "$@" &>> $RUNDIR/$LOG
     fi
 }
+
+####################################################
 
 function ECHO_DEBUG()
 {
@@ -107,6 +119,8 @@ function PRE()
     fi
 }
 
+####################################################
+
 # inputs: MSG
 function WARNING()
 {
@@ -114,6 +128,8 @@ function WARNING()
     ECHOYELLOW "⚠️ Warning: $MSG"
     return 0
 }
+
+####################################################
 
 # inputs: MSG
 function ERROR()
@@ -123,6 +139,8 @@ function ERROR()
     return 0
 }
 
+####################################################
+
 # inputs: MSG
 function CRASH()
 {
@@ -131,12 +149,16 @@ function CRASH()
     return 0
 }
 
+####################################################
+
 # inputs: MSG
 function INFO()
 {
     local MSG="$1"
     ECHOBLUE "👉 $MSG" # ➡
 }
+
+####################################################
 
 # inputs: MSG
 # return 0
@@ -148,6 +170,8 @@ function PRINTOK()
     return 0
 }
 
+####################################################
+
 # inputs: MSG
 # return 0
 function PRINTKO()
@@ -158,6 +182,9 @@ function PRINTKO()
     return 0
 }
 
+####################################################
+
+# print warning message
 # inputs: MSG
 # return 0
 function PRINTW()
@@ -229,6 +256,7 @@ function CAT()
         eval "$CMD"
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
     fi
+    ECHO "CAT RET $RET"
     return $RET
 }
 
