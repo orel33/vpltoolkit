@@ -534,7 +534,6 @@ function EVALW()
         GRADE=$(PYCOMPUTE "$GRADE+$LGRADE")
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
-    [ -z "$INFO" ] && INFO="" # default INFO
     [ -n "$INFO" ] && INFO="($INFO)"
     PRINTW "$MSG: warning $INFO $MSGSCORE"
     return 0
