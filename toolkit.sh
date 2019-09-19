@@ -572,6 +572,7 @@ function COMPILE()
     local TEMP=$(mktemp)
     bash -c "$CMD" &> $TEMP
     local RET=$?
+    ECHO "COMPILE RET=$RET"
 
     # check errors
     EVALKO $RET "compilation" "$ERRORMALUS" "" && CAT $TEMP && return $RET # error !
