@@ -468,7 +468,7 @@ function EVALKO()
     if [ "$SCORE" != "0" ] ; then
         local LGRADE=$(PYCOMPUTE "$SCORE")
         GRADE=$(PYCOMPUTE "$GRADE+$LGRADE")
-        if [ -  z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
+        if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
     [ -z "$INFO" ] && INFO=$(STRSTATUS $RET) # default INFO
     [ -n "$INFO" ] && INFO="($INFO)"
@@ -574,7 +574,7 @@ function COMPILE()
     RET=$?
 
     # check errors
-    EVALKO $RET "compilation" $ERRORMALUS "" && CAT $TEMP && return $RET # error !
+    EVALKO $RET "compilation" "$ERRORMALUS" "" && CAT $TEMP && return $RET # error !
 
     if [ ! -x $EXPECTED ] ; then
         EVALKO 1 "compilation" 0 "expected file \"$EXPECTED\" not found!"
@@ -584,7 +584,7 @@ function COMPILE()
 
     # if WARNING...
     if [ -s $TEMP ] ; then
-        EVALW 1 "compilation" $WARNINGMALUS
+        EVALW 1 "compilation" "$WARNINGMALUS"
         CAT $TEMP && rm -f $TEMP
         return 0 # warning
     fi
