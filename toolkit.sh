@@ -204,13 +204,13 @@ function CAT()
 {
     local FILE="$1"
     if [ $# -eq 1 ] ; then
-        HEAD=0
-        TAIL=0
-        CMD="cat $FILE"
+        local HEAD=0
+        local TAIL=0
+        local CMD="cat $FILE"
     elif [ $# -eq 3 ] ; then
-        HEAD="$2"
-        TAIL="$3"
-        CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE | sed '\$a\'"
+        local HEAD="$2"
+        local TAIL="$3"
+        local CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE | sed '\$a\'"
         # the command sed '$a\' append a trailing \n only if needed
     else
         ECHO "Usage: CAT FILE [HEAD TAIL]" && exit 0
@@ -223,11 +223,11 @@ function CAT()
         echo -e "${CL}Teacher :=>>\$ cat $FILE"
         echo "<|--"
         eval "$CMD" |& sed -e 's/^/>/;' # preformated output
-        RET=${PIPESTATUS[0]}  # return status of first piped command!
+        local RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "--|>"
     else
         eval "$CMD"
-        RET=${PIPESTATUS[0]}  # return status of first piped command!
+        local RET=${PIPESTATUS[0]}  # return status of first piped command!
     fi
     return $RET
 }
@@ -240,10 +240,10 @@ function CAT_TEACHER()
     if [ "$MODE" = "EVAL" ] ; then
         echo -e "${CL}Teacher :=>>\$ cat $@"
         bash -c "cat $@" |& sed -e 's/^/Teacher :=>>/;' # setsid is used for safe exec (setpgid(0,0))
-        RET=${PIPESTATUS[0]}  # return status of first piped command!
+        local RET=${PIPESTATUS[0]}  # return status of first piped command!
     else
         cat $@ &>> $RUNDIR/$LOG
-        RET=$?
+        local RET=$?
     fi
     return $RET
 }
