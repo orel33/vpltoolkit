@@ -574,16 +574,16 @@ function COMPILE()
     RET=$?
 
     # check errors
-    EVALKO $RET "compilation" $ERRORMALUS && CAT $TEMP && return $RET # error !
+    EVALKO $RET "compilation" $ERRORMALUS "" && CAT $TEMP && return $RET # error !
 
-    if [ ! -x $EXPECTED ] ; then 
-        EVALKO 1 "compilation" 0 "expected file \"$EXPECTED\" not found!" 
+    if [ ! -x $EXPECTED ] ; then
+        EVALKO 1 "compilation" 0 "expected file \"$EXPECTED\" not found!"
         CAT $TEMP && rm -f $TEMP
         return 1 # error !
     fi
 
     # if WARNING...
-    if [ -s $TEMP ] ; then 
+    if [ -s $TEMP ] ; then
         EVALW 1 "compilation" $WARNINGMALUS
         CAT $TEMP && rm -f $TEMP
         return 0 # warning
