@@ -423,26 +423,23 @@ function EVALOK()
     if [ "$SCORE" != "0" ] ; then
         local LGRADE=$(PYCOMPUTE "$SCORE")
         GRADE=$(PYCOMPUTE "$GRADE+$LGRADE")
-        # LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be positive
-        # GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ "$NOGRADE" != "1" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
     [ -n "$MSGOK" ] && MSGOK="($MSGOK)"
     PRINTOK "$MSG: success $MSGOK $MSGSCORE"
-    # [ "$SCORE" != "0" ] && ECHO_TEACHER "Update Grade: $LGRADE%"
     return 0
 }
 
 ####################################################
 
-# inputs: RET MSG SCORE [MSGKO]
+# inputs: RET MSG SCORE [INFO]
 # return 0 if KO (RET!=0), else return 1
 function EVALKO()
 {
     local RET=0
     local MSG=""
     local SCORE=0
-    local MSGKO=""
+    local INFO=""
     if [ $# -eq 3 ] ; then
         RET="$1"
         MSG="$2"
@@ -451,9 +448,9 @@ function EVALKO()
         RET="$1"
         MSG="$2"
         SCORE="$3"
-        MSGKO="$4"
+        INFO="$4"
     else
-        ECHO "Usage: EVALKO RET MSG SCORE [MSGKO]" && exit 0
+        ECHO "Usage: EVALKO RET MSG SCORE [INFO]" && exit 0
     fi
     [ $RET -eq 0 ] && return 1
     local MSGSCORE=""
@@ -461,14 +458,49 @@ function EVALKO()
     if [ "$SCORE" != "0" ] ; then
         local LGRADE=$(PYCOMPUTE "$SCORE")
         GRADE=$(PYCOMPUTE "$GRADE+$LGRADE")
-        # LGRADE=$(python3 -c "print(\"%+.2f\" % ($SCORE))") # it must be negative
-        # GRADE=$(python3 -c "print($GRADE+$LGRADE)")
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
-    [ -z "$MSGKO" ] && MSGKO=$(STRSTATUS $RET) # default MSGKO
-    [ -n "$MSGKO" ] && MSGKO="($MSGKO)"
-    PRINTKO "$MSG: failure $MSGKO $MSGSCORE"
-    # [ "$SCORE" != "0" ] && ECHO_TEACHER "Update Grade: $LGRADE%"
+    [ -z "$INFO" ] && INFO=$(STRSTATUS $RET) # default INFO
+    [ -n "$INFO" ] && INFO="($INFO)"
+    PRINTKO "$MSG: failure $INFO $MSGSCORE"
+    return 0
+}
+
+####################################################
+
+# TODO: TODO
+
+# inputs: RET MSG SCORE [INFO]
+# return 0 if RET!=0, else return 1
+function EVALW()
+{
+    local RET=0
+    local MSG=""
+    local SCORE=0
+    local INFO=""
+    if [ $# -eq 3 ] ; then
+        RET="$1"
+        MSG="$2"
+        SCORE="$3" # TODO: check score is <= 0
+    elif [ $# -eq 4 ] ; then
+        RET="$1"
+        MSG="$2"
+        SCORE="$3"
+        INFO="$4"
+    else
+        ECHO "Usage: EVALW RET MSG SCORE [INFO]" && exit 0
+    fi
+    [ $RET -eq 0 ] && return 1
+    local MSGSCORE=""
+    local LGRADE=0
+    if [ "$SCORE" != "0" ] ; then
+        local LGRADE=$(PYCOMPUTE "$SCORE")
+        GRADE=$(PYCOMPUTE "$GRADE+$LGRADE")
+        if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
+    fi
+    [ -z "$INFO" ] && INFO=$(STRSTATUS $RET) # default INFO
+    [ -n "$INFO" ] && INFO="($INFO)"
+    WARNING "$MSG: warning $INFO $MSGSCORE"
     return 0
 }
 
@@ -544,7 +576,7 @@ function COMPILE()
 
     # if WARNING...
     if [ -s $TEMP ] ; then 
-        EVALKO 1 "compilation" $WARNINGMALUS "warnings" 
+        EVALW 1 "compilation" $WARNINGMALUS "warnings" 
         CAT $TEMP && rm -f $TEMP
         return 0 # warning
     fi
