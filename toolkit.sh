@@ -507,6 +507,48 @@ function EVAL()
     return $RET
 }
 
+####################################################
+
+# inputs: BASH_COMPILATION_STRING EXPECTED_FILE [BONUS ERRORMALUS WARNINGMALUS]
+# return command status
+function COMPILE()
+{
+    local CMD="$1"
+    local EXPECTED="$2"
+    local BONUS=0
+    local ERRORMALUS=0
+    local WARNINGMALUS=0
+    if [ $# -eq 5 ] ; then
+        BONUS="$3"          # TODO: check positive
+        ERRORMALUS="$4"     # TODO: check negative
+        WARNINGMALUS="$5"   # TODO: check negative
+    fi
+
+    TEMP=$(mktemp)
+    bash -c "$CMD" &> $TEMP
+    RET=$?
+
+    # check errors
+    EVALKO $RET "compilation" $ERRORMALUS "errors" && CAT $TEMP && return $RET # error !
+
+    if [ ! -x $EXPECTED ] ; then 
+        EVALKO 1 "compilation" 0 "expected file \"$EXPECTED\" not found!" 
+        CAT $TEMP && rm -f $TEMP
+        return 1 # error !
+    fi
+
+    # if WARNING...
+    if [ -s $TEMP ] ; then 
+        EVALKO 1 "compilation" $WARNINGMALUS "warnings" 
+        CAT $TEMP && rm -f $TEMP
+        return 0 # warning
+    fi
+
+    EVALOK $RET "compilation" $BONUS
+    rm -f $TEMP
+
+    return $RET
+}
 
 ####################################################
 
@@ -556,7 +598,6 @@ function CHECKINPUTS()
         [ ! -f "$RUNDIR/inputs/$FILE" ] && ERROR "Requested input file \"$FILE\" is missing!" && exit 1
     done
 }
-
 
 function CHECKPROGRAMS()
 {
