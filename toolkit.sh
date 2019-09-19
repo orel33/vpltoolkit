@@ -509,19 +509,24 @@ function EVAL()
 
 ####################################################
 
-# inputs: BASH_COMPILATION_STRING EXPECTED_FILE [BONUS ERRORMALUS WARNINGMALUS]
+# inputs: BASH_COMPILATION_STRING EXPECTED_FILE [BONUS WARNING_MALUS ERROR_MALUS]
 # return command status
 function COMPILE()
 {
-    local CMD="$1"
-    local EXPECTED="$2"
-    local BONUS=0
-    local ERRORMALUS=0
-    local WARNINGMALUS=0
-    if [ $# -eq 5 ] ; then
+    if [ $# -eq 2 ] ; then
+        local CMD="$1"
+        local EXPECTED="$2"
+        local BONUS=0
+        local WARNINGMALUS=0
+        local ERRORMALUS=0
+    elif [ $# -eq 5 ] ; then
+        local CMD="$1"
+        local EXPECTED="$2"
         BONUS="$3"          # TODO: check positive
-        ERRORMALUS="$4"     # TODO: check negative
-        WARNINGMALUS="$5"   # TODO: check negative
+        WARNINGMALUS="$4"   # TODO: check negative
+        ERRORMALUS="$5"     # TODO: check negative
+    else
+        ECHO "Usage: COMPILE CMD EXPECTED_FILE [BONUS WARNING_MALUS ERROR_MALUS]" && exit 0
     fi
 
     TEMP=$(mktemp)
