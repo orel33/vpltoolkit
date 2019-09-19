@@ -592,7 +592,7 @@ function COMPILE()
     EVALOK $RET "compilation" $BONUS
     rm -f $TEMP
 
-    return $RET
+    return 0
 }
 
 ####################################################
