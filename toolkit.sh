@@ -577,22 +577,24 @@ function EVAL()
 
 ####################################################
 
-# inputs: BASH_COMPILATION_STRING [BONUS WARNING_MALUS ERROR_MALUS]
+# inputs: MSG CMD [BONUS WARNING_MALUS ERROR_MALUS]
 # return command status
 function COMPILE()
 {
-    if [ $# -eq 2 ] ; then
-        local CMD="$1"
+    if [ $# -eq 3 ] ; then
+        local MSG="$1"
+        local CMD="$2"
         local BONUS=0
         local WARNINGMALUS=0
         local ERRORMALUS=0
-    elif [ $# -eq 4 ] ; then
-        local CMD="$1"
-        local BONUS="$2"          # TODO: check positive
-        local WARNINGMALUS="$3"   # TODO: check negative
-        local ERRORMALUS="$4"     # TODO: check negative
+    elif [ $# -eq 5 ] ; then
+        local MSG="$1"
+        local CMD="$2"
+        local BONUS="$3"          # TODO: check positive
+        local WARNINGMALUS="$4"   # TODO: check negative
+        local ERRORMALUS="$5"     # TODO: check negative
     else
-        ECHO "Usage: COMPILE CMD [BONUS WARNING_MALUS ERROR_MALUS]" && exit 0
+        ECHO "Usage: COMPILE MSG CMD [BONUS WARNING_MALUS ERROR_MALUS]" && exit 0
     fi
 
     local TEMP=$(mktemp)
@@ -600,22 +602,22 @@ function COMPILE()
     local RET=$?
 
     # check errors
-    EVALKO $RET "compilation" "$ERRORMALUS" && CAT $TEMP && return $RET # error !
+    EVALKO $RET "$MSG" "$ERRORMALUS" && CAT $TEMP && return $RET # error !
 
     # if [ ! -x $EXPECTED ] ; then
-    #     EVALKO 1 "compilation" "$ERRORMALUS" "expected file \"$EXPECTED\" not found!"
+    #     EVALKO 1 "$MSG" "$ERRORMALUS" "expected file \"$EXPECTED\" not found!"
     #     CAT $TEMP && rm -f $TEMP
     #     return 1 # error !
     # fi
 
     # if WARNING...
     if [ -s $TEMP ] ; then
-        EVALW 1 "compilation" "$WARNINGMALUS"
+        EVALW 1 "$MSG" "$WARNINGMALUS"
         CAT $TEMP && rm -f $TEMP
         return 0 # warning
     fi
 
-    EVALOK $RET "compilation" $BONUS
+    EVALOK $RET "$MSG" $BONUS
     rm -f $TEMP
 
     return 0
