@@ -575,7 +575,8 @@ function COMPILE()
     ECHO "COMPILE RET=$RET"
 
     # check errors
-    EVALKO $RET "compilation" "$ERRORMALUS" "" && CAT $TEMP && return $RET # error !
+    EVALKO $RET "compilation" "$ERRORMALUS" "" && return $RET # error !
+    # CAT $TEMP && 
 
     ECHO "COMPILE A"
 
