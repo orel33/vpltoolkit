@@ -451,14 +451,14 @@ function EVALKO()
     local SCORE=0
     local INFO=""
     if [ $# -eq 3 ] ; then
-        RET="$1"
-        MSG="$2"
-        SCORE="$3" # TODO: check score is <= 0
+        local RET="$1"
+        local MSG="$2"
+        local SCORE="$3" # TODO: check score is <= 0
     elif [ $# -eq 4 ] ; then
-        RET="$1"
-        MSG="$2"
-        SCORE="$3"
-        INFO="$4"
+        local RET="$1"
+        local MSG="$2"
+        local SCORE="$3"
+        local INFO="$4"
     else
         ECHO "Usage: EVALKO RET MSG SCORE [INFO]" && exit 0
     fi
@@ -468,7 +468,7 @@ function EVALKO()
     if [ "$SCORE" != "0" ] ; then
         local LGRADE=$(PYCOMPUTE "$SCORE")
         GRADE=$(PYCOMPUTE "$GRADE+$LGRADE")
-        if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
+        if [ -  z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
     [ -z "$INFO" ] && INFO=$(STRSTATUS $RET) # default INFO
     [ -n "$INFO" ] && INFO="($INFO)"
