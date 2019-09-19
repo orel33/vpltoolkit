@@ -435,14 +435,14 @@ function UPDATE_GRADE()
 
 ####################################################
 
-# inputs: RET MSG SCORE [MSGOK]
+# inputs: RET MSG SCORE [INFO]
 # return 0 if OK (RET=0), else return 1
 function EVALOK()
 {
     local RET=0
     local MSG=""
     local SCORE=0
-    local MSGOK=""
+    local INFO=""
     if [ $# -eq 3 ] ; then
         local RET="$1"
         local MSG="$2"
@@ -451,9 +451,9 @@ function EVALOK()
         local RET="$1"
         local MSG="$2"
         local local SCORE="$3"
-        local MSGOK="$4"
+        local INFO="$4"
     else
-        ECHO "Usage: EVALOK RET MSG SCORE [MSGOK]" && exit 0
+        ECHO "Usage: EVALOK RET MSG SCORE [INFO]" && exit 0
     fi
     [ $RET -ne 0 ] && return 1
     local MSGSCORE=""
@@ -463,8 +463,8 @@ function EVALOK()
         GRADE=$(PYCOMPUTE "$GRADE+$LGRADE")
         if [ "$NOGRADE" != "1" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
-    [ -n "$MSGOK" ] && MSGOK="($MSGOK)"
-    PRINTOK "$MSG: success $MSGOK $MSGSCORE"
+    [ -n "$INFO" ] && INFO="($INFO)"
+    PRINTOK "$MSG: success $INFO $MSGSCORE"
     return 0
 }
 
@@ -498,7 +498,7 @@ function EVALKO()
         GRADE=$(PYCOMPUTE "$GRADE+$LGRADE")
         if [ -z "$NOGRADE" ] ; then MSGSCORE="[$LGRADE%]" ; fi
     fi
-    [ -z "$INFO" ] && INFO=$(STRSTATUS $RET) # default INFO
+    # [ -z "$INFO" ] && INFO=$(STRSTATUS $RET) # TODO: when to use default status as INFO?
     [ -n "$INFO" ] && INFO="($INFO)"
     PRINTKO "$MSG: failure $INFO $MSGSCORE"
     return 0
