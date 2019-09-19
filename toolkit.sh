@@ -256,7 +256,7 @@ function CAT()
         eval "$CMD"
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
     fi
-    ECHO "CAT RET $RET"
+
     return $RET
 }
 
