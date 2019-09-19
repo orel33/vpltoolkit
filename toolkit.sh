@@ -584,7 +584,7 @@ function COMPILE()
 
     # if WARNING...
     if [ -s $TEMP ] ; then 
-        EVALW 1 "compilation" $WARNINGMALUS "warnings" 
+        EVALW 1 "compilation" $WARNINGMALUS
         CAT $TEMP && rm -f $TEMP
         return 0 # warning
     fi
