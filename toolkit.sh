@@ -600,20 +600,15 @@ function COMPILE()
     local TEMP=$(mktemp)
     bash -c "$CMD" &> $TEMP
     local RET=$?
-    ECHO "COMPILE RET=$RET"
 
     # check errors
     EVALKO $RET "compilation" "$ERRORMALUS" && CAT $TEMP && return $RET # error !
-
-    ECHO "COMPILE A"
 
     if [ ! -x $EXPECTED ] ; then
         EVALKO 1 "compilation" "$ERRORMALUS" "expected file \"$EXPECTED\" not found!"
         CAT $TEMP && rm -f $TEMP
         return 1 # error !
     fi
-
-    ECHO "COMPILE B"
 
     # if WARNING...
     if [ -s $TEMP ] ; then
@@ -622,10 +617,7 @@ function COMPILE()
         return 0 # warning
     fi
 
-    ECHO "COMPILE C"
-
     EVALOK $RET "compilation" $BONUS
-    ECHO "COMPILE OKOKOK"
     rm -f $TEMP
 
     return 0
