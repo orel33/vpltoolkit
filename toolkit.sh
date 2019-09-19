@@ -416,14 +416,14 @@ function EVALOK()
     local SCORE=0
     local MSGOK=""
     if [ $# -eq 3 ] ; then
-        RET="$1"
-        MSG="$2"
-        SCORE="$3" # TODO: check score is >= 0
-        elif [ $# -eq 4 ] ; then
-        RET="$1"
-        MSG="$2"
-        SCORE="$3"
-        MSGOK="$4"
+        local RET="$1"
+        local MSG="$2"
+        local SCORE="$3" # TODO: check score is >= 0
+    elif [ $# -eq 4 ] ; then
+        local RET="$1"
+        local MSG="$2"
+        local local SCORE="$3"
+        local MSGOK="$4"
     else
         ECHO "Usage: EVALOK RET MSG SCORE [MSGOK]" && exit 0
     fi
@@ -487,14 +487,14 @@ function EVALW()
     local SCORE=0
     local INFO=""
     if [ $# -eq 3 ] ; then
-        RET="$1"
-        MSG="$2"
-        SCORE="$3" # TODO: check score is <= 0
+        local RET="$1"
+        local MSG="$2"
+        local SCORE="$3" # TODO: check score is <= 0
     elif [ $# -eq 4 ] ; then
-        RET="$1"
-        MSG="$2"
-        SCORE="$3"
-        INFO="$4"
+        local RET="$1"
+        local MSG="$2"
+        local SCORE="$3"
+        local INFO="$4"
     else
         ECHO "Usage: EVALW RET MSG SCORE [INFO]" && exit 0
     fi
