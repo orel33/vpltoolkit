@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="4.0"
+VERSION="5.0"
 [ -z "$RUNDIR" ] && RUNDIR=$(mktemp -d)
 LOG="$RUNDIR/start.log"
 TIMEOUT=10
@@ -29,9 +29,9 @@ function CHECKENV()
     [ -z "$MODE" ] && echo "⚠ Error: Error: MODE variable is not defined!" >&2 && exit 1
     [ -z "$RUNDIR" ] && echo "⚠ Error: Error: RUNDIR variable is not defined!" >&2 && exit 1
     [ -z "$GRAPHIC" ] && GRAPHIC=0
-    [ -z "$DOCKER" ] && DOCKER=""
-    [ -z "$DOCKERUSER" ] && DOCKERUSER=""   # FIXME: maybe set as "root"?
-    [ -z "$DOCKERTIMEOUT" ] && DOCKERTIMEOUT="900"
+    # [ -z "$DOCKER" ] && DOCKER=""
+    # [ -z "$DOCKERUSER" ] && DOCKERUSER=""   # FIXME: maybe set as "root"?
+    # [ -z "$DOCKERTIMEOUT" ] && DOCKERTIMEOUT="900"
     [ -z "$DEBUG" ] && DEBUG=0
     [ -z "$VERBOSE" ] && VERBOSE=0
     [ -z "$ENTRYPOINT" ] && ENTRYPOINT="run.sh"
@@ -51,9 +51,9 @@ function SAVEENV()
     echo "ONLINE=$ONLINE" >> $RUNDIR/env.sh
     echo "RUNDIR=$RUNDIR" >> $RUNDIR/env.sh
     echo "GRAPHIC=$GRAPHIC" >> $RUNDIR/env.sh
-    echo "DOCKER=$DOCKER" >> $RUNDIR/env.sh
-    echo "DOCKERUSER=$DOCKERUSER" >> $RUNDIR/env.sh
-    echo "DOCKERTIMEOUT=$DOCKERTIMEOUT" >> $RUNDIR/env.sh
+    # echo "DOCKER=$DOCKER" >> $RUNDIR/env.sh
+    # echo "DOCKERUSER=$DOCKERUSER" >> $RUNDIR/env.sh
+    # echo "DOCKERTIMEOUT=$DOCKERTIMEOUT" >> $RUNDIR/env.sh
     echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
     echo "VERBOSE=$VERBOSE" >> $RUNDIR/env.sh
     echo "ENTRYPOINT=$ENTRYPOINT" >> $RUNDIR/env.sh
@@ -86,9 +86,9 @@ function PRINTENV()
     echo "* ONLINE=$ONLINE"
     echo "* MODE=$MODE"
     echo "* RUNDIR=$RUNDIR"
-    echo "* DOCKER=$DOCKER"
-    echo "* DOCKERUSER=$DOCKERUSER"
-    echo "* DOCKERTIMEOUT=$DOCKERTIMEOUT"
+    # echo "* DOCKER=$DOCKER"
+    # echo "* DOCKERUSER=$DOCKERUSER"
+    # echo "* DOCKERTIMEOUT=$DOCKERTIMEOUT"
     echo "* GRAPHIC=$GRAPHIC"
     echo "* DEBUG=$DEBUG"
     echo "* VERBOSE=$VERBOSE"

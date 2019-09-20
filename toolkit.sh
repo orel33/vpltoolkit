@@ -650,11 +650,15 @@ function CHECKVERSION()
     [ "$EXPECTED" != "$VERSION" ] && ERROR "Toolkit version $EXPECTED expected (but version \"$VERSION\" found)!" && exit 1
 }
 
-function CHECKDOCKER()
-{
-    local EXPECTED="$1"
-    [ "$EXPECTED" != "$DOCKER" ] && ERROR "Docker $EXPECTED expected (but docker \"$DOCKER\" found)!" && exit 1
-}
+####################################################
+
+# function CHECKDOCKER()
+# {
+#     local EXPECTED="$1"
+#     [ "$EXPECTED" != "$DOCKER" ] && ERROR "Docker $EXPECTED expected (but docker \"$DOCKER\" found)!" && exit 1
+# }
+
+####################################################
 
 function CHECKFILES()
 {
@@ -664,12 +668,16 @@ function CHECKFILES()
     done
 }
 
+####################################################
+
 function CHECKINPUTS()
 {
     for FILE in "$@" ; do
         [ ! -f "$RUNDIR/inputs/$FILE" ] && ERROR "Requested input file \"$FILE\" is missing!" && exit 1
     done
 }
+
+####################################################
 
 function CHECKPROGRAMS()
 {
