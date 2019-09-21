@@ -280,7 +280,7 @@ function START_OFFLINE()
     rm -rf $RUNDIR/vpltoolkit/.git/ &> /dev/null # for security issue
     echo "Start VPL Toolkit in $SECONDS sec..."
     PRINTENV
-    cd $RUNDIR && $RUNDIR/vpltoolkit/vpl_execution
+    # cd $RUNDIR && $RUNDIR/vpltoolkit/vpl_execution
     # => explicit run of vpl_execution in $RUNDIR
     return 0
 }
