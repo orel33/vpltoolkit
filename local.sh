@@ -208,10 +208,14 @@ if [ -n "$URL" ] ; then
 fi
 
 
-SHELLCMD="bash"
-CMD="cd $RUNDIR && $RUNDIR/vpltoolkit/vpl_execution"
+### START OFFLINE ###
+
+START_OFFLINE "$INPUTDIR" $ARGS
 
 ### DOCKER START ###
+
+SHELLCMD="bash"
+CMD="cd $RUNDIR && $RUNDIR/vpltoolkit/vpl_execution"
 
 # CMD="$RUNDIR/$ENTRYPOINT"
 # [ ! -f "$CMD" ] && echo "⚠ Error: Entrypoint file \"$CMD\" not found!" && exit 0
@@ -219,7 +223,6 @@ CMD="cd $RUNDIR && $RUNDIR/vpltoolkit/vpl_execution"
 
 # # [ "$DEBUG" = "1" ] && SHELLCMD="bash -x"
 # # [ $GRAPHIC -eq 1 ] && SHELLCMD="xterm -hold -e $SHELLCMD"
-
 
 function DOCKERCLEAN()
 {
@@ -301,12 +304,8 @@ function DOCKERRUN()
 
 ### START ###
 
-START_OFFLINE "$INPUTDIR" $ARGS
-
 if [ -n "$DOCKER" ] ; then
-    echo "dockerrun"
     DOCKERRUN
-    echo "done"
 else
     $SHELLCMD -c "$CMD $ARGS"
 fi
