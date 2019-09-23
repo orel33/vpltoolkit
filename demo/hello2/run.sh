@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 source env.sh || exit 0
 source vpltoolkit/toolkit.sh || exit 0
