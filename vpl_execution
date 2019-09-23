@@ -37,10 +37,10 @@ fi
 echo "Run..."
 if [ $GRAPHIC -eq 0 ] ; then
     $SHELLCMD $CMD $ARGS
-    [ $DEBUG -eq 1 ] && bash
+    # [ $DEBUG -eq 1 ] && bash
 else
     xterm -hold -e $SHELLCMD $CMD $ARGS
-    [ $DEBUG -eq 1 ] && xterm -hold -e bash
+    # [ $DEBUG -eq 1 ] && xterm -hold -e bash
 fi
 echo "Terminated."
 
