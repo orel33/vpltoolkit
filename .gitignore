@@ -2,3 +2,4 @@ bak/
 *~
 *.bin
 .vscode/
+tmp/
