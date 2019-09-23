@@ -283,11 +283,11 @@ function DOCKERRUN()
 
     if [ $GRAPHIC -eq 0 ] ; then
         docker exec $DOCKERUSEROPT -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
-        [ $DEBUG -eq 1 ] && docker exec $DOCKERUSEROPT -it $DOCKERID bash
+        # [ $DEBUG -eq 1 ] && docker exec $DOCKERUSEROPT -it $DOCKERID bash # FIXME: move debug session in vpl_execution
     else
         # pkill -9 fluxbox    # FIXME: need to kill fluxbox at VPL Jail entrypoint...
         xterm -T main -hold -e docker exec $DOCKERUSEROPT -it $DOCKERID $SHELLCMD -c "$CMD $ARGS"
-        [ $DEBUG -eq 1 ] && xterm -T debug -hold -e docker exec $DOCKERUSEROPT -it $DOCKERID bash
+        # [ $DEBUG -eq 1 ] && xterm -T debug -hold -e docker exec $DOCKERUSEROPT -it $DOCKERID bash # FIXME: move debug session in vpl_execution
     fi
     docker container stop -t 0 $DOCKERID &> /dev/null
 
