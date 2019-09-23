@@ -216,6 +216,9 @@ START_OFFLINE "$INPUTDIR" $ARGS
 if [ -n "$DOCKER" ] ; then
     DOCKERRUN
 else
+    # TODO: factorize next lines with DOCKERRUN() 
+    local SHELLCMD="bash"
+    local CMD="cd $RUNDIR && $RUNDIR/vpltoolkit/vpl_execution"
     $SHELLCMD -c "$CMD $ARGS"
 fi
 
