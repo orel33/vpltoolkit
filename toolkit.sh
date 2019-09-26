@@ -237,7 +237,8 @@ function CAT()
     elif [ $# -eq 3 ] ; then
         local HEAD="$2"
         local TAIL="$3"
-        local CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE | sed '\$a\'"
+        local CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE"         
+        # FIXME:  | sed '\$a\' 
         # the command sed '$a\' append a trailing \n only if needed
     else
         ECHO "Usage: CAT FILE [HEAD TAIL]" && exit 0
@@ -337,7 +338,7 @@ function TRACE()
         # TODO: setsid returns different status as bash!
         # bash -c "setsid -w $@" |& sed -e 's/^/>/;' # preformated output
         # setsid -w bash -c "$@" |& sed -e 's/^/>/;' # preformated output
-        bash -c "$@" |& sed -e 's/^/>/;' |& sed '\$a\'  # preformated output
+        bash -c "$@" |& sed -e 's/^/>/;' |& sed '$a\'  # preformated output
         RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "--|>" 
         local STATUS=$(STRSTATUS $RET)
@@ -364,7 +365,7 @@ function TRACE_TEACHER()
         # TODO: setsid returns different status as bash!
         # bash -c "setsid -w $@" |& sed -e 's/^/Teacher :=>>/;'
         # setsid -w bash -c "$@" |& sed -e 's/^/Teacher :=>>/;' # preformated output
-        bash -c "$@" |& sed -e 's/^/Teacher :=>>/;' |& sed '\$a\' # preformated output
+        bash -c "$@" |& sed -e 's/^/Teacher :=>>/;' |& sed '$a\' # preformated output
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
         local STATUS=$(STRSTATUS $RET)
         echo -e "${CL}Teacher :=>> Status $RET ($STATUS)"
