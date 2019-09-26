@@ -225,6 +225,8 @@ function TITLE_TEACHER()
 #                        CAT                       #
 ####################################################
 
+# Tips: the command sed '$a\' append a trailing \n only if needed...
+
 # inputs: FILE [HEAD TAIL]
 # return cat status
 function CAT()
@@ -237,9 +239,7 @@ function CAT()
     elif [ $# -eq 3 ] ; then
         local HEAD="$2"
         local TAIL="$3"
-        local CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE"         
-        # FIXME:  | sed '\$a\' 
-        # the command sed '$a\' append a trailing \n only if needed
+        local CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE"
     else
         ECHO "Usage: CAT FILE [HEAD TAIL]" && exit 0
     fi
@@ -250,11 +250,11 @@ function CAT()
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
         echo -e "${CL}Teacher :=>>\$ cat $FILE"
         echo "<|--"
-        eval "$CMD" |& sed -e 's/^/>/;' # preformated output
+        eval "$CMD" |& sed -e 's/^/>/;' | sed '$a\' # preformated output
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "--|>"
     else
-        eval "$CMD"
+        eval "$CMD" | sed '$a\'
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
     fi
 
