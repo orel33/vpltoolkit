@@ -337,7 +337,7 @@ function TRACE()
         # TODO: setsid returns different status as bash!
         # bash -c "setsid -w $@" |& sed -e 's/^/>/;' # preformated output
         # setsid -w bash -c "$@" |& sed -e 's/^/>/;' # preformated output
-        bash -c "$@" |& sed -e 's/^/>/;' -e '\$a\'  # preformated output
+        bash -c "$@" |& sed -e 's/^/>/;' |& sed '\$a\'  # preformated output
         RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "--|>" 
         local STATUS=$(STRSTATUS $RET)
@@ -364,7 +364,7 @@ function TRACE_TEACHER()
         # TODO: setsid returns different status as bash!
         # bash -c "setsid -w $@" |& sed -e 's/^/Teacher :=>>/;'
         # setsid -w bash -c "$@" |& sed -e 's/^/Teacher :=>>/;' # preformated output
-        bash -c "$@" |& sed -e 's/^/Teacher :=>>/;' -e '\$a\' # preformated output
+        bash -c "$@" |& sed -e 's/^/Teacher :=>>/;' |& sed '\$a\' # preformated output
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
         local STATUS=$(STRSTATUS $RET)
         echo -e "${CL}Teacher :=>> Status $RET ($STATUS)"
