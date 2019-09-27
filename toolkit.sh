@@ -250,7 +250,8 @@ function CAT()
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
         echo -e "${CL}Teacher :=>>\$ cat $FILE"
         echo "<|--"
-        eval "$CMD" |& sed -e 's/^/>/;' | sed '$a\' # preformated output
+        # eval "$CMD" |& sed -e 's/^/>/;' | sed '$a\' # preformated output
+        eval "$CMD" |& sed -e 's/^//;' | sed '$a\'
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "--|>"
     else
