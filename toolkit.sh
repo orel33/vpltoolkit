@@ -226,7 +226,8 @@ function TITLE_TEACHER()
 ####################################################
 
 # Tips: the command sed '$a\' append a trailing \n only if needed...
-# preformat symbol: ▷ ⇶ ⤷ 〉 ———
+# preformat symbol: > ▷ ⇶ ⤷ 〉 ———
+
 # inputs: FILE [HEAD TAIL]
 # return cat status
 function CAT()
@@ -250,8 +251,8 @@ function CAT()
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
         echo -e "${CL}Teacher :=>>\$ cat $FILE"
         echo "<|--"
-        # eval "$CMD" |& sed -e 's/^/>/;' | sed '$a\' # preformated output
-        eval "$CMD" |& sed -e 's/^/———/;' | sed '$a\'
+        eval "$CMD" |& sed -e 's/^/>/;' |& sed '$a\' # preformated output
+        # eval "$CMD" |& sed -e 's/^/———/;' | sed '$a\'
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "--|>"
     else
@@ -269,7 +270,7 @@ function CAT_TEACHER()
     [ $# -ne 1 ] && ECHO "Usage: CAT_TEACHER FILE" && exit 0
     if [ "$MODE" = "EVAL" ] ; then
         echo -e "${CL}Teacher :=>>\$ cat $@"
-        bash -c "cat $@" |& sed -e 's/^/Teacher :=>>/;' # setsid is used for safe exec (setpgid(0,0))
+        bash -c "cat $@" |& sed -e 's/^/Teacher :=>>/;' |& sed '$a\' 
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
     else
         cat $@ &>> $RUNDIR/$LOG
@@ -339,8 +340,8 @@ function TRACE()
         # TODO: setsid returns different status as bash!
         # bash -c "setsid -w $@" |& sed -e 's/^/>/;' # preformated output
         # setsid -w bash -c "$@" |& sed -e 's/^/>/;' # preformated output
-        # bash -c "$@" |& sed -e 's/^/>/;' |& sed '$a\'  # preformated output
-        bash -c "$@" |& sed -e 's/^/▷ /;' |& sed '$a\'  # preformated output ▷
+        bash -c "$@" |& sed -e 's/^/>/;' |& sed '$a\'  # preformated output
+        # bash -c "$@" |& sed -e 's/^/▷ /;' |& sed '$a\'  # preformated output ▷
         # bash -c "$@" |& sed -e 's/^/⤷ /;' |& sed '$a\'  # preformated output ▷ ⇶ ⤷ 〉 ———
         RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "--|>" 
