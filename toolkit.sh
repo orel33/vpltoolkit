@@ -226,7 +226,7 @@ function TITLE_TEACHER()
 ####################################################
 
 # Tips: the command sed '$a\' append a trailing \n only if needed...
-
+# preformat symbol: ▷ ⇶ ⤷ 〉 ———
 # inputs: FILE [HEAD TAIL]
 # return cat status
 function CAT()
@@ -251,7 +251,7 @@ function CAT()
         echo -e "${CL}Teacher :=>>\$ cat $FILE"
         echo "<|--"
         # eval "$CMD" |& sed -e 's/^/>/;' | sed '$a\' # preformated output
-        eval "$CMD" |& sed -e 's/^/▷/;' | sed '$a\'
+        eval "$CMD" |& sed -e 's/^/———/;' | sed '$a\'
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "--|>"
     else
@@ -341,7 +341,7 @@ function TRACE()
         # setsid -w bash -c "$@" |& sed -e 's/^/>/;' # preformated output
         # bash -c "$@" |& sed -e 's/^/>/;' |& sed '$a\'  # preformated output
         bash -c "$@" |& sed -e 's/^/▷ /;' |& sed '$a\'  # preformated output ▷
-        # bash -c "$@" |& sed -e 's/^/⤷ /;' |& sed '$a\'  # preformated output ▷ ⇶ ⤷
+        # bash -c "$@" |& sed -e 's/^/⤷ /;' |& sed '$a\'  # preformated output ▷ ⇶ ⤷ 〉 ———
         RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "--|>" 
         local STATUS=$(STRSTATUS $RET)
