@@ -652,16 +652,9 @@ function EXIT_GRADE()
 function CHECKVERSION()
 {
     local EXPECTED="$1"
-    [ "$EXPECTED" != "$VERSION" ] && ERROR "Toolkit version $EXPECTED expected (but version \"$VERSION\" found)!" && exit 1
+    [ "$EXPECTED" != "$VERSION" ] && ERROR "Toolkit version $EXPECTED expected (but version \"$VERSION\" found)!" && return 1
+    return 0
 }
-
-####################################################
-
-# function CHECKDOCKER()
-# {
-#     local EXPECTED="$1"
-#     [ "$EXPECTED" != "$DOCKER" ] && ERROR "Docker $EXPECTED expected (but docker \"$DOCKER\" found)!" && exit 1
-# }
 
 ####################################################
 
@@ -669,8 +662,9 @@ function CHECKFILES()
 {
     # TODO: check if it supports filenames with spaces
     for FILE in "$@" ; do
-        [ ! -f "$FILE" ] && ERROR "File \"$FILE\" is missing!" && exit 1
+        [ ! -f "$FILE" ] && ERROR "File \"$FILE\" is missing!" && return 1
     done
+    return 0
 }
 
 ####################################################
@@ -678,8 +672,9 @@ function CHECKFILES()
 function CHECKINPUTS()
 {
     for FILE in "$@" ; do
-        [ ! -f "$RUNDIR/inputs/$FILE" ] && ERROR "Requested input file \"$FILE\" is missing!" && exit 1
+        [ ! -f "$RUNDIR/inputs/$FILE" ] && ERROR "Requested input file \"$FILE\" is missing!" && return 1
     done
+    return 0
 }
 
 ####################################################
@@ -689,8 +684,9 @@ function CHECKPROGRAMS()
     # TODO: check if it supports filenames with spaces
     for PROGRAM in "$@" ; do
         type "$PROGRAM" &> /dev/null
-        [ $? -ne 0 ] && ERROR "Program \"$PROGRAM\" is missing!" && exit 1
+        [ $? -ne 0 ] && ERROR "Program \"$PROGRAM\" is missing!" && return 1
     done
+    return 0
 }
 
 ####################################################
