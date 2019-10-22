@@ -237,7 +237,7 @@ function CAT()
         local HEAD=0
         local TAIL=0
         local CMD="cat $FILE"
-    elif [ $# -eq 3 ] ; then
+        elif [ $# -eq 3 ] ; then
         local HEAD="$2"
         local TAIL="$3"
         local CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE"
@@ -259,7 +259,7 @@ function CAT()
         eval "$CMD" | sed '$a\'
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
     fi
-
+    
     return $RET
 }
 
@@ -270,7 +270,7 @@ function CAT_TEACHER()
     [ $# -ne 1 ] && ECHO "Usage: CAT_TEACHER FILE" && exit 0
     if [ "$MODE" = "EVAL" ] ; then
         echo -e "${CL}Teacher :=>>\$ cat $@"
-        bash -c "cat $@" |& sed -e 's/^/Teacher :=>>/;' |& sed '$a\' 
+        bash -c "cat $@" |& sed -e 's/^/Teacher :=>>/;' |& sed '$a\'
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
     else
         cat $@ &>> $RUNDIR/$LOG
@@ -314,11 +314,11 @@ function STRSTATUS()
     local STATUS=$1
     if (( $STATUS == 0 )) ; then
         echo "EXIT_SUCCESS"
-    elif (( $STATUS == 1 )) ; then
+        elif (( $STATUS == 1 )) ; then
         echo "EXIT_FAILURE"
-    elif (( $STATUS == 124 )) ; then
+        elif (( $STATUS == 124 )) ; then
         echo "timeout"
-    elif (( $STATUS > 128 && $STATUS <= 192 )) ; then
+        elif (( $STATUS > 128 && $STATUS <= 192 )) ; then
         NSIG=$((STATUS-128))
         STRSIG=$(kill -l $NSIG)
         echo "killed by signal $STRSIG"
@@ -344,7 +344,7 @@ function TRACE()
         # bash -c "$@" |& sed -e 's/^/▷ /;' |& sed '$a\'  # preformated output ▷
         # bash -c "$@" |& sed -e 's/^/⤷ /;' |& sed '$a\'  # preformated output ▷ ⇶ ⤷ 〉 ———
         RET=${PIPESTATUS[0]}  # return status of first piped command!
-        echo "--|>" 
+        echo "--|>"
         local STATUS=$(STRSTATUS $RET)
         echo -e "${CL}Teacher :=>> Status $RET ($STATUS)"
     else
@@ -452,7 +452,7 @@ function EVALOK()
         local RET="$1"
         local MSG="$2"
         local SCORE="$3" # TODO: check score is >= 0
-    elif [ $# -eq 4 ] ; then
+        elif [ $# -eq 4 ] ; then
         local RET="$1"
         local MSG="$2"
         local local SCORE="$3"
@@ -487,7 +487,7 @@ function EVALKO()
         local RET="$1"
         local MSG="$2"
         local SCORE="$3" # TODO: check score is <= 0
-    elif [ $# -eq 4 ] ; then
+        elif [ $# -eq 4 ] ; then
         local RET="$1"
         local MSG="$2"
         local SCORE="$3"
@@ -523,7 +523,7 @@ function EVALW()
         local RET="$1"
         local MSG="$2"
         local SCORE="$3" # TODO: check score is <= 0
-    elif [ $# -eq 4 ] ; then
+        elif [ $# -eq 4 ] ; then
         local RET="$1"
         local MSG="$2"
         local SCORE="$3"
@@ -546,6 +546,28 @@ function EVALW()
 
 ####################################################
 
+# inputs: MSG SCORE
+# return 0
+function EVALMSG()
+{
+    local MSG="$1"
+    local SCORE="$2"
+    if [ $# -ne 2 ] ; then
+        ECHO "Usage: EVALMSG MSG SCORE" && exit 0
+    fi
+    local MSGSCORE=""
+    local LGRADE=0
+    if [ "$SCORE" != "0" ] ; then
+        local LGRADE=$(PYCOMPUTE "$SCORE")
+        GRADE=$(PYCOMPUTE "$GRADE+$LGRADE")
+        if [ "$NOGRADE" != "1" ] ; then MSGSCORE="[$LGRADE%]" ; fi
+    fi
+    INFO "$MSG $MSGSCORE"
+    return 0
+}
+
+####################################################
+
 # inputs: RET MSG [BONUS MALUS [MSGOK MSGKO]]
 # return: $RET
 function EVAL()
@@ -558,11 +580,11 @@ function EVAL()
     local MSGKO=""
     if [ $# -eq 2 ] ; then
         MSG="$2"
-    elif [ $# -eq 4 ] ; then
+        elif [ $# -eq 4 ] ; then
         MSG="$2"
         BONUS="$3"
         MALUS="$4"
-    elif [ $# -eq 6 ] ; then
+        elif [ $# -eq 6 ] ; then
         MSG="$2"
         BONUS="$3"  # TODO: check positive
         MALUS="$4"  # TODO: check negative
@@ -591,7 +613,7 @@ function COMPILE()
         local BONUS=0
         local WARNINGMALUS=0
         local ERRORMALUS=0
-    elif [ $# -eq 5 ] ; then
+        elif [ $# -eq 5 ] ; then
         local MSG="$1"
         local CMD="$2"
         local BONUS="$3"          # TODO: check positive
@@ -600,30 +622,30 @@ function COMPILE()
     else
         ECHO "Usage: COMPILE MSG CMD [BONUS WARNING_MALUS ERROR_MALUS]" && exit 0
     fi
-
+    
     local TEMP=$(mktemp)
     bash -c "$CMD" &> $TEMP
     local RET=$?
-
+    
     # check errors
     EVALKO $RET "$MSG" "$ERRORMALUS" && CAT $TEMP && return $RET # error !
-
+    
     # if [ ! -x $EXPECTED ] ; then
     #     EVALKO 1 "$MSG" "$ERRORMALUS" "expected file \"$EXPECTED\" not found!"
     #     CAT $TEMP && rm -f $TEMP
     #     return 1 # error !
     # fi
-
+    
     # if WARNING...
     if [ -s $TEMP ] ; then
         EVALW 1 "$MSG" "$WARNINGMALUS"
         CAT $TEMP && rm -f $TEMP
         return 0 # warning
     fi
-
+    
     EVALOK $RET "$MSG" $BONUS
     rm -f $TEMP
-
+    
     return 0
 }
 
