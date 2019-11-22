@@ -265,6 +265,9 @@ function DOCKERRUN()
     DOCKERID=$(docker run $DOCKEROPT $DOCKER sleep $DOCKERTIMEOUT)
     echo "Run Docker $DOCKER ($DOCKERID)."
 
+    # TODO: sleep will act as init process (pid=1), but don't clean zombie anymore!
+    # FIXME: => https://blog.phusion.nl/2015/01/20/docker-and-the-pid-1-zombie-reaping-problem/
+
     ## 2) DOCKER COPY
     # copy all RUNDIR inside docker...
     docker cp -L $RUNDIR/. $DOCKERID:$RUNDIR &> /dev/null
