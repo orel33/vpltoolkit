@@ -6,12 +6,14 @@ LOG="teacher.log"
 #                       ECHO                       #
 ####################################################
 
-# TODO: use tput
 BLUE='\033[34m'
 GREEN='\033[32m'
 RED='\033[31m'
 YELLOW='\033[33m'
+BB='\033[40m'   # black background
 NC='\033[0m'    # no color
+
+# FIXME: avoid to use tput?
 
 # BLACK=$(tput setaf 0)   # black
 # RED=$(tput setaf 1)     # red
@@ -47,6 +49,18 @@ function ECHOGREEN()
         echo -n -e "${GREEN}" && echo -n "$@" && echo -e "${NC}"
     fi
 }
+
+####################################################
+
+# # green over Black Backround
+# function ECHOGREENBB()
+# {
+#     if [ "$MODE" = "EVAL" ] ; then
+#         echo -e "${CL}Comment :=>>$@"
+#     else
+#         echo -n -e "${BB}${GREEN}" && echo -n "$@" && echo -e "${NC}"
+#     fi
+# }
 
 ####################################################
 
@@ -329,29 +343,27 @@ function STRSTATUS()
 
 ####################################################
 
-# inputs: BASH_CMD_STRING
+# inputs: BASH_CMD_STRING [TIMEOUT]
 # return command status
 function TRACE()
 {
+    local TRACECMD="$1"
+    local TRACETIMEOUT=0    # no timeout
+    [ $# -eq 2 ] && local TRACETIMEOUT=$2
+    if [ $# -gt 2 ] ; then
+        ECHO "Usage: TRACE BASH_CMD_STRING [TIMEOUT]" && exit 0
+    fi
+    
     if [ "$MODE" = "EVAL" ] ; then
-        echo -e "${CL}Teacher :=>>\$ $@"
+        echo -e "${CL}Teacher :=>>\$ $TRACECMD"
         echo "<|--"
-        # setsid is used for safe exec (setpgid(0,0))
-        # TODO: setsid returns different status as bash!
-        # bash -c "setsid -w $@" |& sed -e 's/^/>/;' # preformated output
-        # setsid -w bash -c "$@" |& sed -e 's/^/>/;' # preformated output
-        bash -c "$@" |& sed -e 's/^/>/;' |& sed '$a\'  # preformated output
-        # bash -c "$@" |& sed -e 's/^/▷ /;' |& sed '$a\'  # preformated output ▷
-        # bash -c "$@" |& sed -e 's/^/⤷ /;' |& sed '$a\'  # preformated output ▷ ⇶ ⤷ 〉 ———
+        timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT sed -e 's/^/>/;' |& timeout $TRACETIMEOUT sed '$a\'  # preformated output
         RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "--|>"
         local STATUS=$(STRSTATUS $RET)
         echo -e "${CL}Teacher :=>> Status $RET ($STATUS)"
     else
-        # bash -c "setsid -w $@"
-        # setsid -w bash -c "$@"
-        # EXEC $@
-        bash -c "$@"
+        timeout $TRACETIMEOUT bash -c "$TRACECMD"
         RET=$?
     fi
     return $RET
@@ -359,24 +371,25 @@ function TRACE()
 
 ####################################################
 
-# inputs: BASH_CMD_STRING
+# inputs: BASH_CMD_STRING [TIMEOUT]
 # return command status
 function TRACE_TEACHER()
 {
+    local TRACECMD="$1"
+    local TRACETIMEOUT=0    # no timeout
+    [ $# -eq 2 ] && local TRACETIMEOUT=$2
+    if [ $# -gt 2 ] ; then
+        ECHO "Usage: TRACE_TEACHER BASH_CMD_STRING [TIMEOUT]" && exit 0
+    fi
+    
     if [ "$MODE" = "EVAL" ] ; then
-        echo -e "${CL}Teacher :=>>\$ $@"
-        # setsid is used for safe exec (setpgid(0,0))
-        # TODO: setsid returns different status as bash!
-        # bash -c "setsid -w $@" |& sed -e 's/^/Teacher :=>>/;'
-        # setsid -w bash -c "$@" |& sed -e 's/^/Teacher :=>>/;' # preformated output
-        bash -c "$@" |& sed -e 's/^/Teacher :=>>/;' |& sed '$a\' # preformated output
+        echo -e "${CL}Teacher :=>>\$ $TRACECMD"
+        timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT sed -e 's/^/Teacher :=>>/;' |& timeout $TRACETIMEOUT sed '$a\' # preformated output
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
         local STATUS=$(STRSTATUS $RET)
         echo -e "${CL}Teacher :=>> Status $RET ($STATUS)"
     else
-        # bash -c "setsid -w $@" &>> $RUNDIR/$LOG
-        # setsid -w bash -c "$@" &>> $RUNDIR/$LOG
-        bash -c "$@" &>> $RUNDIR/$LOG
+        timeout $TRACETIMEOUT bash -c "$TRACECMD" &>> $RUNDIR/$LOG
         local RET=$?
     fi
     return $RET
@@ -455,7 +468,7 @@ function EVALOK()
         elif [ $# -eq 4 ] ; then
         local RET="$1"
         local MSG="$2"
-        local local SCORE="$3"
+        local SCORE="$3"
         local INFO="$4"
     else
         ECHO "Usage: EVALOK RET MSG SCORE [INFO]" && exit 0
