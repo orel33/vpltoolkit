@@ -184,6 +184,8 @@ function PRINTOK()
     return 0
 }
 
+# FIXME: le green check "✔️" déborde sur le caractère suivant quand il est affiché dans un terminal... cherché un plus petit check ✓
+
 ####################################################
 
 # inputs: MSG

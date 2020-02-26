@@ -64,6 +64,7 @@ RUN pip3 install --upgrade pip
 RUN apt-get install -yq net-tools socat rlwrap wget curl tcpdump
 RUN apt-get install -yq python3-scapy python-scapy
 RUN apt-get install -yq netcat-openbsd
+RUN apt-get install -yq telnet apache2 telnetd ftpd inetutils-inetd
 
 # graphics app
 RUN apt-get install -yq xterm x11-apps mesa-utils libgl1-mesa-dev libgl1-mesa-glx
@@ -98,9 +99,16 @@ RUN apt-get install -yq tmux screen expect zip unzip git
 RUN apt-get install -yq moreutils
 RUN apt-get install -yq sudo
 RUN apt-get install -yq sbcl
+RUN apt-get install -yq bc ncurses-bin
+RUN apt-get install -yq ruby
+RUN gem install git_fame
 
 # RUN mkdir -p /run/user/0
 # ENV XDG_RUNTIME_DIR /run/user/0
+
+# Init Info
+RUN apt-get install -yq automake subversion imagemagick graphviz firefox-esr
+RUN pip3 install Pillow numpy pytest tk requests scspell3k pygame
 
 # clean
 RUN apt-get -yq autoremove
