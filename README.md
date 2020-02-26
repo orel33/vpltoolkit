@@ -325,6 +325,7 @@ DOCKER="orel33/mydebian:latest"
 * update documentation in README.md (API in toolkit.sh)
 * update unit tests of tookit.sh
 * add possibility to enrich env.sh with user-defined variables
+* etc.
 
 ---
 aurelien.esnard@u-bordeaux.fr
