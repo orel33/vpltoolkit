@@ -55,6 +55,7 @@ RUN apt-get install -yq libncurses-dev
 RUN apt-get install -yq tcl8.5 tcl8.5-dev
 RUN apt-get install -yq python3 python3-pip python3-numpy  python3-termcolor
 RUN apt-get install -yq python python-pip python-numpy python-pytest python-termcolor
+RUN apt-get install -yq pylint pylint3
 # RUN apt-get install -yq radon
 RUN pip install --upgrade pip
 RUN pip3 install --upgrade pip
