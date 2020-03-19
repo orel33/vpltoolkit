@@ -267,6 +267,8 @@ $ ./local.sh -m RUN -d "orel33/mydebian:latest" -r "https://github.com/orel33/vp
 
 VPL Toolkit enables to use a docker image since version 3.0. First, you need to create a docker image. Given the following [Dockerfile](docker/Dockerfile), you can build your own Debian-like image and push it on [DockerHub](https://hub.docker.com/).
 
+Note: you need to base your DockerFile on gblin/minivpl to have the server part of the VPL inside the image.
+
 ```bash
 # build image
 $ docker build -t "orel33/mydebian:latest" .
@@ -284,10 +286,10 @@ To pull this docker image:
 $ docker pull orel33/mydebian:latest
 ```
 
-Then, you just need to set the *DOCKER* variable in your VPL startup script. For instance:
+Then, you just need to set the *DOCKER* variable in your vplbdx.cfg file. For instance:
 
-```bash
-DOCKER="orel33/mydebian:latest"
+```
+DOCKER=orel33/mydebian:latest
 ```
 
 ## Documentation
