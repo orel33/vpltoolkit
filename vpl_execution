@@ -14,6 +14,7 @@ grep -w $MODE <<< "RUN DEBUG EVAL" &> /dev/null
 [ $? -ne 0 ] && echo "⚠ Error: Invalid MODE \"$MODE\"!" && exit 0
 [ -z "$RUNDIR" ] && echo "⚠ Error: Variable \"RUNDIR\" is not defined!" && exit 0
 [ -z "$ENTRYPOINT" ] && echo "⚠ Error: Variable \"ENTRYPOINT\" is not defined!" && exit 0
+CMD=""
 [ -f "/$ENTRYPOINT" ] && CMD="/$ENTRYPOINT"                 # absolute path
 [ -f "$RUNDIR/$ENTRYPOINT" ] && CMD="$RUNDIR/$ENTRYPOINT"   # relative path
 [ ! -f "$CMD" ] && echo "⚠ Error: Entrypoint file \"$CMD\" not found!" && exit 0
