@@ -132,5 +132,7 @@ RUN apt-get -yq autoremove
 # RUN wget -q "https://vscode-update.azurewebsites.net/latest/linux-deb-x64/stable" -O /tmp/vscode.deb && sudo gdebi --n /tmp/vscode.deb
 # RUN wget -q "https://raw.githubusercontent.com/orel33/vscode/master/extensions.sh" -O /tmp/extensions.sh && bash /tmp/extensions.sh
 
+# VPL Toolkit
+RUN git clone https://github.com/orel33/vpltoolkit.git /vpltoolkit
 
 # EOF
