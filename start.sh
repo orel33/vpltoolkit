@@ -93,7 +93,7 @@ function PRINTENV()
     echo "* DEBUG=$DEBUG"
     echo "* VERBOSE=$VERBOSE"
     echo "* ENTRYPOINT=$ENTRYPOINT"
-    echo "* ARGS=$ARGS"
+    echo "* ARGS=\"$ARGS\""
     echo "* INPUTS=$INPUTS"
     return 0
 }
