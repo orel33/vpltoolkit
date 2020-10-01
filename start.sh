@@ -57,7 +57,7 @@ function SAVEENV()
     echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
     echo "VERBOSE=$VERBOSE" >> $RUNDIR/env.sh
     echo "ENTRYPOINT=$ENTRYPOINT" >> $RUNDIR/env.sh
-    echo "ARGS=$ARGS" >> $RUNDIR/env.sh
+    echo "ARGS=\"$ARGS\"" >> $RUNDIR/env.sh
     echo "INPUTS=$INPUTS" >> $RUNDIR/env.sh
     return 0
 }
