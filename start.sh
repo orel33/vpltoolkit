@@ -57,7 +57,7 @@ function SAVEENV()
     echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
     echo "VERBOSE=$VERBOSE" >> $RUNDIR/env.sh
     echo "ENTRYPOINT=$ENTRYPOINT" >> $RUNDIR/env.sh
-    echo "ARGS=$ARGS" >> $RUNDIR/env.sh
+    echo "ARGS=\"$ARGS\"" >> $RUNDIR/env.sh
     echo "INPUTS=$INPUTS" >> $RUNDIR/env.sh
     return 0
 }
@@ -93,7 +93,7 @@ function PRINTENV()
     echo "* DEBUG=$DEBUG"
     echo "* VERBOSE=$VERBOSE"
     echo "* ENTRYPOINT=$ENTRYPOINT"
-    echo "* ARGS=$ARGS"
+    echo "* ARGS=\"$ARGS\""
     echo "* INPUTS=$INPUTS"
     return 0
 }
@@ -210,7 +210,7 @@ function WGET()
 function START_ONLINE()
 {
     [ ! $# -ge 0 ] && echo "⚠ Error: Usage: START_ONLINE [...]" >&2 && exit 1
-    ARGS=\"${@:1}\"
+    ARGS="${@:1}"
     [ -z "$RUNDIR" ] && echo "⚠ Error: RUNDIR variable is not defined!" >&2 && exit 1
     [ ! -d $RUNDIR ] && echo "⚠ Error: Bad RUNDIR: \"$RUNDIR\"!" >&2 && exit 1
     ONLINE=1
@@ -261,7 +261,7 @@ function START_OFFLINE()
 {
     [ ! $# -ge 1 ] && echo "⚠ Error: Usage: START_OFFLINE INPUTDIR [...]" >&2 && exit 1
     local INPUTDIR="$1"
-    local ARGS=\"${@:2}\"
+    local ARGS="${@:2}"
     [ ! -z "$INPUTDIR" ] && [ ! -d $INPUTDIR ] && echo "⚠ Error: Bad INPUTDIR: \"$INPUTDIR\"!" >&2 && exit 1
     [ -z "$RUNDIR" ] && echo "⚠ Error: RUNDIR variable is not defined!" >&2 && exit 1
     [ ! -d $RUNDIR ] && echo "⚠ Error: Bad RUNDIR: \"$RUNDIR\"!" >&2 && exit 1
@@ -294,8 +294,8 @@ function START()
     [ $(basename $0) == "vpl_run.sh" ] && ONLINE=1
     [ $(basename $0) == "vpl_debug.sh" ] && ONLINE=1
     [ $(basename $0) == "vpl_evaluate.sh" ] && ONLINE=1
-    ARGS=\"${@:1}\"
-    if [ $ONLINE -eq 1 ] ; then START_ONLINE $ARGS ; else START_OFFLINE $ARGS ; fi
+    ARGS="${@:1}"
+    if [ $ONLINE -eq 1 ] ; then START_ONLINE "$ARGS" ; else START_OFFLINE "$ARGS" ; fi
     return 0
 }
 
