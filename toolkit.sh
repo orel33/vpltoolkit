@@ -249,14 +249,18 @@ function TITLE_TEACHER()
 function CAT()
 {
     local FILE="$1"
+    local CMD="cat $FILE"
     if [ $# -eq 1 ] ; then
         local HEAD=0
         local TAIL=0
-        local CMD="cat $FILE"
-        elif [ $# -eq 3 ] ; then
+    elif [ $# -eq 3 ] ; then
         local HEAD="$2"
         local TAIL="$3"
-        local CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE"
+        local NLINES=$(wc -l $FILE)
+        local WLINES=$(($HEAD+$TAIL))
+        if (($WLINES < $NLINES)) ; then
+            local CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE"
+        fi
     else
         ECHO "Usage: CAT FILE [HEAD TAIL]" && exit 0
     fi
