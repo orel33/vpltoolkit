@@ -256,7 +256,7 @@ function CAT()
     elif [ $# -eq 3 ] ; then
         local HEAD="$2"
         local TAIL="$3"
-        local NLINES=$(wc -l $FILE)
+        local NLINES=$(cat $FILE | wc -l)
         local WLINES=$(($HEAD+$TAIL))
         if (($WLINES < $NLINES)) ; then
             local CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE"
