@@ -244,29 +244,34 @@ function TITLE_TEACHER()
 # Tips: the command sed '$a\' append a trailing \n only if needed...
 # preformat symbol: > ▷ ⇶ ⤷ 〉 ———
 
-# inputs: FILE [HEAD TAIL]
+# inputs: FILE [HEAD [TAIL]]
 # return cat status
 function CAT()
 {
     local FILE="$1"
+    [ ! -f $FILE ] && CRASH "CAT (file not found)" && exit 0
     local CMD="cat $FILE"
+
     if [ $# -eq 1 ] ; then
         local HEAD=0
         local TAIL=0
+    elif [ $# -eq 2 ] ; then
+        local HEAD="$2"
+        local TAIL="$2"
     elif [ $# -eq 3 ] ; then
         local HEAD="$2"
         local TAIL="$3"
-        local NLINES=$(cat $FILE | wc -l)
-        local WLINES=$(($HEAD+$TAIL))
-        if (($WLINES < $NLINES)) ; then
-            local CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE"
-        fi
     else
-        ECHO "Usage: CAT FILE [HEAD TAIL]" && exit 0
+        ECHO "Usage: CAT FILE [HEAD [TAIL]]" && exit 0
     fi
-    
-    [ ! -f $FILE ] && CRASH "CAT (file not found)" && exit 0
-    
+
+    local NLINES=$(cat $FILE | wc -l)
+    local WLINES=$(($HEAD+$TAIL))
+    if (($WLINES < $NLINES)) ; then
+        local CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE"
+    fi
+
+
     if [ "$MODE" = "EVAL" ] ; then
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
         echo -e "${CL}Teacher :=>>\$ cat $FILE"
