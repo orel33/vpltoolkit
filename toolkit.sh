@@ -251,10 +251,11 @@ function CAT()
     local FILE="$1"
     [ ! -f $FILE ] && CRASH "CAT (file not found)" && exit 0
     local CMD="cat $FILE"
+    local NLINES=$(cat $FILE | wc -l)
 
     if [ $# -eq 1 ] ; then
-        local HEAD=0
-        local TAIL=0
+        local HEAD="$NLINES"
+        local TAIL="$NLINES"
     elif [ $# -eq 2 ] ; then
         local HEAD="$2"
         local TAIL="$2"
@@ -265,12 +266,10 @@ function CAT()
         ECHO "Usage: CAT FILE [HEAD [TAIL]]" && exit 0
     fi
 
-    local NLINES=$(cat $FILE | wc -l)
     local WLINES=$(($HEAD+$TAIL))
     if (($WLINES < $NLINES)) ; then
         local CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE"
     fi
-
 
     if [ "$MODE" = "EVAL" ] ; then
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
