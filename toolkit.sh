@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
+####################################################
+#                    CONSTANTS                     #
+####################################################
+
 LOG="teacher.log"
+MAXCHAR=10000       # max char on standard output
 
 ####################################################
 #                       ECHO                       #
@@ -26,7 +31,6 @@ NC='\033[0m'    # no color
 CEOL=$(tput el)       # tput requires package "ncurses-bin"
 # CL="\r${CEOL}"
 CL=""
-
 
 ####################################################
 
@@ -361,7 +365,6 @@ function TRACE()
 {
     local TRACECMD="$1"
     local TRACETIMEOUT=0        # no timeout
-    local TRACEMAXCHAR=10000    # max char on standard output
     [ $# -eq 2 ] && local TRACETIMEOUT=$2
     if [ $# -gt 2 ] ; then
         ECHO "Usage: TRACE BASH_CMD_STRING [TIMEOUT]" && exit 0
@@ -371,13 +374,13 @@ function TRACE()
         echo -e "${CL}Teacher :=>>\$ $TRACECMD"
         echo "<|--"
         #FIXME: should i really timeout all piped subcommands?
-        timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $TRACEMAXCHAR |& timeout $TRACETIMEOUT sed -e 's/^/>/;' |& timeout $TRACETIMEOUT sed '$a\'  # preformated output
+        timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $MAXCHAR |& timeout $TRACETIMEOUT sed -e 's/^/>/;' |& timeout $TRACETIMEOUT sed '$a\'  # preformated output
         RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "--|>"
         local STATUS=$(STRSTATUS $RET)
         echo -e "${CL}Teacher :=>> Status $RET ($STATUS)"
     else
-        timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $TRACEMAXCHAR
+        timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $MAXCHAR
         RET=$?
     fi
     return $RET
@@ -391,7 +394,6 @@ function TRACE_TEACHER()
 {
     local TRACECMD="$1"
     local TRACETIMEOUT=0        # no timeout
-    local TRACEMAXCHAR=10000    # max char on standard output
     [ $# -eq 2 ] && local TRACETIMEOUT=$2
     if [ $# -gt 2 ] ; then
         ECHO "Usage: TRACE_TEACHER BASH_CMD_STRING [TIMEOUT]" && exit 0
@@ -399,12 +401,12 @@ function TRACE_TEACHER()
     
     if [ "$MODE" = "EVAL" ] ; then
         echo -e "${CL}Teacher :=>>\$ $TRACECMD"
-        timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $TRACEMAXCHAR |& timeout $TRACETIMEOUT sed -e 's/^/Teacher :=>>/;' |& timeout $TRACETIMEOUT sed '$a\' # preformated output
+        timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $MAXCHAR |& timeout $TRACETIMEOUT sed -e 's/^/Teacher :=>>/;' |& timeout $TRACETIMEOUT sed '$a\' # preformated output
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
         local STATUS=$(STRSTATUS $RET)
         echo -e "${CL}Teacher :=>> Status $RET ($STATUS)"
     else
-        timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $TRACEMAXCHAR &>> $RUNDIR/$LOG
+        timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $MAXCHAR &>> $RUNDIR/$LOG
         local RET=$?
     fi
     return $RET
@@ -652,7 +654,7 @@ function COMPILE()
     fi
     
     local TEMP=$(mktemp)
-    bash -c "$CMD" &> $TEMP
+    bash -c "$CMD" |& head -c $MAXCHAR &> $TEMP
     local RET=$?
     
     # check errors
