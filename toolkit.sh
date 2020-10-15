@@ -361,7 +361,7 @@ function TRACE()
 {
     local TRACECMD="$1"
     local TRACETIMEOUT=0        # no timeout
-    local TRACEMAXCHAR=1000     # max char on standard output
+    local TRACEMAXCHAR=10000    # max char on standard output
     [ $# -eq 2 ] && local TRACETIMEOUT=$2
     if [ $# -gt 2 ] ; then
         ECHO "Usage: TRACE BASH_CMD_STRING [TIMEOUT]" && exit 0
@@ -390,7 +390,8 @@ function TRACE()
 function TRACE_TEACHER()
 {
     local TRACECMD="$1"
-    local TRACETIMEOUT=0    # no timeout
+    local TRACETIMEOUT=0        # no timeout
+    local TRACEMAXCHAR=10000    # max char on standard output
     [ $# -eq 2 ] && local TRACETIMEOUT=$2
     if [ $# -gt 2 ] ; then
         ECHO "Usage: TRACE_TEACHER BASH_CMD_STRING [TIMEOUT]" && exit 0
@@ -398,12 +399,12 @@ function TRACE_TEACHER()
     
     if [ "$MODE" = "EVAL" ] ; then
         echo -e "${CL}Teacher :=>>\$ $TRACECMD"
-        timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT sed -e 's/^/Teacher :=>>/;' |& timeout $TRACETIMEOUT sed '$a\' # preformated output
+        timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $TRACEMAXCHAR |& timeout $TRACETIMEOUT sed -e 's/^/Teacher :=>>/;' |& timeout $TRACETIMEOUT sed '$a\' # preformated output
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
         local STATUS=$(STRSTATUS $RET)
         echo -e "${CL}Teacher :=>> Status $RET ($STATUS)"
     else
-        timeout $TRACETIMEOUT bash -c "$TRACECMD" &>> $RUNDIR/$LOG
+        timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $TRACEMAXCHAR &>> $RUNDIR/$LOG
         local RET=$?
     fi
     return $RET
