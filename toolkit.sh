@@ -330,6 +330,8 @@ function EXEC()
     return $?
 }
 
+
+
 ####################################################
 
 # inputs: bash_return_status
@@ -359,7 +361,7 @@ function TRACE()
 {
     local TRACECMD="$1"
     local TRACETIMEOUT=0        # no timeout
-    local TRACEMAXCHAR=100     # max char on standard output
+    local TRACEMAXCHAR=1000     # max char on standard output
     [ $# -eq 2 ] && local TRACETIMEOUT=$2
     if [ $# -gt 2 ] ; then
         ECHO "Usage: TRACE BASH_CMD_STRING [TIMEOUT]" && exit 0
@@ -375,7 +377,7 @@ function TRACE()
         local STATUS=$(STRSTATUS $RET)
         echo -e "${CL}Teacher :=>> Status $RET ($STATUS)"
     else
-        timeout $TRACETIMEOUT bash -c "$TRACECMD"
+        timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $TRACEMAXCHAR
         RET=$?
     fi
     return $RET
