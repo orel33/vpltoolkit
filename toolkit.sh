@@ -382,7 +382,6 @@ function TRACE()
     else
         timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $MAXCHAR
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
-        RET=$?
     fi
     return $RET
 }
@@ -410,7 +409,6 @@ function TRACE_TEACHER()
     else
         timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $MAXCHAR &>> $RUNDIR/$LOG
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
-        local RET=$?
     fi
     return $RET
 }
