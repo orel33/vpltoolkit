@@ -369,11 +369,11 @@ function TRACE()
     if [ $# -gt 2 ] ; then
         ECHO "Usage: TRACE BASH_CMD_STRING [TIMEOUT]" && exit 0
     fi
-    
+
+    # FIXME: should I really timeout all piped subcommands?
     if [ "$MODE" = "EVAL" ] ; then
         echo -e "${CL}Teacher :=>>\$ $TRACECMD"
         echo "<|--"
-        #FIXME: should i really timeout all piped subcommands?
         timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $MAXCHAR |& timeout $TRACETIMEOUT sed -e 's/^/>/;' |& timeout $TRACETIMEOUT sed '$a\'  # preformated output
         RET=${PIPESTATUS[0]}  # return status of first piped command!
         echo "--|>"
@@ -381,6 +381,7 @@ function TRACE()
         echo -e "${CL}Teacher :=>> Status $RET ($STATUS)"
     else
         timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $MAXCHAR
+        local RET=${PIPESTATUS[0]}  # return status of first piped command!
         RET=$?
     fi
     return $RET
@@ -398,7 +399,8 @@ function TRACE_TEACHER()
     if [ $# -gt 2 ] ; then
         ECHO "Usage: TRACE_TEACHER BASH_CMD_STRING [TIMEOUT]" && exit 0
     fi
-    
+
+    # FIXME: should I really timeout all piped subcommands?
     if [ "$MODE" = "EVAL" ] ; then
         echo -e "${CL}Teacher :=>>\$ $TRACECMD"
         timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $MAXCHAR |& timeout $TRACETIMEOUT sed -e 's/^/Teacher :=>>/;' |& timeout $TRACETIMEOUT sed '$a\' # preformated output
@@ -407,6 +409,7 @@ function TRACE_TEACHER()
         echo -e "${CL}Teacher :=>> Status $RET ($STATUS)"
     else
         timeout $TRACETIMEOUT bash -c "$TRACECMD" |& timeout $TRACETIMEOUT head -c $MAXCHAR &>> $RUNDIR/$LOG
+        local RET=${PIPESTATUS[0]}  # return status of first piped command!
         local RET=$?
     fi
     return $RET
