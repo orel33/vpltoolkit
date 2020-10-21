@@ -219,14 +219,21 @@ function PRINTW()
 #                       TITLE                      #
 ####################################################
 
+# print title
+# inputs: TITLE [SCORE]
+# return 0
+
 function TITLE()
 {
+    local THETITLE="$1"
+    if [ $# -eq 2 -a "$2" != "0" ] ; then THETITLE="$1 /$2" ; fi
+
     if [ "$MODE" = "EVAL" ] ; then
         echo -e "${CL}Teacher :=>> ##############################"
-        echo -e "${CL}Comment :=>>-$@"
+        echo -e "${CL}Comment :=>>-$THETITLE"
         echo -e "${CL}Teacher :=>> ##############################"
     else
-        ECHOBLUE "######### $@ ##########"
+        ECHOBLUE "######### $THETITLE ##########"
     fi
 }
 
@@ -234,9 +241,10 @@ function TITLE()
 
 function TITLE_TEACHER()
 {
+    [ $# -ne 1 ] && ECHO "Usage: TITLE_TEACHER MSG" && exit 0
     if [ "$MODE" = "EVAL" ] ; then
         echo -e "${CL}Teacher :=>> ##############################"
-        echo -e "${CL}Teacher :=>>-$@"
+        echo -e "${CL}Teacher :=>>-$1"
         echo -e "${CL}Teacher :=>> ##############################"
     fi
 }
