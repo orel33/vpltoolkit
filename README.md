@@ -327,7 +327,13 @@ DOCKER=orel33/mydebian:latest
 * update documentation in README.md (API in toolkit.sh)
 * update unit tests of tookit.sh
 * add possibility to enrich env.sh with user-defined variables
+* use `set -o piepfail ; cmd1 | cmd2` to improve `TRACE()` implementation in `toolkit.sh`
 * etc.
+
+### Bugs
+
+* bug using `tput`
+* `launch.sh` seems to bo broken in current version...
 
 ---
 aurelien.esnard@u-bordeaux.fr

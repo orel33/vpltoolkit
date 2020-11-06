@@ -367,6 +367,15 @@ function STRSTATUS()
 
 ####################################################
 
+# TODO: Use "set -pipefail ; cmd1 | cmd2" inside TRACE() implementation.
+
+# If pipefail is enabled, the pipeline's return status is the value of the  last
+# (rightmost)  command  to exit with a non-zero status, or zero if all commands
+# exit successfully. The shell waits for all commands in the pipeline to
+# terminate before returning a value.
+
+####################################################
+
 # inputs: BASH_CMD_STRING [TIMEOUT]
 # return command status
 function TRACE()
