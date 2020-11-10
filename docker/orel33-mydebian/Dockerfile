@@ -1,13 +1,15 @@
-FROM debian:latest
+FROM debian:buster
 MAINTAINER Aurelien Esnard <aurelien.esnard@u-bordeaux.fr>
 WORKDIR /home/docker
 ARG DEBIAN_FRONTEND=noninteractive
 # ENV LANG en_EN.utf8 
 
 # upgrade in debian testing (with unstable as )
-COPY sources.list /etc/apt/
-COPY preferences /etc/apt/preferences.d/
+# COPY sources.list /etc/apt/
+# COPY preferences /etc/apt/preferences.d/
+
 RUN apt-get update
+RUN apt-get install -y build-essential
 RUN apt-get install -y apt-utils apt-file gdebi
 # RUN apt-get install -y apt-show-versions
 
@@ -20,7 +22,7 @@ RUN apt-get install -y util-linux manpages gdb valgrind
 RUN apt-get install -y cmake cmake-curses-gui cmake-data cmake-doc
 RUN apt-get install -y flex bison
 RUN apt-get install -y libncurses-dev
-RUN apt-get install -y tcl8.5 tcl8.5-dev
+RUN apt-get install -y tcl8.6 tcl8.6-dev
 RUN apt-get install -y python3 python3-pip python3-numpy  python3-termcolor
 RUN apt-get install -y python python-pip python-numpy python-pytest python-termcolor
 RUN apt-get install -y radon
@@ -65,6 +67,13 @@ RUN apt-get install -y locales-all tmux screen expect zip unzip git
 RUN apt-get install -y moreutils
 RUN apt-get install -y sudo
 RUN apt-get install -y sbcl
+RUN apt-get install -yq bc ncurses-bin
+RUN apt-get install -yq ruby
+RUN gem install git_fame
+
+# Init Info
+RUN apt-get install -yq automake subversion imagemagick graphviz firefox-esr
+RUN pip3 install Pillow numpy pytest tk requests scspell3k pygame
 
 # RUN mkdir -p /run/user/0
 # ENV XDG_RUNTIME_DIR /run/user/0

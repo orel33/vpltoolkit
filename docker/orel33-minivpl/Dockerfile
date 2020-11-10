@@ -103,12 +103,13 @@ RUN apt-get install -yq sbcl
 RUN apt-get install -yq bc ncurses-bin
 RUN apt-get install -yq ruby
 RUN gem install git_fame
+RUN apt-get install -yq libreadline-dev libbison-dev flex
 
 # RUN mkdir -p /run/user/0
 # ENV XDG_RUNTIME_DIR /run/user/0
 
 # Init Info
-RUN apt-get install -yq automake subversion imagemagick graphviz firefox-esr
+RUN apt-get install -yq automake subversion imagemagick graphviz # firefox-esr
 RUN pip3 install Pillow numpy pytest tk requests scspell3k pygame
 
 # clean
