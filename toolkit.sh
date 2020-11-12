@@ -5,7 +5,7 @@
 ####################################################
 
 LOG="teacher.log"
-MAXCHAR=10000       # max char on standard output
+MAXCHAR=100000       # max char on standard output
 
 ####################################################
 #                       ECHO                       #
