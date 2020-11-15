@@ -104,6 +104,7 @@ RUN apt-get install -yq bc ncurses-bin
 RUN apt-get install -yq ruby
 RUN gem install git_fame
 RUN apt-get install -yq libreadline-dev libbison-dev flex
+RUN apt-get install -yq clang-format
 
 # RUN mkdir -p /run/user/0
 # ENV XDG_RUNTIME_DIR /run/user/0
@@ -114,24 +115,6 @@ RUN pip3 install Pillow numpy pytest tk requests scspell3k pygame
 
 # clean
 RUN apt-get -yq autoremove
-
-# add user toto
-# RUN useradd -ms /bin/bash toto
-# RUN echo 'toto ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-# RUN gpasswd -a toto sudo
-# RUN echo "toto:toto" | chpasswd
-# RUN chown -R toto:toto /home/toto
-
-# add user tutu
-# RUN useradd -ms /bin/bash tutu
-# RUN echo 'tutu ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-# RUN gpasswd -a tutu sudo
-# RUN echo "tutu:tutu" | chpasswd
-# RUN chown -R tutu:tutu /home/tutu
-
-# VS Code
-# RUN wget -q "https://vscode-update.azurewebsites.net/latest/linux-deb-x64/stable" -O /tmp/vscode.deb && sudo gdebi --n /tmp/vscode.deb
-# RUN wget -q "https://raw.githubusercontent.com/orel33/vscode/master/extensions.sh" -O /tmp/extensions.sh && bash /tmp/extensions.sh
 
 # VPL Toolkit
 RUN git clone https://github.com/orel33/vpltoolkit.git /vpltoolkit

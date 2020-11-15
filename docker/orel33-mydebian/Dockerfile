@@ -70,6 +70,8 @@ RUN apt-get install -y sbcl
 RUN apt-get install -yq bc ncurses-bin
 RUN apt-get install -yq ruby
 RUN gem install git_fame
+RUN apt-get install -yq libreadline-dev libbison-dev flex
+RUN apt-get install -yq clang-format
 
 # Init Info
 RUN apt-get install -yq automake subversion imagemagick graphviz firefox-esr
