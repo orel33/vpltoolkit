@@ -1,0 +1,5 @@
+# unstable (sid)
+deb http://deb.debian.org/debian sid main
+deb http://ftp.us.debian.org/debian sid main contrib non-free
+# fallback in stable
+deb http://ftp.us.debian.org/debian stable main
