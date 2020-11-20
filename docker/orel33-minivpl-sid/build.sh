@@ -1,3 +1,3 @@
 #!/bin/bash
-docker build -t "orel33/minivpl:sid" . && docker push "orel33/minivpl:sid"
+docker build -t "orel33/minivpl-sid:latest" . && docker push "orel33/minivpl-sid:latest"
 
