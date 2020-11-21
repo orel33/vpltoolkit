@@ -1,5 +1,5 @@
 FROM debian:buster
-MAINTAINER Aurelien Esnard <aurelien.esnard@u-bordeaux.fr>
+LABEL maintainer="aurelien.esnard@u-bordeaux.fr"
 WORKDIR /home/docker
 ARG DEBIAN_FRONTEND=noninteractive
 # ENV LANG en_EN.utf8 

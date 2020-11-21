@@ -1,6 +1,6 @@
 # FROM debian:latest
 FROM gblin/minivpl
-MAINTAINER Aurelien Esnard <aurelien.esnard@u-bordeaux.fr>
+LABEL maintainer="aurelien.esnard@u-bordeaux.fr"
 
 WORKDIR /home/docker
 # WORKDIR /tmp/

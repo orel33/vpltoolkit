@@ -1,72 +1,86 @@
-### minivpl docker image
-FROM ubuntu:groovy
-# FROM debian:sid
+### minivpl docker image based on ubuntu 20.10
 
-# FROM bitnami/minideb:stretch
-LABEL maintainer="guillaume.blin@u-bordeaux.fr"
-LABEL authors="Guillaume Blin and Corentin Abel Mercier"
+FROM gblin/minivpl-ubuntu
 
+WORKDIR /home/docker
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update
-RUN apt-get install -yq apt-utils apt-file gdebi
 
-### Set the locale
-# ENV LANG en_EN.utf8
+### apt tools
+RUN apt-get update
+RUN apt-get install -yq build-essential apt-utils apt-file gdebi
+
+### set locales
 RUN apt-get install -yq locales-all
-# RUN apt-get install -yq locales
-# ARG LANG=en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN apt-get install -yq build-essential ca-certificates curl git libbz2-1.0 libc6 libncurses5 libncursesw5-dev  libsqlite3-0 libsqlite3-dev 
-RUN apt-get install -yq libssl-dev libtinfo5 pkg-config unzip wget zlib1g vim x11-apps x11-xserver-utils procps python3 python3-pip
-# missing packages in ubuntu:groovy
-# RUN apt-get install -yq libssl1.0.2 libffi6 libreadline7
-# try to fix with that packages
-RUN apt-get install -yq libssl1.1 libreadline8
+### misc tools
+RUN apt-get install -yq bash bash-completion tmux screen expect zip unzip
+RUN apt-get install -yq dialog xtermcontrol shc indent ldap-utils
+RUN apt-get install -yq moreutils bc sudo sbcl graphviz
 
+### editing
+RUN apt-get install -yq emacs-nox vim nano
+
+### C/C++ programming
+RUN apt-get install -yq gcc g++ gcc-multilib g++-multilib
+RUN apt-get install -yq gcc-8 g++-8 libc6 libc6-dev libc6-dbg
+
+### programming tools
+RUN apt-get install -yq util-linux manpages gdb valgrind 
+RUN apt-get install -yq automake autotools-dev
+RUN apt-get install -yq cmake cmake-curses-gui cmake-data cmake-doc
+RUN apt-get install -yq git subversion
+RUN apt-get install -yq clang-format clang-format-8
+RUN apt-get install -yq flex bison libbison-dev
+RUN apt-get install -yq ncurses-bin libncurses-dev libreadline-dev
+RUN apt-get install -yq tcl8.6 tcl8.6-dev tk8.6 tk8.6-dev
+RUN apt-get install -yq ruby
+RUN gem install git_fame
+
+### python3
+RUN apt-get install -yq python3 python3-pip python3-numpy python3-termcolor pylint3
 RUN pip3 install --upgrade pip
-RUN apt-get install -yq procps 
-RUN apt-get install -yq libx11-6 libxcb1 libxau6 
-RUN apt-get install -yq fluxbox xorg tightvncserver xvfb dbus-x11 x11-utils
-RUN apt-get install -yq xfonts-base xfonts-75dpi xfonts-100dpi
-RUN apt-get install -yq python3-websockify python3-setuptools locales-all 
-# RUN apt-get install -yq  libva-glx1
-RUN apt-get install -yq  libva-glx2
+RUN apt-get install -yq radon
 
-RUN pip3 install wheel
-ENV LANG en_EN.utf8
-RUN cd /tmp && git clone https://github.com/novnc/websockify.git && cd websockify && make && cp rebind.so /usr/lib/. && cd .. && rm -rf websockify
-RUN apt-get install -yq cmake g++ pkg-config libwebsockets-dev libjson-c-dev libssl-dev
+### networking
+RUN apt-get install -yq net-tools socat rlwrap wget curl tcpdump netcat-openbsd telnet
+RUN apt-get install -yq apache2 telnetd ftpd inetutils-inetd
+RUN apt-get install -yq python3-scapy
 
-# Deprecated Node.js 8 => migrating Node.js 12 LTS "Erbium" (recommended)
-# RUN curl -sL https://deb.nodesource.com/setup_8.x | bash
-RUN curl -sLf -o /dev/null 'https://deb.nodesource.com/node_8.x/dists/groovy/Release' | bash
-# RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
-# RUN curl -sL https://deb.nodesource.com/setup_12.x | bash
-RUN apt-get install --yes nodejs npm
-COPY misc/wss-shell /usr/lib/wss-shell
-RUN cd /usr/lib/wss-shell && npm link
+# graphics app
+RUN apt-get install -yq xterm x11-apps mesa-utils libgl1-mesa-dev libgl1-mesa-glx
+RUN apt-get install -yq libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-gfx-dev libsdl2-ttf-dev libsdl2-net-dev
+RUN apt-get install -yq python3-pygame python3-pyx
 
-RUN mkdir -p /vplbdx/.vnc
-COPY misc/xstartup /vplbdx/.vnc/
-RUN chmod a+x /vplbdx/.vnc/xstartup
-RUN touch /vplbdx/.vnc/passwd
-RUN chmod 400 /vplbdx/.vnc/passwd
-RUN chmod go-rwx /vplbdx/.vnc
-RUN touch /vplbdx/.Xauthority
-COPY misc/start-vncserver.sh /vplbdx/
-COPY misc/vpl_terminal_launcher.sh /vplbdx/
-RUN chmod a+x /vplbdx/start-vncserver.sh /vplbdx/vpl_terminal_launcher.sh
-RUN echo "minivpl" > /etc/hostname
-RUN echo "127.0.0.1	localhost" > /etc/hosts
-RUN echo "127.0.0.1	minivpl" >> /etc/hosts
-RUN mkdir -p /vplbdx/.ssl
-COPY misc/logo.jpg /vplbdx/
-RUN apt-get install -yq feh
-EXPOSE 5901
-EXPOSE 8093
-ENV USER root
+# X11 & VNC
+RUN apt-get install -yq xserver-xorg x11-xserver-utils
+RUN apt-get install -yq xfonts-base xfonts-75dpi xfonts-100dpi xfonts-scalable xfonts-cyrillic
+RUN apt-get install -yq xvfb x11vnc
+# RUN apt-get install -yq tightvncserver xtightvncviewer
+# RUN apt-get install -yq tigervnc-standalone-server tigervnc-common
 
-#########################################################################
+# Window Manager
+RUN apt-get install -yq fluxbox lxterminal lxsession
+# RUN apt-get install -yq xmonad xmobar
+# RUN apt-get install -yq i3
+
+# remove hardware-accelerated Mesa libraries and install the software-only render
+# RUN apt-get install -yq libgl1-mesa-swx11
+
+### BD Web
+RUN apt-get install -yq python3-psycopg2 python3-flask
+RUN apt-get install -yq gedit firefox
+
+### Init Info
+RUN apt-get install -yq  imagemagick graphviz
+RUN pip3 install Pillow numpy pytest tk requests scspell3k pygame
+
+### clean
+RUN apt-get -yq autoremove
+
+### VPL Toolkit
+RUN git clone https://github.com/orel33/vpltoolkit.git /vpltoolkit
+
+# EOF
