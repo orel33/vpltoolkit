@@ -82,6 +82,7 @@ function LOADENV()
 
 function PRINTENV()
 {
+    echo "* SYSTEM=$(lsb_release -d | cut -d: -f2 | tr -d [:space:])"
     echo "* VERSION=$VERSION"
     echo "* ONLINE=$ONLINE"
     echo "* MODE=$MODE"
