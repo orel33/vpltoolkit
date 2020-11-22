@@ -32,7 +32,7 @@ RUN apt-get install -yq util-linux manpages gdb valgrind
 RUN apt-get install -yq automake autotools-dev
 RUN apt-get install -yq cmake cmake-curses-gui cmake-data cmake-doc
 RUN apt-get install -yq git subversion
-RUN apt-get install -yq clang-format clang-format-8
+RUN apt-get install -yq clang-format clang-format-8 clang-format-9 clang-format-10 clang-format-11
 RUN apt-get install -yq flex bison libbison-dev
 RUN apt-get install -yq ncurses-bin libncurses-dev libreadline-dev
 RUN apt-get install -yq tcl8.6 tcl8.6-dev tk8.6 tk8.6-dev
