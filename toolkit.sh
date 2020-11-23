@@ -472,7 +472,7 @@ function PYCOMPUTE()
 {
     local FORMULA="$1"
     python3 -c "print(\"%+.2f\" % ($FORMULA))" 2> error
-    [ $? -ne 0 ] && CRASH "PYCOMPUTE (invalid formula)" && cat error && exit 0
+    [ $? -ne 0 ] && CRASH "PYCOMPUTE (invalid formula)" && cat error && exit 1
     return 0
 }
 
