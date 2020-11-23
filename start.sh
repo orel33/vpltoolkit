@@ -154,7 +154,7 @@ function DOWNLOAD()
     fi
     rm -rf $RUNDIR/download &>> $LOG
     END=$(DATE)
-    TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
+    TIME=$(python3 -c "print(int(($END-$START)*1E3))") # in ms
     [ "$VERBOSE" = "1" ] && echo "Download teacher files in $TIME ms"
     return 0
 }
@@ -199,7 +199,7 @@ function WGET()
     fi
     rm -rf $RUNDIR/download &>> $LOG
     END=$(DATE)
-    TIME=$(python -c "print(int(($END-$START)*1E3))") # in ms
+    TIME=$(python3 -c "print(int(($END-$START)*1E3))") # in ms
     [ "$VERBOSE" = "1" ] && echo "Download teacher files in $TIME ms"
     return 0
 }
