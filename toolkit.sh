@@ -472,7 +472,7 @@ function PYCOMPUTE()
 {
     local FORMULA="$1"
     python3 -c "print(\"%+.2f\" % ($FORMULA))" 2> error
-    [ $? -ne 0 ] && CRASH "PYCOMPUTE (invalid formula)" && exit 1
+    [ $? -ne 0 ] && CRASH "PYCOMPUTE \"$FORMULA\"" && return 1
     return 0
 }
 
@@ -500,7 +500,7 @@ function EVALOK()
         local RET="$1"
         local MSG="$2"
         local SCORE="$3" # TODO: check score is >= 0
-        elif [ $# -eq 4 ] ; then
+    elif [ $# -eq 4 ] ; then
         local RET="$1"
         local MSG="$2"
         local SCORE="$3"
