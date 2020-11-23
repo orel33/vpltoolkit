@@ -471,6 +471,7 @@ function WAIT()
 function PYCOMPUTE()
 {
     local FORMULA="$1"
+    ECHO_TEACHER "python3: print(\"%+.2f\" % ($FORMULA))"
     python3 -c "print(\"%+.2f\" % ($FORMULA))" 2> error
     [ $? -ne 0 ] && CRASH "PYCOMPUTE (invalid formula)" && exit 1
     return 0
