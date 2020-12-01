@@ -37,12 +37,13 @@ RUN apt-get install -yq flex bison libbison-dev
 RUN apt-get install -yq ncurses-bin libncurses-dev libreadline-dev
 RUN apt-get install -yq tcl8.6 tcl8.6-dev tk8.6 tk8.6-dev
 RUN apt-get install -yq ruby
-RUN gem install git_fame
+# RUN gem install git_fame
 
 ### python3
 RUN apt-get install -yq python3 python3-pip python3-numpy python3-termcolor pylint3
 RUN pip3 install --upgrade pip
 RUN apt-get install -yq radon
+RUN pip3 install git-fame
 
 ### networking
 RUN apt-get install -yq net-tools socat rlwrap wget curl tcpdump netcat-openbsd telnet
@@ -82,5 +83,8 @@ RUN apt-get -yq autoremove
 
 ### VPL Toolkit
 RUN git clone https://github.com/orel33/vpltoolkit.git /vpltoolkit
+
+### Misc
+RUN apt-get install -yq rename a2ps enscript
 
 # EOF
