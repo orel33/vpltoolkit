@@ -38,7 +38,7 @@ RUN apt-get install -y netcat-openbsd
 # graphics app
 RUN apt-get install -y xterm x11-apps mesa-utils libgl1-mesa-dev libgl1-mesa-glx
 RUN apt-get install -y libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-gfx-dev libsdl2-ttf-dev libsdl2-net-dev
-RUN apt-get install -y tk8.5 tk8.5-dev graphviz
+RUN apt-get install -y tk8.6 tk8.6-dev graphviz
 RUN apt-get install -y python3-pygame python-pygame python-pyx
 
 # X11 & VNC
@@ -58,7 +58,7 @@ RUN apt-get install -y fluxbox lxterminal lxsession
 
 # BD Web
 RUN apt-get install -y python-psycopg2 python3-psycopg2 python3-flask python-flask
-RUN apt-get install -y firefox
+# RUN apt-get install -y firefox # ????
 RUN apt-get install -y gedit
 
 # misc
@@ -78,7 +78,10 @@ RUN apt-get install -yq automake subversion imagemagick graphviz firefox-esr
 RUN pip3 install Pillow numpy pytest tk requests scspell3k pygame
 
 # MISC
-RUN apt-get install -yq libglib2.0-dev
+RUN apt-get install -yq libglib2.0 libglib2.0-dev
+RUN apt-get install -yq pandoc tree
+RUN apt-get install -yq texlive-fonts-recommended
+RUN apt-get install -yq doxygen graphviz
 
 # RUN mkdir -p /run/user/0
 # ENV XDG_RUNTIME_DIR /run/user/0
