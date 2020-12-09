@@ -77,6 +77,9 @@ RUN apt-get install -yq clang-format
 RUN apt-get install -yq automake subversion imagemagick graphviz firefox-esr
 RUN pip3 install Pillow numpy pytest tk requests scspell3k pygame
 
+# MISC
+RUN apt-get install -yq libglib2.0-dev
+
 # RUN mkdir -p /run/user/0
 # ENV XDG_RUNTIME_DIR /run/user/0
 

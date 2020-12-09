@@ -86,5 +86,6 @@ RUN git clone https://github.com/orel33/vpltoolkit.git /vpltoolkit
 
 ### Misc
 RUN apt-get install -yq rename a2ps enscript
+RUN apt-get install -yq libglib2.0-dev
 
 # EOF
