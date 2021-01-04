@@ -173,7 +173,16 @@ function CRASH()
 function INFO()
 {
     local MSG="$1"
-    ECHOBLUE "👉 $MSG" # ➡
+    ECHOBLUE "👉 $MSG"
+}
+
+####################################################
+
+# inputs: MSG
+function MEMO()
+{
+    local MSG="$1"
+    ECHO "📝 $MSG"
 }
 
 ####################################################
