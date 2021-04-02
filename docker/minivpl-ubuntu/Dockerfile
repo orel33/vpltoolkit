@@ -78,14 +78,14 @@ RUN apt-get install -yq gedit firefox
 RUN apt-get install -yq  imagemagick graphviz
 RUN pip3 install Pillow numpy pytest tk requests scspell3k pygame
 
+### Misc
+RUN apt-get install -yq rename a2ps enscript
+RUN apt-get install -yq libglib2.0-dev
+
 ### clean
 RUN apt-get -yq autoremove
 
 ### VPL Toolkit
 RUN git clone https://github.com/orel33/vpltoolkit.git /vpltoolkit
-
-### Misc
-RUN apt-get install -yq rename a2ps enscript
-RUN apt-get install -yq libglib2.0-dev
 
 # EOF
