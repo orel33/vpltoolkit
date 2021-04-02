@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# rm -f $0
+rm -f $0 # for security issue
 
 if [ -f ./env.sh ] ; then
     source ./env.sh
@@ -15,17 +15,7 @@ grep -w $MODE <<< "RUN DEBUG EVAL" &> /dev/null
 [ -z "$RUNDIR" ] && echo "⚠ Error: Variable \"RUNDIR\" is not defined!" && exit 0
 [ -z "$ENTRYPOINT" ] && echo "⚠ Error: Variable \"ENTRYPOINT\" is not defined!" && exit 0
 CMD="$RUNDIR/$ENTRYPOINT"
-# CMD=""
-# [ -f "/$ENTRYPOINT" ] && CMD="/$ENTRYPOINT"                 # absolute path
-# [ -f "$RUNDIR/$ENTRYPOINT" ] && CMD="$RUNDIR/$ENTRYPOINT"   # relative path
 [ ! -f "$CMD" ] && echo "⚠ Error: Entrypoint file \"$CMD\" not found!" && exit 0
-### shell command
-SHELLCMD="bash"
-# [ "$DEBUG" = "1" ] && SHELLCMD="bash -x"
-# [ $GRAPHIC -eq 1 ] && SHELLCMD="xterm -hold -e $SHELLCMD"
-
-cd $RUNDIR
-# echo "RUNDIR=$RUNDIR"
 
 ### graphic mode ###
 
@@ -37,6 +27,12 @@ fi
 
 #### START ####
 
+# clean vpl script for security issues
+rm -f vpl_run.sh vpl_debug.sh vpl_evaluate.sh  &> /dev/null
+
+SHELLCMD="bash"
+cd $RUNDIR
+
 echo "Run..."
 if [ $GRAPHIC -eq 0 ] ; then
     $SHELLCMD $CMD $ARGS
@@ -46,7 +42,5 @@ else
     [ $DEBUG -eq 1 ] && xterm -hold -e bash
 fi
 echo "Terminated."
-
-
 
 # EOF

@@ -2,7 +2,9 @@
 
 ## Introduction
 
-*VPL Toolkit* is a light toolkit to help *teachers* to program [VPL](http://vpl.dis.ulpgc.es/) activity in [Moodle](https://moodle.org/) for their *students*.
+*VPL Toolkit* is a light toolkit to help *teachers* to program
+[VPL](http://vpl.dis.ulpgc.es/) activity in [Moodle](https://moodle.org/) for
+their *students*.
 
 Features:
 
@@ -34,7 +36,7 @@ click EVAL button ----> vpl_evaluate.sh ---+
 To develop a new VPL activity, it is often convenient to launch VPL scripts offline without the Moodle frontend, using the *local.sh* script, as follow:
 
 ```text
-local.sh <...> --------+---> vpl_(w)execution ---+---> run.sh
+local.sh [...] --------+---> vpl_(w)execution ---+---> run.sh
 ```
 
 The entrypoint script (*run.sh* by default) is starting from the *$RUNDIR* directory, organized as follow:
