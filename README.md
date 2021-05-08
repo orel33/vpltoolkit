@@ -330,6 +330,7 @@ DOCKER=orel33/mydebian:latest
 * update unit tests of tookit.sh
 * add possibility to enrich env.sh with user-defined variables
 * use `set -o piepfail ; cmd1 | cmd2` to improve `TRACE()` implementation in `toolkit.sh`
+* add memory limit option in TRACE routine (use `ulimit -v MAXMEM` in subshell)
 * etc.
 
 ### Bugs

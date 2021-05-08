@@ -385,6 +385,8 @@ function STRSTATUS()
 
 ####################################################
 
+# TODO: limit memory to run command using `ulimit -v MAXMEM` in subshell
+
 # inputs: BASH_CMD_STRING [TIMEOUT]
 # return command status
 function TRACE()
@@ -413,6 +415,8 @@ function TRACE()
 }
 
 ####################################################
+
+# TODO: limit memory to run command using `ulimit -v MAXMEM` in subshell
 
 # inputs: BASH_CMD_STRING [TIMEOUT]
 # return command status
