@@ -27,8 +27,8 @@ fi
 if [ $MODE = "EVAL" ] ; then
     TITLE "Eval"
     TRACE_TEACHER "python3 hello.py &> hello.out"
-    TRACE_TEACHER "grep -iq 'hello world!' hello.out"
-    EVAL $? "Test program output" 100 0
+    TRACE_TEACHER "grep -iq 'hello world' hello.out"
+    EVAL $? "Test your program output" 100 0
 fi
 
 
