@@ -86,6 +86,8 @@ RUN apt-get install -yq libglib2.0-dev
 RUN apt-get -yq autoremove
 
 ### VPL Toolkit
+
 RUN git clone https://github.com/orel33/vpltoolkit.git /vpltoolkit
+
 
 # EOF
