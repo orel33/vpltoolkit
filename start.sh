@@ -275,8 +275,10 @@ function START_OFFLINE()
     grep -w $MODE <<< "RUN DEBUG EVAL" &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Error: Invalid MODE \"$MODE\"!" >&2 && exit 1
     # copy offline env to source variables like VPL_STUDENT_MAIL
-    cp $RUNDIR/inputs/vpl_environnement.sh $HOME &> /dev/null
-    cp $RUNDIR/inputs/vpl_environnement.sh $RUNDIR &> /dev/null
+    cp $INPUTDIR/vpl_environnement.sh $HOME &> /dev/null
+    cp $INPUTDIR/vpl_environnement.sh $RUNDIR &> /dev/null
+    source $HOME/vpl_environment.sh &> /dev/null
+    # prepare inputs
     mkdir -p $RUNDIR/inputs
     cp $INPUTDIR/* $RUNDIR/inputs/ &> /dev/null     # FIXME: error if no inputs
     INPUTS="$RUNDIR/inputs/"
