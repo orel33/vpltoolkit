@@ -96,6 +96,7 @@ function PRINTENV()
     echo "* ENTRYPOINT=$ENTRYPOINT"
     echo "* ARGS=\"$ARGS\""
     echo "* INPUTS=$INPUTS"
+    echo "* EMAIL=$VPL_STUDENT_MAIL"
     return 0
 }
 
@@ -274,7 +275,8 @@ function START_OFFLINE()
     grep -w $MODE <<< "RUN DEBUG EVAL" &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Error: Invalid MODE \"$MODE\"!" >&2 && exit 1
     # copy offline env to source variables like VPL_STUDENT_MAIL
-    [ -f "$RUNDIR/vpl_environnement.sh" ] && cp $RUNDIR/vpl_environnement.sh $HOME
+    cp $RUNDIR/inputs/vpl_environnement.sh $HOME &> /dev/null
+    cp $RUNDIR/inputs/vpl_environnement.sh $RUNDIR &> /dev/null
     mkdir -p $RUNDIR/inputs
     cp $INPUTDIR/* $RUNDIR/inputs/ &> /dev/null     # FIXME: error if no inputs
     INPUTS="$RUNDIR/inputs/"
