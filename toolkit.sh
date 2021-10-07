@@ -19,6 +19,9 @@ BB='\033[40m'   # black background
 NC='\033[0m'    # no color
 
 # FIXME: avoid to use tput?
+# TODO: check the problem of TERM with tput... if not defined
+# useful for tput, else use tput -Txterm-256color
+[ -z "$TERM" ] && export TERM="xterm-256color"
 
 # BLACK=$(tput setaf 0)   # black
 # RED=$(tput setaf 1)     # red
@@ -497,6 +500,7 @@ function UPDATE_GRADE()
     local SCORE=$1
     local LGRADE=$(PYCOMPUTE "$SCORE")
     GRADE=$(PYCOMPUTE "$GRADE+$LGRADE")
+    return 0
 }
 
 ####################################################
