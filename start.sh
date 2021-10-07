@@ -273,6 +273,8 @@ function START_OFFLINE()
     [ -z "$MODE" ] && echo "⚠ Error: MODE variable is not defined!" >&2 && exit 1
     grep -w $MODE <<< "RUN DEBUG EVAL" &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Error: Invalid MODE \"$MODE\"!" >&2 && exit 1
+    # copy offline env to source variables like VPL_STUDENT_MAIL
+    [ -f "$RUNDIR/vpl_environnement.sh" ] && cp $RUNDIR/vpl_environnement.sh $HOME
     mkdir -p $RUNDIR/inputs
     cp $INPUTDIR/* $RUNDIR/inputs/ &> /dev/null     # FIXME: error if no inputs
     INPUTS="$RUNDIR/inputs/"
@@ -285,7 +287,6 @@ function START_OFFLINE()
     # => explicit run of vpl_execution in $RUNDIR
     return 0
 }
-
 
 ####################################################
 
