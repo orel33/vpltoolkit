@@ -85,8 +85,10 @@ RUN apt-get install -yq libglib2.0-dev
 ### clean
 RUN apt-get -yq autoremove
 
-### VPL Toolkit
+### Use to enforce the build of next layers
+COPY build-date.txt /
 
+### VPL Toolkit
 RUN git clone https://github.com/orel33/vpltoolkit.git /vpltoolkit
 
 
