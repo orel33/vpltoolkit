@@ -29,14 +29,12 @@ function CHECKENV()
     [ -z "$MODE" ] && echo "⚠ Error: MODE variable is not defined!" >&2 && exit 1
     [ -z "$RUNDIR" ] && echo "⚠ Error: RUNDIR variable is not defined!" >&2 && exit 1
     [ -z "$GRAPHIC" ] && GRAPHIC=0
-    # [ -z "$DOCKER" ] && DOCKER=""
-    # [ -z "$DOCKERUSER" ] && DOCKERUSER=""   # FIXME: maybe set as "root"?
-    # [ -z "$DOCKERTIMEOUT" ] && DOCKERTIMEOUT="900"
     [ -z "$DEBUG" ] && DEBUG=0
     [ -z "$VERBOSE" ] && VERBOSE=0
     [ -z "$ENTRYPOINT" ] && ENTRYPOINT="run.sh"
     [ -z "$ARGS" ] && ARGS=""
     [ -z "$INPUTS" ] && INPUTS=""
+    [ -z "$EMAIL" ] && EMAIL=""
     return 0
 }
 
@@ -51,14 +49,12 @@ function SAVEENV()
     echo "ONLINE=$ONLINE" >> $RUNDIR/env.sh
     echo "RUNDIR=$RUNDIR" >> $RUNDIR/env.sh
     echo "GRAPHIC=$GRAPHIC" >> $RUNDIR/env.sh
-    # echo "DOCKER=$DOCKER" >> $RUNDIR/env.sh
-    # echo "DOCKERUSER=$DOCKERUSER" >> $RUNDIR/env.sh
-    # echo "DOCKERTIMEOUT=$DOCKERTIMEOUT" >> $RUNDIR/env.sh
     echo "DEBUG=$DEBUG" >> $RUNDIR/env.sh
     echo "VERBOSE=$VERBOSE" >> $RUNDIR/env.sh
     echo "ENTRYPOINT=$ENTRYPOINT" >> $RUNDIR/env.sh
     echo "ARGS=\"$ARGS\"" >> $RUNDIR/env.sh
     echo "INPUTS=$INPUTS" >> $RUNDIR/env.sh
+    echo "EMAIL=$EMAIL" >> $RUNDIR/env.sh
     return 0
 }
 
@@ -87,22 +83,15 @@ function PRINTENV()
     echo "* ONLINE=$ONLINE"
     echo "* MODE=$MODE"
     echo "* RUNDIR=$RUNDIR"
-    # echo "* DOCKER=$DOCKER"
-    # echo "* DOCKERUSER=$DOCKERUSER"
-    # echo "* DOCKERTIMEOUT=$DOCKERTIMEOUT"
     echo "* GRAPHIC=$GRAPHIC"
     echo "* DEBUG=$DEBUG"
     echo "* VERBOSE=$VERBOSE"
     echo "* ENTRYPOINT=$ENTRYPOINT"
     echo "* ARGS=\"$ARGS\""
     echo "* INPUTS=$INPUTS"
-    echo "* EMAIL=${VPL_STUDENT_MAIL}"
+    echo "* EMAIL=$EMAIL"
     return 0
 }
-
-####################################################
-
-# TODO: function ADDENV()
 
 ####################################################
 #                   DOWNLOAD                       #
@@ -222,7 +211,7 @@ function START_ONLINE()
     [ -z "$MODE" ] && echo "⚠ Error: MODE variable is not defined!" >&2 && exit 1
     grep -w $MODE <<< "RUN DEBUG EVAL" &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Error: Invalid MODE \"$MODE\"!" >&2 && exit 1
-    source $HOME/vpl_environment.sh
+    [ -f  $HOME/vpl_environment.sh ] && source $HOME/vpl_environment.sh
     mkdir -p $RUNDIR/inputs
     # [ ! -z "$VPL_SUBFILES" ] && ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs ) # FIXME: here bug if file contains spaces
     for var in ${!VPL_SUBFILE@} ; do
@@ -239,9 +228,6 @@ function START_ONLINE()
         cp -f "$file" $RUNDIR/inputs &> /dev/null
         [ ! $? -eq 0 ] && echo "⚠ Error: cannot copy input file \"$file\" in inputs directory!"
     done
-    INPUTS="$RUNDIR/inputs/"
-    CHECKENV
-    SAVEENV
     rm -rf $RUNDIR/vpltoolkit/.git/ &> /dev/null # for security issue
     cp $RUNDIR/env.sh $HOME
     cp $RUNDIR/vpltoolkit/toolkit.sh $HOME
@@ -250,6 +236,11 @@ function START_ONLINE()
     cp $HOME/common_script.sh $RUNDIR/
     # graphic session
     [ $GRAPHIC -eq 1 ] && mv $HOME/vpl_execution $HOME/vpl_wexecution
+    # prepare environment
+    INPUTS="$RUNDIR/inputs/"
+    EMAIL="${VPL_STUDENT_MAIL}"
+    CHECKENV
+    SAVEENV
     # print in compilation window
     echo "Start VPL Toolkit in $SECONDS sec..."
     PRINTENV
@@ -275,9 +266,9 @@ function START_OFFLINE()
     mkdir -p $RUNDIR/inputs
     cp $INPUTDIR/* $RUNDIR/inputs/ &> /dev/null     # FIXME: error if no inputs
     INPUTS="$RUNDIR/inputs/"
-    # prepare env
-    # copy offline env to source variables like VPL_STUDENT_MAIL
-    source $INPUTS/vpl_environment.sh
+    # prepare environment
+    [ -f $INPUTS/vpl_environment.sh ] && source $INPUTS/vpl_environment.sh
+    EMAIL="${VPL_STUDENT_MAIL}"
     CHECKENV
     SAVEENV
     rm -rf $RUNDIR/vpltoolkit/.git/ &> /dev/null # for security issue
