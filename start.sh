@@ -24,10 +24,10 @@ function DATE()
 function CHECKENV()
 {
     # basic environment
-    [ -z "$VERSION" ] && echo "⚠ Error: Error: VERSION variable is not defined!" >&2 && exit 1
-    [ -z "$ONLINE" ] && echo "⚠ Error: Error: ONLINE variable is not defined!" >&2 && exit 1
-    [ -z "$MODE" ] && echo "⚠ Error: Error: MODE variable is not defined!" >&2 && exit 1
-    [ -z "$RUNDIR" ] && echo "⚠ Error: Error: RUNDIR variable is not defined!" >&2 && exit 1
+    [ -z "$VERSION" ] && echo "⚠ Error: VERSION variable is not defined!" >&2 && exit 1
+    [ -z "$ONLINE" ] && echo "⚠ Error: ONLINE variable is not defined!" >&2 && exit 1
+    [ -z "$MODE" ] && echo "⚠ Error: MODE variable is not defined!" >&2 && exit 1
+    [ -z "$RUNDIR" ] && echo "⚠ Error: RUNDIR variable is not defined!" >&2 && exit 1
     [ -z "$GRAPHIC" ] && GRAPHIC=0
     # [ -z "$DOCKER" ] && DOCKER=""
     # [ -z "$DOCKERUSER" ] && DOCKERUSER=""   # FIXME: maybe set as "root"?
@@ -44,7 +44,7 @@ function CHECKENV()
 
 function SAVEENV()
 {
-    [ -z "$RUNDIR" ] && echo "⚠ Error: Error: RUNDIR variable is not defined!" >&2 && exit 1
+    [ -z "$RUNDIR" ] && echo "⚠ Error: RUNDIR variable is not defined!" >&2 && exit 1
     rm -f $RUNDIR/env.sh
     echo "VERSION=$VERSION" >> $RUNDIR/env.sh
     echo "MODE=$MODE" >> $RUNDIR/env.sh
@@ -96,7 +96,7 @@ function PRINTENV()
     echo "* ENTRYPOINT=$ENTRYPOINT"
     echo "* ARGS=\"$ARGS\""
     echo "* INPUTS=$INPUTS"
-    echo "* EMAIL=$VPL_STUDENT_MAIL"
+    echo "* EMAIL=${VPL_STUDENT_MAIL}"
     return 0
 }
 
@@ -268,20 +268,16 @@ function START_OFFLINE()
     [ -z "$RUNDIR" ] && echo "⚠ Error: RUNDIR variable is not defined!" >&2 && exit 1
     [ ! -d $RUNDIR ] && echo "⚠ Error: Bad RUNDIR: \"$RUNDIR\"!" >&2 && exit 1
     ONLINE=0
-    # [ $(basename $0) == "local_run.sh" ] && MODE="RUN"
-    # [ $(basename $0) == "local_debug.sh" ] && MODE="DEBUG"
-    # [ $(basename $0) == "local_eval.sh" ] && MODE="EVAL"
     [ -z "$MODE" ] && echo "⚠ Error: MODE variable is not defined!" >&2 && exit 1
     grep -w $MODE <<< "RUN DEBUG EVAL" &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Error: Invalid MODE \"$MODE\"!" >&2 && exit 1
-    # copy offline env to source variables like VPL_STUDENT_MAIL
-    cp $INPUTDIR/vpl_environnement.sh $HOME &> /dev/null
-    cp $INPUTDIR/vpl_environnement.sh $RUNDIR &> /dev/null
-    source $HOME/vpl_environment.sh &> /dev/null
     # prepare inputs
     mkdir -p $RUNDIR/inputs
     cp $INPUTDIR/* $RUNDIR/inputs/ &> /dev/null     # FIXME: error if no inputs
     INPUTS="$RUNDIR/inputs/"
+    # prepare env
+    # copy offline env to source variables like VPL_STUDENT_MAIL
+    source $INPUTS/vpl_environment.sh
     CHECKENV
     SAVEENV
     rm -rf $RUNDIR/vpltoolkit/.git/ &> /dev/null # for security issue
