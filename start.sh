@@ -34,7 +34,7 @@ function CHECKENV()
     [ -z "$ENTRYPOINT" ] && ENTRYPOINT="run.sh"
     [ -z "$ARGS" ] && ARGS=""
     [ -z "$INPUTS" ] && INPUTS=""
-    [ -z "$EMAIL" ] && EMAIL=""
+    [ -z "$EMAIL" ] && EMAIL="unknown@etu.u-bordeaux.fr"
     return 0
 }
 
