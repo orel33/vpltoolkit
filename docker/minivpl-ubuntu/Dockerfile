@@ -76,7 +76,7 @@ RUN apt-get install -yq gedit firefox
 
 ### Init Info
 RUN apt-get install -yq  imagemagick graphviz
-RUN pip3 install Pillow numpy pytest tk requests scspell3k pygame
+RUN pip3 install Pillow numpy pytest tk requests scspell3k pygame coverage
 
 ### Misc
 RUN apt-get install -yq rename a2ps enscript
