@@ -307,7 +307,7 @@ function CAT()
         eval "$CMD" | sed '$a\'
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
     fi
-    
+
     return $RET
 }
 
@@ -341,7 +341,7 @@ function EXEC()
     # FIXME: only work for a simple command without subshells...
     # TODO: use disown command to detach command in order to avoid dirty error messages printed by bash
     # TODO: use safe EXEC() in TRACE()
-    
+
     # run redirection in a subshell for safety
     (
         exec 30>&2
@@ -687,30 +687,31 @@ function COMPILE()
     else
         ECHO "Usage: COMPILE MSG CMD [BONUS WARNING_MALUS ERROR_MALUS]" && exit 0
     fi
-    
+
+
     local TEMP=$(mktemp)
-    bash -c "$CMD" |& head -c $MAXCHAR &> $TEMP
+    ( set -o pipefail ; bash -c "$CMD" |& head -c $MAXCHAR &> $TEMP )
     local RET=$?
-    
+
     # check errors
     EVALKO $RET "$MSG" "$ERRORMALUS" && CAT $TEMP && return $RET # error !
-    
+
     # if [ ! -x $EXPECTED ] ; then
     #     EVALKO 1 "$MSG" "$ERRORMALUS" "expected file \"$EXPECTED\" not found!"
     #     CAT $TEMP && rm -f $TEMP
     #     return 1 # error !
     # fi
-    
+
     # if WARNING...
     if [ -s $TEMP ] ; then
         EVALW 1 "$MSG" "$WARNINGMALUS"
         CAT $TEMP && rm -f $TEMP
         return 0 # warning
     fi
-    
+
     EVALOK $RET "$MSG" $BONUS
     rm -f $TEMP
-    
+
     return 0
 }
 
