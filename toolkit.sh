@@ -239,7 +239,7 @@ function TITLE()
 {
     local THETITLE="$1"
     if [ $# -eq 2 -a "$2" != "0" ] ; then THETITLE="$1 /$2" ; fi
-
+    
     if [ "$MODE" = "EVAL" ] ; then
         echo -e "${CL}Teacher :=>> ##############################"
         echo -e "${CL}Comment :=>>-$THETITLE"
@@ -276,25 +276,25 @@ function CAT()
     [ ! -f $FILE ] && CRASH "CAT (file not found)" && exit 0
     local CMD="cat $FILE"
     local NLINES=$(cat $FILE | wc -l)
-
+    
     if [ $# -eq 1 ] ; then
         local HEAD="$NLINES"
         local TAIL="$NLINES"
-    elif [ $# -eq 2 ] ; then
+        elif [ $# -eq 2 ] ; then
         local HEAD="$2"
         local TAIL="$2"
-    elif [ $# -eq 3 ] ; then
+        elif [ $# -eq 3 ] ; then
         local HEAD="$2"
         local TAIL="$3"
     else
         ECHO "Usage: CAT FILE [HEAD [TAIL]]" && exit 0
     fi
-
+    
     local WLINES=$(($HEAD+$TAIL))
     if (($WLINES < $NLINES)) ; then
         local CMD="(head -n $HEAD ; echo \"...\" ; tail -n $TAIL) < $FILE"
     fi
-
+    
     if [ "$MODE" = "EVAL" ] ; then
         # cat $@ |& sed -e 's/^/Comment :=>>/;'
         echo -e "${CL}Teacher :=>>\$ cat $FILE"
@@ -307,7 +307,7 @@ function CAT()
         eval "$CMD" | sed '$a\'
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
     fi
-
+    
     return $RET
 }
 
@@ -319,6 +319,22 @@ function CAT_TEACHER()
     if [ "$MODE" = "EVAL" ] ; then
         echo -e "${CL}Teacher :=>>\$ cat $@"
         bash -c "cat $@" |& sed -e 's/^/Teacher :=>>/;' |& sed '$a\'
+        local RET=${PIPESTATUS[0]}  # return status of first piped command!
+    else
+        cat $@ &>> $RUNDIR/$LOG
+        local RET=$?
+    fi
+    return $RET
+}
+
+####################################################
+
+function CAT_REPORT()
+{
+    [ $# -ne 1 ] && ECHO "Usage: CAT_REPORT FILE" && exit 0
+    if [ "$MODE" = "EVAL" ] ; then
+        echo -e "${CL}Report :=>>\$ cat $@"
+        bash -c "cat $@" |& sed -e 's/^/Report :=>>/;' |& sed '$a\'
         local RET=${PIPESTATUS[0]}  # return status of first piped command!
     else
         cat $@ &>> $RUNDIR/$LOG
@@ -341,7 +357,7 @@ function EXEC()
     # FIXME: only work for a simple command without subshells...
     # TODO: use disown command to detach command in order to avoid dirty error messages printed by bash
     # TODO: use safe EXEC() in TRACE()
-
+    
     # run redirection in a subshell for safety
     (
         exec 30>&2
@@ -400,7 +416,7 @@ function TRACE()
     if [ $# -gt 2 ] ; then
         ECHO "Usage: TRACE BASH_CMD_STRING [TIMEOUT]" && exit 0
     fi
-
+    
     # FIXME: should I really timeout all piped subcommands?
     if [ "$MODE" = "EVAL" ] ; then
         echo -e "${CL}Teacher :=>>\$ $TRACECMD"
@@ -431,7 +447,7 @@ function TRACE_TEACHER()
     if [ $# -gt 2 ] ; then
         ECHO "Usage: TRACE_TEACHER BASH_CMD_STRING [TIMEOUT]" && exit 0
     fi
-
+    
     # FIXME: should I really timeout all piped subcommands?
     if [ "$MODE" = "EVAL" ] ; then
         echo -e "${CL}Teacher :=>>\$ $TRACECMD"
@@ -517,7 +533,7 @@ function EVALOK()
         local RET="$1"
         local MSG="$2"
         local SCORE="$3" # TODO: check score is >= 0
-    elif [ $# -eq 4 ] ; then
+        elif [ $# -eq 4 ] ; then
         local RET="$1"
         local MSG="$2"
         local SCORE="$3"
@@ -664,55 +680,6 @@ function EVAL()
         EVALKO "$RET" "$MSG" "$MALUS" "$MSGKO"
     fi
     return $RET
-}
-
-####################################################
-
-# inputs: MSG CMD [BONUS WARNING_MALUS ERROR_MALUS]
-# return command status
-function COMPILE()
-{
-    if [ $# -eq 3 ] ; then
-        local MSG="$1"
-        local CMD="$2"
-        local BONUS=0
-        local WARNINGMALUS=0
-        local ERRORMALUS=0
-        elif [ $# -eq 5 ] ; then
-        local MSG="$1"
-        local CMD="$2"
-        local BONUS="$3"          # TODO: check positive
-        local WARNINGMALUS="$4"   # TODO: check negative
-        local ERRORMALUS="$5"     # TODO: check negative
-    else
-        ECHO "Usage: COMPILE MSG CMD [BONUS WARNING_MALUS ERROR_MALUS]" && exit 0
-    fi
-
-
-    local TEMP=$(mktemp)
-    ( set -o pipefail ; bash -c "$CMD" |& head -c $MAXCHAR &> $TEMP )
-    local RET=$?
-
-    # check errors
-    EVALKO $RET "$MSG" "$ERRORMALUS" && CAT $TEMP && return $RET # error !
-
-    # if [ ! -x $EXPECTED ] ; then
-    #     EVALKO 1 "$MSG" "$ERRORMALUS" "expected file \"$EXPECTED\" not found!"
-    #     CAT $TEMP && rm -f $TEMP
-    #     return 1 # error !
-    # fi
-
-    # if WARNING...
-    if [ -s $TEMP ] ; then
-        EVALW 1 "$MSG" "$WARNINGMALUS"
-        CAT $TEMP && rm -f $TEMP
-        return 0 # warning
-    fi
-
-    EVALOK $RET "$MSG" $BONUS
-    rm -f $TEMP
-
-    return 0
 }
 
 ####################################################
