@@ -241,11 +241,15 @@ function TITLE()
     if [ $# -eq 2 -a "$2" != "0" ] ; then THETITLE="$1 /$2" ; fi
     
     if [ "$MODE" = "EVAL" ] ; then
+        echo -e "${CL}Comment :=>>"
         echo -e "${CL}Teacher :=>> ##############################"
         echo -e "${CL}Comment :=>>-$THETITLE"
         echo -e "${CL}Teacher :=>> ##############################"
+        echo -e "${CL}Comment :=>>"
     else
+        ECHO
         ECHOBLUE "######### $THETITLE ##########"
+        ECHO
     fi
 }
 
@@ -255,9 +259,11 @@ function TITLE_TEACHER()
 {
     [ $# -ne 1 ] && ECHO "Usage: TITLE_TEACHER MSG" && exit 0
     if [ "$MODE" = "EVAL" ] ; then
+        echo -e "${CL}Comment :=>>"
         echo -e "${CL}Teacher :=>> ##############################"
         echo -e "${CL}Teacher :=>>-$1"
         echo -e "${CL}Teacher :=>> ##############################"
+        echo -e "${CL}Comment :=>>"
     fi
 }
 
