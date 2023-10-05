@@ -38,7 +38,8 @@ if [ $GRAPHIC -eq 0 ] ; then
     # $SHELLCMD $CMD $ARGS
     echo "docker run -v $RUNDIR:$RUNDIR -it orel33/mydebian12 $SHELLCMD $CMD $ARGS"
     ls -l $RUNDIR
-    docker run -v $RUNDIR:$RUNDIR -it orel33/mydebian12 $SHELLCMD $CMD $ARGS
+    # docker run -v $RUNDIR:$RUNDIR -it orel33/mydebian12 $SHELLCMD $CMD $ARGS
+    docker run -v $RUNDIR:$RUNDIR -it orel33/mydebian12 bash
     [ $DEBUG -eq 1 ] && bash
 else
     xterm -hold -e $SHELLCMD $CMD $ARGS
