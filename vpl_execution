@@ -36,7 +36,7 @@ cd $RUNDIR
 echo "Run..."
 if [ $GRAPHIC -eq 0 ] ; then
     # $SHELLCMD $CMD $ARGS
-    docker run -it orel33/mydebian12 $SHELLCMD $CMD $ARGS
+    docker run -v $RUNDIR:$RUNDIR -it orel33/mydebian12 $SHELLCMD $CMD $ARGS
     [ $DEBUG -eq 1 ] && bash
 else
     xterm -hold -e $SHELLCMD $CMD $ARGS
