@@ -231,7 +231,7 @@ function START_ONLINE()
     rm -rf $RUNDIR/vpltoolkit/.git/ &> /dev/null # for security issue
     # prepare environment
     INPUTS="$RUNDIR/inputs/"
-    EMAIL="${VPL_STUDENT_MAIL}"
+    EMAIL="${MOODLE_USER_EMAIL}"
     CHECKENV
     SAVEENV
     cp $RUNDIR/env.sh $HOME
@@ -268,7 +268,7 @@ function START_OFFLINE()
     INPUTS="$RUNDIR/inputs/"
     # prepare environment
     [ -f $INPUTS/vpl_environment.sh ] && source $INPUTS/vpl_environment.sh
-    EMAIL="${VPL_STUDENT_MAIL}"
+    EMAIL="${MOODLE_USER_EMAIL}"
     CHECKENV
     SAVEENV
     rm -rf $RUNDIR/vpltoolkit/.git/ &> /dev/null # for security issue
