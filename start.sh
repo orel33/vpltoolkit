@@ -103,17 +103,19 @@ function DOWNLOAD()
     if [ $# -eq 1 ] ; then
         local REPOSITORY="$1"
         local BRANCH="master"
-        local SUBDIR=""
-        elif [ $# -eq 2 ] ; then
+        local SUBDIRS=""
+    elif [ $# -eq 2 ] ; then
         local REPOSITORY="$1"
         local BRANCH="$2"
-        local SUBDIR=""
-        elif [ $# -eq 3 ] ; then
+        local SUBDIRS=""
+    elif [ $# -ge 3 ] ; then
         local REPOSITORY="$1"
         local BRANCH="$2"
-        local SUBDIR="$3"
+        shift
+        shift
+        local SUBDIRS=("$@")
     else
-        echo "⚠ Error: Usage: DOWNLOAD REPOSITORY [BRANCH [SUBDIR]]" >&2 && exit 1
+        echo "⚠ Error: Usage: DOWNLOAD REPOSITORY [BRANCH [SUBDIR] ...]" >&2 && exit 1
     fi
 
     START=$(DATE)
@@ -128,13 +130,15 @@ function DOWNLOAD()
     [ $RET -ne 0 ] && echo "⚠ Error: GIT clone repository failure (branch \"$BRANCH\")!" >&2 && exit 1
 
     # checkout only what is needed
-    if [ -n "$SUBDIR" ] ; then
-        ( cd $RUNDIR/download && timeout $TIMEOUT git -c http.sslVerify=false checkout HEAD -- $SUBDIR ) &>> $LOG
+    if [ -n "$SUBDIRS" ] ; then
+        ( cd $RUNDIR/download && timeout $TIMEOUT git -c http.sslVerify=false checkout HEAD -- "${SUBDIRS[@]}" ) &>> $LOG
         RET=$?
         [ $RET -eq 124 ] && echo "⚠ Error: GIT checkout failure (timeout)!" >&2 && exit 1
-        [ $RET -ne 0 ] && echo "⚠ Error: GIT checkout failure (subdir \"$SUBDIR\")!" >&2 && exit 1
-        [ ! -d $RUNDIR/download/$SUBDIR ] && echo "⚠ Error: SUBDIR \"$SUBDIR\" not found!" >&2 && exit 1
-        cp -rf $RUNDIR/download/$SUBDIR/. $RUNDIR/ &>> $LOG
+        [ $RET -ne 0 ] && echo "⚠ Error: GIT checkout failure (subdirs: \"$SUBDIRS\")!" >&2 && exit 1
+        for SUBDIR in "${SUBDIRS[@]}" ; do
+            [ ! -d $RUNDIR/download/$SUBDIR ] && echo "⚠ Error: SUBDIR \"$SUBDIR\" not found!" >&2 && exit 1
+            cp -rf $RUNDIR/download/$SUBDIR/. $RUNDIR/ &>> $LOG
+        done 
     else
         ( cd $RUNDIR/download && timeout $TIMEOUT git -c http.sslVerify=false checkout HEAD ) &>> $LOG
         RET=$?
