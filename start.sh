@@ -211,7 +211,8 @@ function START_ONLINE()
     [ -z "$MODE" ] && echo "⚠ Error: MODE variable is not defined!" >&2 && exit 1
     grep -w $MODE <<< "RUN DEBUG EVAL" &> /dev/null
     [ $? -ne 0 ] && echo "⚠ Error: Invalid MODE \"$MODE\"!" >&2 && exit 1
-    [ -f  $HOME/vpl_environment.sh ] && source $HOME/vpl_environment.sh
+    # Temporary workaround for VPL user names with unescaped apostrophes.
+    [ -f "$HOME/vpl_environment.sh" ] && sed -i '/^export MOODLE_USER_NAME=/d' "$HOME/vpl_environment.sh" && source "$HOME/vpl_environment.sh"
     mkdir -p $RUNDIR/inputs
     # [ ! -z "$VPL_SUBFILES" ] && ( cd $HOME && cp $VPL_SUBFILES $RUNDIR/inputs ) # FIXME: here bug if file contains spaces
     for var in ${!VPL_SUBFILE@} ; do
@@ -267,7 +268,8 @@ function START_OFFLINE()
     cp $INPUTDIR/* $RUNDIR/inputs/ &> /dev/null     # FIXME: error if no inputs
     INPUTS="$RUNDIR/inputs/"
     # prepare environment
-    [ -f $INPUTS/vpl_environment.sh ] && source $INPUTS/vpl_environment.sh
+    # Temporary workaround for VPL user names with unescaped apostrophes.
+    [ -f "$INPUTS/vpl_environment.sh" ] && sed -i '/^export MOODLE_USER_NAME=/d' "$INPUTS/vpl_environment.sh" && source "$INPUTS/vpl_environment.sh"
     EMAIL="${MOODLE_USER_EMAIL}"
     CHECKENV
     SAVEENV
